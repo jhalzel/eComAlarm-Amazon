@@ -1,0 +1,27 @@
+import json
+from sp_api.api import Sales
+from sp_api.base import Marketplaces, SpApiCredentials, SpApiCredentialsProvider
+from sp_api.base.enums import Granularity
+
+# Set your credentials
+credentials = SpApiCredentials(
+    access_key='YOUR_ACCESS_KEY',
+    secret_key='YOUR_SECRET_KEY',
+    refresh_token='YOUR_REFRESH_TOKEN',
+)
+
+if __name__ == '__main__':
+    try:
+        with open('./responses/data.json') as f
+            data = json.load(f)
+            asins = [x['asin'] for x in data[:5]]
+            print(asins)
+
+        for asin in asins:
+            sales = Sales(credentials=credentials, marketplace=Marketplaces.US)
+            res = sales.get_order_metrics(interval='2023-01-01--2023-01-31', asin=asin, granularity=Granularity.TOTAL)
+            
+            metrics = res.payload[0]
+            print(metrics)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+    print(f"Error loading or parsing JSON file: {e}")

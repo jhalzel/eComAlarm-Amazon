@@ -1,0 +1,52 @@
+.App {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+}
+
+.App-status {
+  padding: 25%;
+  color:whitesmoke;
+}
+
+.App-header {
+  background-color: #282c34;
+  display: flex;
+  min-height: 25%;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-header ul {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+}
+
+.App-header ul li {
+  margin-right: 20px;
+}
+
+.App-header ul li a {
+  text-decoration: none;
+  color: yellowgreen;
+  font-weight: 500;
+  font-size: x-large;
+}
+
+.App-link {
+  background-color: #282c34;
+  min-height: 100%;
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
