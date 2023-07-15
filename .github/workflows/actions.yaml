@@ -27,6 +27,16 @@ jobs:
         run: python src/script.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
+          # Amazon credentials
+          SP_API_REFRESH_TOKEN: ${{ secrets.SP_API_REFRESH_TOKEN }}
+          SP_API_ACCESS_KEY: ${{ secrets.SP_API_ACCESS_KEY }}
+          SP_API_SECRET_KEY: ${{ secrets.SP_API_SECRET_KEY }}
+          LWA_APP_ID: ${{ secrets.LWA_APP_ID }}
+          LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_ID }}
+          # Gmail credentials
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          
           
       # - name: commit files
       #   run: |
