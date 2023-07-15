@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-  - cron: '*/3 * * * *' # Every 3 minutes for testing
+  - cron: '*/6 * * * *' # Every 3 minutes for testing
 
 
 jobs:
