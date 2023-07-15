@@ -72,14 +72,14 @@ def main():
     }
 
    
-def run_program():
-    # Run the main function every 5 minutes
-    schedule.every(20).seconds.do(main)
+# def run_program():
+#     # Run the main function every 5 minutes
+#     schedule.every(20).seconds.do(main)
 
-    while True:
-        schedule.run_pending()
-        time.sleep(5)
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(5)
 
 
 if __name__ == '__main__':
-    run_program()
+    main()
