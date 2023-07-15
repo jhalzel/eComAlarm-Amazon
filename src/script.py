@@ -30,6 +30,18 @@ logger_file_handler.setFormatter(formatter)
 logger.addHandler(logger_file_handler)
 
 # Access credentials from the dictionary
+try:
+    SP_API_REFRESH_TOKEN = os.environ["SP_API_REFRESH_TOKEN"]
+    LWA_APP_ID = os.environ["LWA_APP_ID"]
+    LWA_CLIENT_SECRET = os.environ["LWA_CLIENT_SECRET"]
+    SP_API_ACCESS_KEY = os.environ["SP_API_ACCESS_KEY"]
+    SP_API_SECRET_KEY = os.environ["SP_API_SECRET_KEY"]
+    SP_API_ROLE_ARN = os.environ["SP_API_ROLE_ARN"]
+except KeyError:
+    logger.error("Please set the environment variables!")
+    raise
+
+# Access credentials from the dictionary
 credentials = {
     "refresh_token": os.environ.get("SP_API_REFRESH_TOKEN"),
     "lwa_app_id": os.environ.get("LWA_APP_ID"),

@@ -17,6 +17,22 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9' # install the python version needed
+
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('src/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Save Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('src/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
           
       - name: install python packages
         run: |
@@ -29,10 +45,11 @@ jobs:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
           # Amazon credentials
           SP_API_REFRESH_TOKEN: ${{ secrets.SP_API_REFRESH_TOKEN }}
+          LWA_APP_ID: ${{ secrets.LWA_APP_ID }}
+          LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_SECRET }}
           SP_API_ACCESS_KEY: ${{ secrets.SP_API_ACCESS_KEY }}
           SP_API_SECRET_KEY: ${{ secrets.SP_API_SECRET_KEY }}
-          LWA_APP_ID: ${{ secrets.LWA_APP_ID }}
-          LWA_CLIENT_SECRET: ${{ secrets.LWA_CLIENT_ID }}
+          SP_API_ROLE_ARN: ${{ secrets.SP_API_ROLE_ARN }}
           # Gmail credentials
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
