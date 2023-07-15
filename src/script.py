@@ -15,9 +15,15 @@ import schedule
 import time
 
 
+# Get the current script's directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logger_file_handler = logging.handlers.RotatingFileHandler(
+    os.path.join(current_dir, "status.log"),
     "status.log",
     maxBytes=1024 * 1024,
     backupCount=1,
@@ -28,6 +34,12 @@ logger_file_handler.setFormatter(formatter)
 logger.addHandler(logger_file_handler)
 
 try:
+     # Load credentials from the 'src' folder
+    from config import credentials
+
+    # Access Twilio config from the 'src' folder
+    from twilio_config import gmail_credentials
+
     SOME_SECRET = os.environ["SOME_SECRET"]
 except KeyError:
     SOME_SECRET = "Token not available!"
