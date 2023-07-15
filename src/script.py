@@ -3,12 +3,10 @@ import logging.handlers
 import os
 
 import requests
-from config import credentials
 from sp_api.base import Marketplaces
 from sp_api.api import Orders
 from datetime import datetime, timedelta
 from sms import send_sms_via_email
-from twilio_config import gmail_credentials
 import pytz
 import json
 import schedule
@@ -17,8 +15,6 @@ import time
 
 # Get the current script's directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
-
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -33,13 +29,22 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 logger_file_handler.setFormatter(formatter)
 logger.addHandler(logger_file_handler)
 
+# Access credentials from the dictionary
+credentials = {
+    "refresh_token": os.environ.get("SP_API_REFRESH_TOKEN"),
+    "lwa_app_id": os.environ.get("LWA_APP_ID"),
+    "lwa_client_secret": os.environ.get("LWA_CLIENT_SECRET"),
+    "aws_access_key": os.environ.get("SP_API_ACCESS_KEY"),
+    "aws_secret_key": os.environ.get("SP_API_SECRET_KEY"),
+    "role_arn": os.environ.get("SP_API_ROLE_ARN")
+}
+
+gmail_credentials = {
+    "gmail_user": os.environ.get("GMAIL_USER"),
+    "gmail_password": os.environ.get("GMAIL_PASSWORD")
+}
+
 try:
-     # Load credentials from the 'src' folder
-    from config import credentials
-
-    # Access Twilio config from the 'src' folder
-    from twilio_config import gmail_credentials
-
     SOME_SECRET = os.environ["SOME_SECRET"]
 except KeyError:
     SOME_SECRET = "Token not available!"
