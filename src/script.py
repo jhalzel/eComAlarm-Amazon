@@ -52,7 +52,7 @@ credentials = {
 }
 
 gmail_credentials = {
-    "gmail_user": os.environ.get("GMAIL_USER"),
+    "gmail_username": os.environ.get("GMAIL_USER"),
     "gmail_password": os.environ.get("GMAIL_PASSWORD")
 }
 
