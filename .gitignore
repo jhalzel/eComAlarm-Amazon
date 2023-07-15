@@ -133,3 +133,11 @@ __blobstorage__
 __queuestorage__
 __azurite_db*__.json
 .python_packages
+
+
+
+#Sensitive data
+
+config.py
+twilio_config.py
+# src/credentials.py
