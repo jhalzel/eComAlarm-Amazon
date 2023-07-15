@@ -1,6 +1,6 @@
 import email, smtplib, ssl
 from providers import PROVIDERS
-from twilio_config import gmail_credentials
+import os
 
 from email import encoders
 from email.mime.base import MIMEBase
@@ -16,6 +16,10 @@ from exceptions import (
     NumberNotValidException,
 )
 
+gmail_credentials = {
+    "gmail_user": os.environ.get("GMAIL_USER"),
+    "gmail_password": os.environ.get("GMAIL_PASSWORD"),
+}
 
 
 def send_sms_via_email(
