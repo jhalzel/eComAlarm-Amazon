@@ -96,13 +96,13 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+src/.env
+src/.venv
+src/env/
+src/venv/
+src/ENV/
+src/env.bak/
+src/venv.bak/
 
 # Spyder project settings
 .spyderproject
