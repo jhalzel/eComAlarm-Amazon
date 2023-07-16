@@ -16,10 +16,10 @@ from exceptions import (
     NumberNotValidException,
 )
 
-# gmail_credentials = {
-#     "gmail_username": os.environ.get("GMAIL_USER"),
-#     "gmail_password": os.environ.get("GMAIL_PASSWORD"),
-# }
+gmail_credentials = {
+    "gmail_username": os.environ.get("GMAIL_USER"),
+    "gmail_password": os.environ.get("GMAIL_PASSWORD"),
+}
 
 
 def send_sms_via_email(
