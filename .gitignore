@@ -140,5 +140,5 @@ __azurite_db*__.json
 
 config.py
 twilio_config.py
-const.env
+const.py
 # src/credentials.py
