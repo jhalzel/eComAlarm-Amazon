@@ -12,6 +12,8 @@ jobs:
 
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content to github runner
+        with: 
+          node-version: '16.15.0'
 
       - name: setup python
         uses: actions/setup-python@v4
