@@ -98,9 +98,10 @@ celerybeat-schedule
 # Environments
 .env
 .venv
-env/
-venv/
-ENV/
+src/.venv
+src/env/
+src/venv/
+src/ENV/
 env.bak/
 venv.bak/
 
@@ -138,6 +139,6 @@ __azurite_db*__.json
 
 #Sensitive data
 
-config.py
-twilio_config.py
+src/config.py
+src/twilio_config.py
 # src/credentials.py
