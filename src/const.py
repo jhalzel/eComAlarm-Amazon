@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 REFRESH_TOKEN = os.environ.get('SP_API_REFRESH_TOKEN')   
 LWA_APP_ID = os.environ.get('LWA_APP_ID')
