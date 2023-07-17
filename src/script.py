@@ -1,6 +1,7 @@
 import logging
 import logging.handlers
 import os
+from dotenv import load_dotenv
 
 import requests
 from sp_api.base import Marketplaces
@@ -12,6 +13,8 @@ import json
 import schedule
 import time
 
+
+load_dotenv()
 
 # Get the current script's directory
 current_dir = os.path.dirname(os.path.abspath(__file__))

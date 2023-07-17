@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#vscode
+.vscode/
+
 # C extensions
 *.so
 
@@ -98,12 +101,16 @@ celerybeat-schedule
 # Environments
 .env
 .venv
-src/.venv
+venv/
+env/
+src/.venv/
+src/.env/
 src/env/
 src/venv/
 src/ENV/
 env.bak/
 venv.bak/
+
 
 # Spyder project settings
 .spyderproject
@@ -141,4 +148,5 @@ __azurite_db*__.json
 
 src/config.py
 src/twilio_config.py
+src/const.py
 # src/credentials.py
