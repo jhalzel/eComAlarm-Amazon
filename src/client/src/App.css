@@ -1,11 +1,32 @@
+
+/* Outer most div containing everything called .App  with solid full background not moving*/
 .App {
+  display: inherit;
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
+  min-width: 100vw;  
+  /* no scroll */
+  overflow: hidden;
+  /* white edges hidden */
+  margin: 0;
+  padding: 0;
+  /* no scroll bars */
 }
 
+/* .App {
+  display: inherit;
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  min-width: 100vw;  
+} */
+
 .App-status {
-  padding: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
   color:whitesmoke;
 }
 
@@ -28,11 +49,13 @@ div .App-link {
   flex-direction: row;
   /* all content fits on screen */
   flex-wrap: nowrap;
-  justify-content: start;
+  /* center content */
+  justify-content: space-between;
   align-items: center;
-  padding-left: 10px;
+  padding: auto;
   /* scroll horizontal */
-  overflow-x: scroll;
+  overflow-x: auto;
+  width: 100%;
 }
 
 .App-link h7 {
@@ -46,10 +69,10 @@ div .App-link {
   min-height: 50px;
   /* even heights */
   height: 100px;
-  /* even widths */
-  width: 100px;
   /* min width of box size */
   min-width: 100px;
+  /* even widths */
+  width: 100px;
   /* border radius */
   border-radius: 5px;
   /* background color */
@@ -59,6 +82,9 @@ div .App-link {
 
 /* .App-link contains all of the data in a navbar type of way*/
 .App-link {
+  white-space: pre-wrap;  
+  overflow-x: auto;
+  display: inline-flex;
   color: #61dafb;
 }
 .App-link-values {

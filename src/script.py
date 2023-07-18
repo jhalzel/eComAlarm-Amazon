@@ -7,6 +7,7 @@ import requests
 from sp_api.base import Marketplaces
 from sp_api.api import Orders
 from sp_api.api import Products
+from collections import Counter
 from datetime import datetime, timedelta
 from sms import send_sms_via_email
 import pytz
@@ -88,6 +89,7 @@ def main():
     order_pending_count = 0
     fba_sales = 0
     fbm_sales = 0
+    total_sales = 0
 
     number = '7742396843'
     message = 'Total sales has met the threshold of $60.'
@@ -105,12 +107,15 @@ def main():
             fba_sales += float(order['OrderTotal']['Amount'])
 
         # print the order data
-        print(f'order: {json.dumps(order, indent=4)}')
+        # print(f'order: {json.dumps(order, indent=4)}')
 
-        # extract order total
+        # loop through and extract order sales amounts
         if 'OrderTotal' in order:
+            # get order total
             sale = float(order['OrderTotal']['Amount'])
+            # add to total sales
             total_sales += sale
+            # add to order count
             order_count += 1
 
         # get pending orders
@@ -120,36 +125,55 @@ def main():
             order_ids.append(order['AmazonOrderId'])
 
 
-    asins = []
-
-
+    # get counter object of asins
+    asin_counter = Counter()
+     
     # Iterate over the order IDs and get the (pending) order items
     for order in order_ids:
+        # initialize response
         response = orders_client.get_order_items(order_id=order)
+        # initialize order_items
         order_items = response.payload['OrderItems']
-        print(f'order_items: {json.dumps(order_items, indent=4)}')
-        # extract ASINs
+        # print(f'order_items: {json.dumps(order_items, indent=4)}')
+        # make counter of asins
         for item in order_items:
-            asins.append(item['ASIN'])
+            asin_counter[item['ASIN']] += 1
     
-    print(f'asins: {asins}')
+    # print the asin counter
+    print(f'asin_counter: {asin_counter}')
+
+    # get asins list
+    asins = list(asin_counter.keys())
+    # print the asins list
+    print(f'asins: {asins}') 
+
 
     # grab products pricing information
     products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
     
     price_response = products_client.get_product_pricing_for_asins(asin_list=asins, item_condition='New')
+    # loop through the asin data
     for asin_data in price_response.payload:
-        asin = asin_data
-        print(f'asin_data: {json.dumps(asin, indent=4)}')
-        
+        # print the asin data
+        print(f'asin_data: {json.dumps(asin_data, indent=4)}')
+        # extract price
+        price = asin_data['Product']['Offers'][0]['BuyingPrice']['LandedPrice']['Amount']
+        # extract quantity
+        qty = asin_counter[asin_data['ASIN']]
+        # print quantity of each asin
+        print(f'quantity of {asin_data["ASIN"]}: {qty}')
+        # calculate total price
+        price_total = price * qty
+        # print total price
+        print(f'price_total: {price_total}')
 
-
+    
 
     print(f'order_pending_count: {order_pending_count}')            
     print(f'total_sales: {fba_sales}')
+    print(f'fba_sales: {fba_sales}')
     print(f'fbm_sales: {fbm_sales}')
     print(f'order_count: {order_count}')
-
 
 
 
