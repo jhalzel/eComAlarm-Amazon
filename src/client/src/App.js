@@ -25,29 +25,30 @@ useEffect(() => {
 
   return (
     <div className='App'>
-      <nav className='App-header'>
-        <ul>
-          <li>
+      
+        <header>
             <a href='/'>
               <h6>Amazon FBM Revenue Tracker</h6>
             </a>
-          </li>
-        </ul>
-      </nav>
-      {data ? (
-        <div>
-          <h3 className='App-link'>Total Sales: {data.total_sales}</h3>
-          <h3 className='App-link'>Order Count: {data.order_count}</h3>
+        </header>
+
+      
+        <div className='App-status'>
+        <h2>Status</h2>
+        <p className='App-link'>Last Updated: {data ? data.last_updated : 'N/A'}</p>
+        </div>
+        
+      {data ? (        
+        <div className='App-link'>
+          <h7>Total FBM Sales: <br/> <span className='App-link-values'>{data.fbm_sales}</span></h7>
+          <h7>Total FBA Sales: <br/>  <span className='App-link-values'>{data.fba_sales}</span></h7>
+          <h7>Orders Pending: <br/> <span className='App-link-values'>{data.order_pending_count}</span> </h7>
+          <h7>Order Count: <br/> <span className='App-link-values'>{data.order_count}</span></h7>
         </div>
       ) : (
         <p className='App'>Loading...</p>
       )}
       
-      <div className='App-status'>
-        <h2>Status</h2>
-        <p className='App-link'>Last Updated: {data ? data.last_updated : 'N/A'}</p>
-      </div>
-
     </div>
   );
 }

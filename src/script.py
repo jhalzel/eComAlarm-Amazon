@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import requests
 from sp_api.base import Marketplaces
 from sp_api.api import Orders
+from sp_api.api import Products
 from datetime import datetime, timedelta
 from sms import send_sms_via_email
 import pytz
@@ -84,7 +85,9 @@ def main():
 
     order_ids = []
     order_count = 0
-    total_sales = 0
+    order_pending_count = 0
+    fba_sales = 0
+    fbm_sales = 0
 
     number = '7742396843'
     message = 'Total sales has met the threshold of $60.'
@@ -93,30 +96,81 @@ def main():
 
     # Iterate over the orders and extract the order IDs
     for order in response.payload['Orders']:
-        #filter out orders that are not fulfilled by Amazon
-        # if order['FulfillmentChannel'] != 'AFN': 
-        order_ids.append(order['AmazonOrderId'])
-        order_count += 1
+        #extract FBM orders (MFN)
+        if order['FulfillmentChannel'] != 'AFN' and order['OrderStatus'] != 'Pending' and order['OrderStatus'] != 'Canceled':
+            fbm_sales += float(order['OrderTotal']['Amount'])
+
+        # extract FBA orders (AFN)
+        elif order['FulfillmentChannel'] == 'AFN' and order['OrderStatus'] != 'Pending' and order['OrderStatus'] != 'Canceled':
+            fba_sales += float(order['OrderTotal']['Amount'])
+
+        # print the order data
         print(f'order: {json.dumps(order, indent=4)}')
+
+        # extract order total
         if 'OrderTotal' in order:
             sale = float(order['OrderTotal']['Amount'])
             total_sales += sale
-    print(f'total_sales: {total_sales}')
+            order_count += 1
+
+        # get pending orders
+        elif order['OrderStatus'] == 'Pending':
+            order_pending_count += 1
+            # get order ids of pending orders only
+            order_ids.append(order['AmazonOrderId'])
+
+
+    asins = []
+
+
+    # Iterate over the order IDs and get the (pending) order items
+    for order in order_ids:
+        response = orders_client.get_order_items(order_id=order)
+        order_items = response.payload['OrderItems']
+        print(f'order_items: {json.dumps(order_items, indent=4)}')
+        # extract ASINs
+        for item in order_items:
+            asins.append(item['ASIN'])
+    
+    print(f'asins: {asins}')
+
+    # grab products pricing information
+    products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
+    
+    price_response = products_client.get_product_pricing_for_asins(asin_list=asins, item_condition='New')
+    for asin_data in price_response.payload:
+        asin = asin_data
+        print(f'asin_data: {json.dumps(asin, indent=4)}')
+        
+
+
+
+    print(f'order_pending_count: {order_pending_count}')            
+    print(f'total_sales: {fba_sales}')
+    print(f'fbm_sales: {fbm_sales}')
     print(f'order_count: {order_count}')
 
 
+
+
+
     # If total_sales reaches threshold, send text message
-    if total_sales > 60:
+    if fbm_sales > 60:
         try:
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
             print(f'Error: {e}')
-
+    
+    # Get the current timestamp when main() is called
+    current_timestamp = datetime.now().strftime("%m - %d %H:%M:%S")
 
     # Exit the function to pause the program
     return {
-        'total_sales': [total_sales],
-        'order_count': [order_count]
+        'fbm_sales': [fbm_sales],
+        'fba_sales': [fba_sales],
+        'order_pending_count': [order_pending_count],
+        'order_count': [order_count],
+        'last_updated': [current_timestamp]
     }
 
    

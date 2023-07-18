@@ -9,37 +9,62 @@
   color:whitesmoke;
 }
 
-.App-header {
+header a {
   background-color: #282c34;
   display: flex;
   min-height: 25%;
   flex-direction: column;
   align-items: center;
   font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-header ul {
-  display: flex;
-  flex-direction: row;
-  list-style: none;
-}
-
-.App-header ul li {
-  margin-right: 20px;
-}
-
-.App-header ul li a {
   text-decoration: none;
-  color: yellowgreen;
+  color: greenyellow;
   font-weight: 500;
   font-size: x-large;
 }
 
+
+div .App-link {
+  display: flex;
+  flex-direction: row;
+  /* all content fits on screen */
+  flex-wrap: nowrap;
+  justify-content: start;
+  align-items: center;
+  padding-left: 10px;
+  /* scroll horizontal */
+  overflow-x: scroll;
+}
+
+.App-link h7 {
+  /* border around each header */
+  border: 1px solid greenyellow;
+  /* even padding */
+  padding: 10px;
+  /* margin between each header */
+  margin: 10px;
+  /* even min-heights */
+  min-height: 50px;
+  /* even heights */
+  height: 100px;
+  /* even widths */
+  width: 100px;
+  /* min width of box size */
+  min-width: 100px;
+  /* border radius */
+  border-radius: 5px;
+  /* background color */
+  background-color: #1b1d21;
+  
+}
+
+/* .App-link contains all of the data in a navbar type of way*/
 .App-link {
-  background-color: #282c34;
-  min-height: 100%;
   color: #61dafb;
+}
+.App-link-values {
+  color: greenyellow;
+  font-weight: 500;
+  font-size: medium;
 }
 
 @keyframes App-logo-spin {
