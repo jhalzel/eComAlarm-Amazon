@@ -47,7 +47,7 @@ credentials = {
 }
 
 gmail_credentials = {
-    "gmail_username": os.environ.get("GMAIL_USER"),
+    "gmail_username": os.environ.get("GMAIL_USERNAME"),
     "gmail_password": os.environ.get("GMAIL_PASSWORD")
 }
 
@@ -98,32 +98,31 @@ def main():
 
     # Iterate over the orders and extract the order IDs
     for order in response.payload['Orders']:
-        #extract FBM orders (MFN)
-        if order['FulfillmentChannel'] != 'AFN' and order['OrderStatus'] != 'Pending' and order['OrderStatus'] != 'Canceled':
-            fbm_sales += float(order['OrderTotal']['Amount'])
-
-        # extract FBA orders (AFN)
-        elif order['FulfillmentChannel'] == 'AFN' and order['OrderStatus'] != 'Pending' and order['OrderStatus'] != 'Canceled':
-            fba_sales += float(order['OrderTotal']['Amount'])
 
         # print the order data
-        # print(f'order: {json.dumps(order, indent=4)}')
-
-        # loop through and extract order sales amounts
+        print(f'order: {json.dumps(order, indent=4)}')
+        
+         # item is not pending, cancelled, or unfulfillable
         if 'OrderTotal' in order:
-            # get order total
-            sale = float(order['OrderTotal']['Amount'])
-            # add to total sales
-            total_sales += sale
-            # add to order count
+        # Orders are either fulfilled by Amazon (FBA) or fulfilled by Merchant (FBM)
+            
+            #extract FBA orders (AFN)
+            if order['FulfillmentChannel'] == 'AFN' and 'OrderTotal' in order:
+                fba_sales += float(order['OrderTotal']['Amount'])
+
+            # extract FBM orders (MFN)
+            elif order['FulfillmentChannel'] == 'MFN' and 'OrderTotal' in order:
+                fbm_sales += float(order['OrderTotal']['Amount'])
+
+            # get order total amount for both FBA and FBM
+            total_sales += float(order['OrderTotal']['Amount'])
             order_count += 1
 
-        # get pending orders
+        # get pending orders' ids
         elif order['OrderStatus'] == 'Pending':
             order_pending_count += 1
             # get order ids of pending orders only
             order_ids.append(order['AmazonOrderId'])
-
 
     # get counter object of asins
     asin_counter = Counter()
@@ -135,7 +134,7 @@ def main():
         # initialize order_items
         order_items = response.payload['OrderItems']
         # print(f'order_items: {json.dumps(order_items, indent=4)}')
-        # make counter of asins
+        # add to counter object
         for item in order_items:
             asin_counter[item['ASIN']] += 1
     
@@ -145,30 +144,50 @@ def main():
     # get asins list
     asins = list(asin_counter.keys())
     # print the asins list
-    print(f'asins: {asins}') 
+    # print(f'asins: {asins}') 
 
 
     # grab products pricing information
     products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
     
     price_response = products_client.get_product_pricing_for_asins(asin_list=asins, item_condition='New')
-    # loop through the asin data
+
+
+    # Product Pricing information
     for asin_data in price_response.payload:
         # print the asin data
-        print(f'asin_data: {json.dumps(asin_data, indent=4)}')
-        # extract price
-        price = asin_data['Product']['Offers'][0]['BuyingPrice']['LandedPrice']['Amount']
-        # extract quantity
-        qty = asin_counter[asin_data['ASIN']]
-        # print quantity of each asin
-        print(f'quantity of {asin_data["ASIN"]}: {qty}')
-        # calculate total price
-        price_total = price * qty
-        # print total price
-        print(f'price_total: {price_total}')
+        # print(f'asin_data: {json.dumps(asin_data, indent=4)}')
+        
+        # Item is available for sale
+        if 'Offers'in asin_data['Product']:
+            # extract price
+            price = asin_data['Product']['Offers'][0]['BuyingPrice']['LandedPrice']['Amount']
+            # extract quantity
+            qty = asin_counter[asin_data['ASIN']]
+            # print quantity of each asin
+            # print(f'quantity of {asin_data["ASIN"]}: {qty}')
+            # calculate total price
+            price_total = price * qty
+            # print total price
+            print(f'price_total: {price_total}')
 
+        # Item is not available for sale (get buy-box price)
+        else:
+            qty = asin_counter[asin_data['ASIN']]
+            
+            try: 
+                newest_offer = products_client.get_item_offers(asin_data['ASIN'], item_condition='New').payload
+                # print(f'newest_offers: {json.dumps(newest_offer, indent=4)}')
+                buy_box_price = newest_offer['Summary']['BuyBoxPrices'][0]['LandedPrice']['Amount']
+                print(f'buy_box_price: {buy_box_price}')
+                price_total = buy_box_price * qty
+            except Exception as e:
+                print(f'Offers not found: {e}')
+                continue
+
+    # add price_total to total_sales                
+    total_sales += price_total
     
-
     print(f'order_pending_count: {order_pending_count}')            
     print(f'total_sales: {fba_sales}')
     print(f'fba_sales: {fba_sales}')

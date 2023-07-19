@@ -31,7 +31,6 @@ useEffect(() => {
               <h6>Amazon FBM Revenue Tracker</h6>
             </a>
         </header>
-
       
         <div className='App-status'>
         <h2>Status</h2>
