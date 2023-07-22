@@ -1,41 +1,44 @@
-
-/* Outer most div containing everything called .App  with solid full background not moving*/
-.App {
-  display: inherit;
-  text-align: center;
-  background-color: #282c34;
-  min-height: 100vh;
-  min-width: 100vw;  
-  /* no scroll */
-  overflow: hidden;
-  /* white edges hidden */
+/* Remove default margin and padding on body and HTML elements */
+body, html {
   margin: 0;
   padding: 0;
-  /* no scroll bars */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
-/* .App {
-  display: inherit;
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Remove scrollbar */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Outer most div containing everything called .App with solid full background not moving */
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
-  min-width: 100vw;  
-} */
-
-.App-status {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 20px;
-  color:whitesmoke;
+  min-width: 100vw;
+  color: whitesmoke;
 }
 
-header a {
+/* Header styles */
+header {
   background-color: #282c34;
   display: flex;
-  min-height: 25%;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  height: 10vh;
+}
+
+header h6 {
   font-size: calc(10px + 2vmin);
   text-decoration: none;
   color: greenyellow;
@@ -43,61 +46,141 @@ header a {
   font-size: x-large;
 }
 
-
-div .App-link {
-  display: flex;
-  flex-direction: row;
-  /* all content fits on screen */
-  flex-wrap: nowrap;
-  /* center content */
-  justify-content: space-between;
-  align-items: center;
-  padding: auto;
-  /* scroll horizontal */
-  overflow-x: auto;
-  width: 100%;
-}
-
-.App-link h7 {
-  /* border around each header */
-  border: 1px solid greenyellow;
-  /* even padding */
-  padding: 10px;
-  /* margin between each header */
-  margin: 10px;
-  /* even min-heights */
-  min-height: 50px;
-  /* even heights */
-  height: 100px;
-  /* min width of box size */
-  min-width: 100px;
-  /* even widths */
-  width: 100px;
-  /* border radius */
-  border-radius: 5px;
-  /* background color */
-  background-color: #1b1d21;
-  
-}
-
-/* .App-link contains all of the data in a navbar type of way*/
-.App-link {
-  white-space: pre-wrap;  
-  overflow-x: auto;
-  display: inline-flex;
+header a:hover {
   color: #61dafb;
 }
+
+header a {
+  text-decoration: none;
+}
+
+
+/* Status section styles */
+.App-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #61dafb;
+}
+
+/* Data boxes styles */
+.App-link {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #61dafb;
+  flex-wrap: wrap;
+}
+
+.data-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid greenyellow;
+  padding: 10px;
+  margin: 10px;
+  height: 4rem;
+  width: 6rem;
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: #1b1d21;
+}
+
+/* Values styles */
 .App-link-values {
   color: greenyellow;
   font-weight: 500;
   font-size: medium;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+
+
+/* =================================================================== */
+
+/* Sales Threshold (1) styles */
+.Sales_threshold_title {
+  color: rgb(255, 71, 47);
+  font-weight: 500;
+  font-size: medium;
+}
+
+/* Sales threshold styles */
+.Sales_threshold1 {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  color: #61dafb;
+  margin: 0.5rem;
+}
+
+.Sales_threshold1 input {
+  max-width: fit-content;
+  margin: 0.3rem;
+  padding: 0.4rem;
+  border: 1px solid greenyellow;
+  border-radius: 5px;
+  background-color: #1b1d21;
+  color: greenyellow;
+}
+
+.Sales_threshold1 button {
+  margin: 0.2rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid greenyellow;
+  border-radius: 5px;
+  background-color: #1b1d21;
+  color: #61dafb;
+  cursor: pointer;
+}
+
+.Sales_threshold1 button:hover {
+  background-color: #61dafb;
+  color: #103e99;
+}
+
+.Sales_threshold_title .fbm_threshold {
+  text-align: center;
+  color: #61dafb;
+  margin: 0.5rem;
+  font-size: large;
+  font-weight: 800;
+}
+
+
+
+/* =================================================================== */
+
+/* Sales threshold (2) styles */
+.Sales_threshold2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #61dafb;
+  margin: 0.5rem;
+}
+
+.Sales_threshold2 input {
+  margin: 0.3rem;
+  padding: 0.4rem;
+  border: 1px solid greenyellow;
+  border-radius: 5px;
+  background-color: #1b1d21;
+  color: greenyellow;
+}
+
+.Sales_threshold2 button {
+  margin: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid greenyellow;
+  border-radius: 5px;
+  background-color: #1b1d21;
+  color: #61dafb;
+  cursor: pointer;
+}
+
+.Sales_threshold2 button:hover {
+  background-color: #61dafb;
+  color: #1b1d21;
 }

@@ -141,19 +141,11 @@ def main():
     # local_date = datetime.now(pytz.timezone("US/Pacific"))
 
     # UTC time zone
-    current_date = datetime.now().astimezone(pytz.utc)
-    adjusted_date = current_date - timedelta(minutes=3)
     eastern_date = datetime.now(pytz.timezone("US/Eastern"))
-    # hours_from_midnight = (eastern_date - eastern_date.replace(hour=0, minute=0, second=0, microsecond=0)).total_seconds() / 3600.0
-    
+    adjusted_date = eastern_date - timedelta(minutes=3)
 
-    # adjust for Eastern time by adding 4 hours
-    onedayago = current_date - timedelta(hours=23, minutes=30, seconds=59)
-    # print(f"current_date: {current_date}")  
-    # print(f"onedayago: {onedayago}")
-
-    start_date = onedayago.strftime("%Y-%m-%dT%H:%M:%SZ")
-    end_date = adjusted_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+    start_date = eastern_date.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S-04:00")
+    end_date = adjusted_date.strftime("%Y-%m-%dT%H:%M:%S")
 
     # Use the modified values in the API call
     response = orders_client.get_orders(
@@ -165,6 +157,7 @@ def main():
     fba_order_ids = []
     fbm_order_ids = []
     order_count = 0
+    shipped_order_count = 0
     order_pending_count = 0
     fba_sales = 0
     fbm_sales = 0
@@ -182,12 +175,14 @@ def main():
         
          # item is not pending, cancelled, or unfulfillable
         if 'OrderTotal' in order:
+            shipped_order_count += 1
             order_count += 1
         # Orders are either fulfilled by Amazon (FBA) or fulfilled by Merchant (FBM)
             
             #extract FBA orders (AFN)
             if order['FulfillmentChannel'] == 'AFN' and 'OrderTotal' in order:
                 fba_sales += float(order['OrderTotal']['Amount'])
+                print(f'fba_sales: {fba_sales}')
 
             # extract FBM orders (MFN)
             elif order['FulfillmentChannel'] == 'MFN' and 'OrderTotal' in order:
@@ -197,13 +192,14 @@ def main():
         # get pending orders' ids
         elif order['OrderStatus'] == 'Pending':
             order_pending_count += 1
+            order_count += 1
             if order['FulfillmentChannel'] == 'MFN':
                 # FBM PENDING ORDERS
                 fbm_order_ids.append(order['AmazonOrderId'])
+
             elif order['FulfillmentChannel'] == 'AFN':
                 # FBA PENDING ORDERS
                 fba_order_ids.append(order['AmazonOrderId'])
-
         else:
             continue
 
@@ -225,27 +221,22 @@ def main():
     products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
 
     #calculate fbm sales
-    fbm_sales = calculate_total_sales(fbm_asin_counter, fbm_asins, products_client)
+    fbm_sales += calculate_total_sales(fbm_asin_counter, fbm_asins, products_client)
 
     #calculate fba sales
-    fba_sales = calculate_total_sales(fba_asin_counter,fba_asins, products_client)
-
-    
+    fba_sales += calculate_total_sales(fba_asin_counter,fba_asins, products_client)
 
     print(f'fbm_sales: {fbm_sales}')
     print(f'fba_sales: {fba_sales}')
    
-    # add price_total to total_sales                
-    # total_sales += price_total
     
     print(f'order_pending_count: {order_pending_count}')            
-    print(f'total_sales: {fba_sales}')
+    print(f'total_sales: {fba_sales + fbm_sales}')
     print(f'fba_sales: {fba_sales}')
     print(f'fbm_sales: {fbm_sales}')
-    print(f'order_count: {order_count}')
-    print(f'current_date: {current_date}')
+    print(f'shipped order count: {shipped_order_count}')
+    print(f'total order count: {order_count}')
     print(f'eastern_date: {eastern_date}')
-    print(f'one_day_ago: {onedayago}')
 
 
     # If total_sales reaches threshold, send text message
@@ -254,27 +245,25 @@ def main():
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
             print(f'Error: {e}')
+
+    custom_format = "%B %d, %H:%M:%S"
     
     # Get the current timestamp when main() is called
-    current_timestamp = datetime.now().strftime("%m - %d %H:%M:%S")
+    current_timestamp = datetime.now()
+
+    # Format the timestamp
+    current_timestamp = current_timestamp.strftime(custom_format)
 
     # Exit the function to pause the program
     return {
+        'total_sales': [fbm_sales + fba_sales], 
         'fbm_sales': [fbm_sales],
         'fba_sales': [fba_sales],
+        'shipped_order_count': [shipped_order_count],
         'order_pending_count': [order_pending_count],
-        'order_count': [order_count],
+        'total_order_count': [order_count],
         'last_updated': [current_timestamp]
     }
-
-   
-# def run_program():
-#     # Run the main function every 5 minutes
-#     schedule.every(20).seconds.do(main)
-
-#     while True:
-#         schedule.run_pending()
-#         time.sleep(5)
 
 
 if __name__ == '__main__':
