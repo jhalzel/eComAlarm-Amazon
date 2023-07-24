@@ -104,6 +104,14 @@ useEffect(() => {
           <span className="App-link-values">${data.fba_sales}</span>
         </div>
         <div className="data-box">
+          <h7>FBA Pending Sales:</h7>
+          <span className="App-link-values">${data.fba_pending_sales}</span>
+        </div>
+        <div className="data-box">
+          <h7>FBM Pending Sales:</h7>
+          <span className="App-link-values">${data.fbm_pending_sales}</span>
+        </div>
+        <div className="data-box">
           <h7>Orders Pending:</h7>
           <span className="App-link-values">{data.order_pending_count}</span>
         </div>

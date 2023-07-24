@@ -221,15 +221,18 @@ def main():
     products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
 
     #calculate fbm sales
-    fbm_sales += calculate_total_sales(fbm_asin_counter, fbm_asins, products_client)
+    fbm_pending_sales = calculate_total_sales(fbm_asin_counter, fbm_asins, products_client)
 
     #calculate fba sales
-    fba_sales += calculate_total_sales(fba_asin_counter,fba_asins, products_client)
+    fba_pending_sales = calculate_total_sales(fba_asin_counter,fba_asins, products_client)
 
-    print(f'fbm_sales: {fbm_sales}')
-    print(f'fba_sales: {fba_sales}')
-   
-    
+    print(f'fbm_pending_sales: {fbm_pending_sales}')
+    print(f'fba_pending_sales: {fba_pending_sales}')
+
+    # add pending sales to total sales
+    fba_sales += fba_pending_sales
+    fbm_sales += fbm_pending_sales
+
     print(f'order_pending_count: {order_pending_count}')            
     print(f'total_sales: {fba_sales + fbm_sales}')
     print(f'fba_sales: {fba_sales}')
@@ -258,6 +261,8 @@ def main():
 
     # Exit the function to pause the program
     return {
+        'fba_pending_sales': [fba_pending_sales],
+        'fbm_pending_sales': [fbm_pending_sales],
         'total_sales': [fbm_sales + fba_sales], 
         'fbm_sales': [fbm_sales],
         'fba_sales': [fba_sales],
