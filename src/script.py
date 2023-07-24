@@ -141,11 +141,11 @@ def main():
     # local_date = datetime.now(pytz.timezone("US/Pacific"))
 
     # UTC time zone
-    eastern_date = datetime.now(pytz.timezone("US/Eastern"))
+    eastern_date = datetime.now(pytz.timezone("US/Eastern")) - timedelta(minutes=3)
     adjusted_date = eastern_date - timedelta(minutes=3)
 
     start_date = eastern_date.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S-04:00")
-    end_date = adjusted_date.strftime("%Y-%m-%dT%H:%M:%S")
+    end_date = adjusted_date.strftime("%Y-%m-%dT%H:%M:%S-04:00")
 
     # Use the modified values in the API call
     response = orders_client.get_orders(
@@ -237,6 +237,8 @@ def main():
     print(f'shipped order count: {shipped_order_count}')
     print(f'total order count: {order_count}')
     print(f'eastern_date: {eastern_date}')
+    print(f'end_date: {end_date}')
+    print(f'start_date: {start_date}')
 
 
     # If total_sales reaches threshold, send text message
