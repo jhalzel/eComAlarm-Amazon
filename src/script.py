@@ -250,7 +250,7 @@ def main():
 
     
     # If total_sales reaches threshold, send text message
-    if fbm_sales > 60:
+    if fba_sales > 60:
         try:
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
