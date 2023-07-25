@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # Set the environment variable based on the output of the execute_script print statement
-      REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} 
+        REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.revenue_threshold_met }}
+
     steps:
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content to GitHub runner
