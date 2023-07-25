@@ -12,7 +12,7 @@ jobs:
     steps:
 
       -name: Set up threshold environment variable
-       env: 
+      env: 
         REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }}
 
 
