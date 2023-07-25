@@ -20,6 +20,10 @@ jobs:
           echo "Revenue threshold met: ${{ inputs.revenue_threshold_met }}"
           # Set the PAUSE_SCHEDULE_FLAG to true
           echo "PAUSE_SCHEDULE_FLAG=true" >> $GITHUB_ENV
+      
+      - name: Check PAUSE_SCHEDULE_FLAG value
+        run: |
+          echo "PAUSE_SCHEDULE_FLAG: ${{ env.PAUSE_SCHEDULE_FLAG }}"
 
       - name: Pause the schedule if revenue threshold is met and flag is true
         if: ${{ inputs.revenue_threshold_met == 'true' && env.PAUSE_SCHEDULE_FLAG == 'true' }}
