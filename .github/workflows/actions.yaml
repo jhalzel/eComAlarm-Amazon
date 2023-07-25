@@ -9,12 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    needs: execute_script # Ensure the execute_script job is completed before running this job
-    env:
-      # Set the environment variable based on the output of the execute_script print statement
-        REVENUE_THRESHOLD_MET: ${{ needs.execute_script.outputs.revenue_threshold_met }}
-
+    
     steps:
+      - name: Check revenue threshold and pause schedule if needed
+        needs: execute_script # Ensure the execute_script job is completed before running this job
+        env:
+          # Set the environment variable based on the output of the execute_script print statement
+          REVENUE_THRESHOLD_MET: ${{ needs.execute_script.outputs.revenue_threshold_met }}
+
+
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content to GitHub runner
         with: 
