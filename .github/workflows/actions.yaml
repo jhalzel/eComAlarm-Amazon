@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-  - cron: '0,15,30,45 * * * *' # run exactly every 15 minutes
+    - cron: '0,15,30,45 * * * *' # run exactly every 15 minutes
   repository_dispatch:
     types: [resume_schedule]
 
@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9' # install the python version needed
-
 
       - name: Restore cache
         uses: actions/cache@v2
@@ -61,7 +60,7 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           
-       - name: Check revenue threshold and pause schedule if needed
+      - name: Check revenue threshold and pause schedule if needed
         if: ${{ env.REVENUE_THRESHOLD_MET == 'true' }}
         run: |
           echo "Pause the schedule until midnight if revenue threshold is met."
@@ -69,7 +68,6 @@ jobs:
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/repos/jhalzel/amz-monitor_test/actions/workflows/pause.yaml/dispatches \
               -d '{"ref":"main", "inputs": {"revenue_threshold_met": "true"}}'
-          
 
       # - name: commit files
       #   run: |
@@ -82,4 +80,4 @@ jobs:
       #   uses: ad-m/github-push-action@v0.6.0
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: main 
+      #     branch: main
