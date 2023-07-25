@@ -143,16 +143,26 @@ def main():
     # Set up the Sales API client
     orders_client = Orders(credentials=credentials, marketplace=Marketplaces.US)
 
-    # get Pacific Time current date
-    # local_date = datetime.now(pytz.timezone("US/Pacific"))
+            
+    # Get the current time in the Eastern timezone (US/Eastern)
+    eastern_timezone = pytz.timezone("US/Eastern")
+    current_time = datetime.now(eastern_timezone)
 
-    # UTC time zone
-    eastern_date = datetime.now(pytz.timezone("US/Eastern")) - timedelta(minutes=3)
-    adjusted_date = eastern_date - timedelta(minutes=3)
+    # Check if daylight saving time (DST) is in effect for the current time
+    is_dst = current_time.dst() != timedelta(0)
 
-    start_date = eastern_date.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S-04:00")
-    end_date = adjusted_date.strftime("%Y-%m-%dT%H:%M:%S-04:00")
+    # Adjust the timezone based on DST
+    if is_dst:
+        timezone_offset = "-04:00"  # Eastern Daylight Time (EDT) - UTC-4
+    else:
+        timezone_offset = "-05:00"  # Eastern Standard Time (EST) - UTC-5
 
+    # Format the start_date and end_date with the adjusted timezone offset
+    start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    adjusted_date = current_time - timedelta(minutes=3)
+    end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+
+        
     # Use the modified values in the API call
     response = orders_client.get_orders(
         CreatedAfter=start_date,
@@ -245,10 +255,9 @@ def main():
     print(f'fbm_sales: {fbm_sales}')
     print(f'shipped order count: {shipped_order_count}')
     print(f'total order count: {order_count}')
-    print(f'eastern_date: {eastern_date}')
+    print(f'eastern_timezone: {eastern_timezone}')
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
-
 
     
     # If total_sales reaches threshold, send text message
