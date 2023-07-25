@@ -9,11 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} # Set the environment variable based on the output of the execute_script step
     steps:
-
-      - name: Set up threshold environment variable # Add a space before "name"
-        env: 
-          REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} # Correct the indentation
 
       - name: checkout repo content
         uses: actions/checkout@v2 # checkout the repository content to GitHub runner
