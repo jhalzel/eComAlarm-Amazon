@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-    # Set the environment variable based on the output of the execute_script print statement
+      # Set the environment variable based on the output of the execute_script print statement
       REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} 
     steps:
 
