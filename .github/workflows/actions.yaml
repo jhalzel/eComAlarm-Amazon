@@ -11,14 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      -name: Set up threshold environment variable
+      - name: Set up threshold environment variable # Add a space before "name"
         env: 
-          REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }}
-
-
+          REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} # Correct the indentation
 
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2 # checkout the repository content to GitHub runner
         with: 
           node-version: '16.15.0'
 
