@@ -17,6 +17,10 @@ jobs:
           flag_value=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/jhalzel/amz-monitor_test/actions/secrets/PAUSE_SCHEDULE_FLAG)
+
+          # Print the output for debugging
+          echo "Secret API Response:"
+          echo "$flag_value"
           
           # Check if the flag is set to "true"
           if [[ $flag_value == *"\"value\": \"true\""* ]]; then
