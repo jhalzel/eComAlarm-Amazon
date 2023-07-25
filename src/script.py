@@ -12,11 +12,11 @@ from sp_api.api import Products
 # Data Manipulation and Analysis 
 from collections import Counter 
 from datetime import datetime, timedelta 
-from github import context
+
  
 # Communication and Notification 
 from sms import send_sms_via_email 
- 
+
 # Timezone Handling 
 import pytz 
  
@@ -67,8 +67,12 @@ except KeyError:
     #raise
 
 
+# Set a default value for revenue_threshold_met
+revenue_threshold_met = False
+
 
 def calculate_total_sales(asin_counter, asins_list, client):
+    global revenue_threshold_met  # Make revenue_threshold_met a global variable
     price_total = 0
     total_sales = 0
     qty = 0
@@ -134,7 +138,7 @@ def get_asin_counter(order_ids, orders_client):
 
 
 def main():
-    # Initialize revenue_threshold_met as False initially
+    # Make revenue_threshold_met a global variable
     global revenue_threshold_met
 
     logger.info(f"Token value: {SOME_SECRET}")
@@ -257,7 +261,9 @@ def main():
             print(f'Error: {e}')
         revenue_threshold_met = True
 
-    context.set_output('threshold_met', str(revenue_threshold_met).lower())
+    # Set the output for GitHub Actions workflow
+    # Convert revenue_threshold_met to lowercase string for YAML compatibility
+    print(f'revenue_threshold_met: {str(revenue_threshold_met).lower()}')
     
     custom_format = "%B %d, %H:%M:%S"
     

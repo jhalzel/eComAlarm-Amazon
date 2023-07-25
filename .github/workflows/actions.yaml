@@ -10,7 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} # Set the environment variable based on the output of the execute_script step
+    # Set the environment variable based on the output of the execute_script print statement
+      REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.threshold_met }} 
     steps:
 
       - name: checkout repo content
@@ -60,8 +61,8 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           
-      - name: Check revenue threshold and pause schedule if needed
-        if: ${{ steps.execute_script.outputs.threshold_met == 'true' }}
+       - name: Check revenue threshold and pause schedule if needed
+        if: ${{ env.REVENUE_THRESHOLD_MET == 'true' }}
         run: |
           echo "Pause the schedule until midnight if revenue threshold is met."
           curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
