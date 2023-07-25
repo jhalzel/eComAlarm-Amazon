@@ -261,7 +261,8 @@ def main():
 
     # Set the output for GitHub Actions workflow
     # Convert revenue_threshold_met to lowercase string for YAML compatibility
-    print(f'::set-output name=revenue_threshold_met::{str(revenue_threshold_met).lower()}')
+    # print(f'::set-output name=revenue_threshold_met::{str(revenue_threshold_met).lower()}')
+    print(f'revenue_threshold_met: {str(revenue_threshold_met).lower()}')
     
     custom_format = "%B %d, %H:%M:%S"
     
