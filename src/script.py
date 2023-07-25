@@ -72,7 +72,6 @@ revenue_threshold_met = False
 
 
 def calculate_total_sales(asin_counter, asins_list, client):
-    global revenue_threshold_met  # Make revenue_threshold_met a global variable
     price_total = 0
     total_sales = 0
     qty = 0
@@ -138,8 +137,7 @@ def get_asin_counter(order_ids, orders_client):
 
 
 def main():
-    # Make revenue_threshold_met a global variable
-    global revenue_threshold_met
+    global revenue_threshold_met  # Make revenue_threshold_met a global variable
 
     logger.info(f"Token value: {SOME_SECRET}")
     # Set up the Sales API client
