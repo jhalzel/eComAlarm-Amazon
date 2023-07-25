@@ -1,0 +1,36 @@
+name: Pause Schedule
+on:
+  workflow_dispatch:
+    inputs:
+      revenue_threshold_met:
+        description: 'Boolean value indicating whether revenue threshold is met'
+        required: true
+
+jobs:
+  pause_schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pause the schedule if revenue threshold is met
+        if: ${{ inputs.revenue_threshold_met == 'true' }}
+        run: |
+          # Access the revenue_threshold_met from the environment
+          echo "Revenue threshold met: $REVENUE_THRESHOLD_MET"
+          
+          # Calculate the remaining time until midnight
+          now=$(date +%s)
+          midnight=$(date -d 'tomorrow 00:00:00' +%s)
+          remaining_seconds=$((midnight - now))
+          
+          # Sleep until midnight
+          echo "Pause the schedule until midnight."
+          sleep $remaining_seconds
+
+      # After the pause is over, trigger the actions.yaml workflow
+      - name: Trigger actions.yaml workflow
+        if: ${{ inputs.revenue_threshold_met == 'true' }}
+        run: |
+          echo "Resume the schedule. Triggering actions.yaml workflow."
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.everest-preview+json" \
+            https://api.github.com/repos/jhalzel/amz-monitor_test/dispatches \
+            -d '{"event_type": "resume_schedule"}'

@@ -12,6 +12,7 @@ from sp_api.api import Products
 # Data Manipulation and Analysis 
 from collections import Counter 
 from datetime import datetime, timedelta 
+from github import context
  
 # Communication and Notification 
 from sms import send_sms_via_email 
@@ -65,7 +66,7 @@ except KeyError:
     #logger.info("Token not available!")
     #raise
 
-    
+
 
 def calculate_total_sales(asin_counter, asins_list, client):
     price_total = 0
@@ -133,6 +134,9 @@ def get_asin_counter(order_ids, orders_client):
 
 
 def main():
+    # Initialize revenue_threshold_met as False initially
+    global revenue_threshold_met
+
     logger.info(f"Token value: {SOME_SECRET}")
     # Set up the Sales API client
     orders_client = Orders(credentials=credentials, marketplace=Marketplaces.US)
@@ -244,13 +248,17 @@ def main():
     print(f'start_date: {start_date}')
 
 
+    
     # If total_sales reaches threshold, send text message
     if fbm_sales > 60:
         try:
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
             print(f'Error: {e}')
+        revenue_threshold_met = True
 
+    context.set_output('threshold_met', str(revenue_threshold_met).lower())
+    
     custom_format = "%B %d, %H:%M:%S"
     
     # Get the current timestamp when main() is called

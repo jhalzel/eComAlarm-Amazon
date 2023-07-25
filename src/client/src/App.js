@@ -96,6 +96,10 @@ useEffect(() => {
           <span className="App-link-values">${data.total_sales}</span>
         </div>
         <div className="data-box">
+          <h7>Total Order Count:</h7>
+          <span className="App-link-values">{data.total_order_count}</span>
+        </div>
+        <div className="data-box">
           <h7>FBM Sales:</h7>
           <span className="App-link-values">${data.fbm_sales}</span>
         </div>
@@ -114,10 +118,6 @@ useEffect(() => {
         <div className="data-box">
           <h7>Orders Pending:</h7>
           <span className="App-link-values">{data.order_pending_count}</span>
-        </div>
-        <div className="data-box">
-          <h7>Total Order Count:</h7>
-          <span className="App-link-values">{data.total_order_count}</span>
         </div>
         <div className="data-box">
           <h7>Shipped Order Count:</h7>
