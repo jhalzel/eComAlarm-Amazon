@@ -9,9 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    needs: execute_script # Ensure the execute_script job is completed before running this job
     env:
       # Set the environment variable based on the output of the execute_script print statement
-        REVENUE_THRESHOLD_MET: ${{ steps.execute_script.outputs.revenue_threshold_met }}
+        REVENUE_THRESHOLD_MET: ${{ needs.execute_script.outputs.revenue_threshold_met }}
 
     steps:
       - name: checkout repo content
