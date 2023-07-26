@@ -67,8 +67,6 @@ except KeyError:
     #raise
 
 
-# Set a default value for revenue_threshold_met
-revenue_threshold_met = False
 
 
 def calculate_total_sales(asin_counter, asins_list, client):
@@ -135,10 +133,27 @@ def get_asin_counter(order_ids, orders_client):
     return asin_counter
 
 
+# Define the function to check if total_sales reaches threshold & conditionally send text message based on PAUSE_SCHEDULE_FLAG
+def check_and_send_notifications(PAUSE_SCHEDULE_FLAG, fba_sales, number, message, provider, sender_credentials, threshold):
+    # If total_sales reaches threshold, send text message
+    if fba_sales > threshold and not PAUSE_SCHEDULE_FLAG:
+        try:
+            send_sms_via_email(number, message, provider, sender_credentials)
+        except Exception as e:
+            print(f'Error: {e}')
+        # Set PAUSE_SCHEDULE_FLAG to True to prevent subsequent notifications
+        PAUSE_SCHEDULE_FLAG = True
+
+
+# Initialize the global variable
+PAUSE_SCHEDULE_FLAG = False
+
 
 def main():
-    global revenue_threshold_met  # Make revenue_threshold_met a global variable
+    # Access the global variable inside the main function
+    global PAUSE_SCHEDULE_FLAG
 
+    # Print the token value
     logger.info(f"Token value: {SOME_SECRET}")
     # Set up the Sales API client
     orders_client = Orders(credentials=credentials, marketplace=Marketplaces.US)
@@ -259,20 +274,12 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
-    
-    # If total_sales reaches threshold, send text message
-    if fba_sales > 60:
-        try:
-            send_sms_via_email(number, message, provider, sender_credentials)
-        except Exception as e:
-            print(f'Error: {e}')
-        revenue_threshold_met = True
+    # Set the threshold value
+    threshold = 60
 
-    # Set the output for GitHub Actions workflow
-    # Convert revenue_threshold_met to lowercase string for YAML compatibility
-    # print(f'::set-output name=revenue_threshold_met::{str(revenue_threshold_met).lower()}')
-    print(f'revenue_threshold_met: {str(revenue_threshold_met).lower()}')
-    
+    # Check if total_sales reaches threshold & conditionally send text message based on PAUSE_SCHEDULE_FLAG
+    check_and_send_notifications(PAUSE_SCHEDULE_FLAG, fba_sales, number, message, provider, sender_credentials, threshold)
+
     custom_format = "%B %d, %H:%M:%S"
     
     # Get the current timestamp when main() is called
