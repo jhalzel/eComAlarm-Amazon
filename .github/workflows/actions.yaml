@@ -16,9 +16,8 @@ jobs:
           # Retrieve the value of the PAUSE_SCHEDULE_FLAG secret
           is_paused=${{ secrets.PAUSE_SCHEDULE_FLAG }}
 
-          # Print the output for debugging
-          echo "Secret API Response:"
-          echo "$flag_value"
+          # Debug PAUSE_SCHEDULE_FLAG value
+          echo "PAUSE_SCHEDULE_FLAG=$is_paused"
           
           # Check if the flag is set to "true"
           if [[ $is_paused == "true" ]]; then
