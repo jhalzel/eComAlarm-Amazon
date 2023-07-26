@@ -12,15 +12,14 @@ jobs:
     
     steps:
       - name: Check if schedule is paused
+        env:
+          PAUSE_SCHEDULE_FLAG: ${{ secrets.PAUSE_SCHEDULE_FLAG }}
         run: |
-          # Retrieve the value of the PAUSE_SCHEDULE_FLAG secret
-          is_paused=${{ secrets.PAUSE_SCHEDULE_FLAG }}
-
           # Debug PAUSE_SCHEDULE_FLAG value
-          echo "PAUSE_SCHEDULE_FLAG=$is_paused"
+          echo "PAUSE_SCHEDULE_FLAG: $PAUSE_SCHEDULE_FLAG"
           
           # Check if the flag is set to "true"
-          if [[ $is_paused == "true" ]]; then
+          if [[ $PAUSE_SCHEDULE_FLAG == "true" ]]; then
             echo "Schedule is paused. Exiting the workflow."
             exit 0
           fi
