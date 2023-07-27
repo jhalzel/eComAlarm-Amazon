@@ -133,25 +133,25 @@ def get_asin_counter(order_ids, orders_client):
     return asin_counter
 
 
-# Define the function to check if total_sales reaches threshold & conditionally send text message based on PAUSE_SCHEDULE_FLAG
-def check_and_send_notifications(PAUSE_SCHEDULE_FLAG, fba_sales, number, message, provider, sender_credentials, threshold):
+# Define the function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
+def check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold):
     # If total_sales reaches threshold, send text message
-    if fba_sales > threshold and not PAUSE_SCHEDULE_FLAG:
+    if fba_sales > threshold and not pause_flag:
         try:
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
             print(f'Error: {e}')
-        # Set PAUSE_SCHEDULE_FLAG to True to prevent subsequent notifications
-        PAUSE_SCHEDULE_FLAG = True
+        # Set pause_flag to True to prevent subsequent notifications
+        pause_flag = True
 
 
 # Initialize the global variable
-PAUSE_SCHEDULE_FLAG = False
+pause_flag = False
 
 
 def main():
     # Access the global variable inside the main function
-    global PAUSE_SCHEDULE_FLAG
+    global pause_flag
 
     # Print the token value
     logger.info(f"Token value: {SOME_SECRET}")
@@ -277,8 +277,8 @@ def main():
     # Set the threshold value
     threshold = 60
 
-    # Check if total_sales reaches threshold & conditionally send text message based on PAUSE_SCHEDULE_FLAG
-    check_and_send_notifications(PAUSE_SCHEDULE_FLAG, fba_sales, number, message, provider, sender_credentials, threshold)
+    # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
+    check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
 
     custom_format = "%B %d, %H:%M:%S"
     
