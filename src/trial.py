@@ -1,14 +1,40 @@
 from flask import Flask, jsonify
 from script import main
+from flask import request
+import json
 
 app = Flask(__name__)
 
 # status = get_status(total_sales, order_count)
 
+# Store the fbm_threshold value
+fbm_threshold = None
+
+# Set the fbm_threshold value
+@app.route('/set_threshold', methods=['POST'])
+def set_threshold():
+    data = request.json
+    new_threshold = data.get('fbm_threshold')
+    
+
+    # Update the config.json file with the new threshold
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+        config['fbm_threshold'] = new_threshold
+
+    with open('config.json', 'w') as file:
+        json.dump(config, file)
+
+    return jsonify({'message': 'Threshold updated successfully'})
+
+
+
 # Members API Route
 @app.route('/members')
 def members():
+    global fbm_threshold
     status = main()  # Call the main function to execute the code
+    fbm_threshold = status['threshold']  # Extract the fbm_threshold value from the dictionary
     fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
     fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary
     total_sales = status['total_sales']  # Extract the total sales value from the dictionary
@@ -25,7 +51,9 @@ def members():
                     'shipped_order_count': shipped_order_count, 
                     'total_sales': total_sales,
                     'fba_pending_sales': fba_pending_sales,
-                    'fbm_pending_sales': fbm_pending_sales})
+                    'fbm_pending_sales': fbm_pending_sales,
+                    'fbm_threshold': fbm_threshold}
+                    )
 
 if __name__ == '__main__':
     app.run(host='localhost', port=5000, debug=True)

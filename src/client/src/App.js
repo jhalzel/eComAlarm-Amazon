@@ -3,12 +3,39 @@ import './App.css';
 
 function App() {
   const [data, setData] = useState(null);
-  const [fbm_threshold, setFbm_threshold] = useState(null);
-  const [temp_threshold, setTemp_threshold] = useState(null);
+  const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
+  const [temp_threshold, setTemp_threshold] = useState(0);
 
- // Function to handle changes in the input field
+
+
+// Function to Post the data to the API
+const setThreshold = async (newThreshold) => {
+  try {
+    console.log(newThreshold)
+    const response = await fetch('/set_threshold', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fbm_threshold: newThreshold }),
+    });
+
+    if (response.ok) {
+      console.log('Threshold updated successfully');
+      localStorage.setItem('fbm_threshold', newThreshold);
+    } else {
+      console.error('Failed to update threshold. Response status:', response.status);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};  
+
+
+// Function to handle changes in the input field
  const handleThresholdChange = (e) => {
   setTemp_threshold(e.target.value);
+  setThreshold(e.target.value);
 };
 
 // Function to handle the "Enter" key press
@@ -16,6 +43,7 @@ const handleKeyPress = (e) => {
   if (e.key === 'Enter') {
     // Update the value of the text box when "Enter" key is pressed
     setFbm_threshold(e.target.value);
+    setThreshold(e.target.value)
   }
 };
 
@@ -42,6 +70,7 @@ useEffect(() => {
     }
   };
 
+
   fetchMembersData(); // Initial fetch
 
   const interval = setInterval(fetchMembersData, 60000); // Fetch every minute (adjust as needed)
@@ -65,7 +94,7 @@ useEffect(() => {
       {/* Input for FBM Sales Threshold */}
       {!fbm_threshold ? (
         <>
-        <h7 className='Sales_threshold_title'>FBM Sales Threshold: {" "}{fbm_threshold} {" "}</h7>
+        <div className='Sales_threshold_title'>FBM Sales Threshold: {" "}{fbm_threshold} {" "}</div>
         <div  className='Sales_threshold1'>
         {/* Use the value prop to bind the input field to the state */}
         <input
@@ -81,8 +110,8 @@ useEffect(() => {
         </div>
         </>) : (
         <div className='Sales_threshold2'>
-        <h7 className='Sales_threshold_title'>FBM Sales Threshold: {" "}
-        <span className='fbm_threshold'>${fbm_threshold}</span> {" "}</h7>
+        <div className='Sales_threshold_title'>FBM Sales Threshold: {" "}
+        <span className='fbm_threshold'>${fbm_threshold}</span> {" "}</div>
         <button onClick={handleEdit}>Edit</button>
         </div>
       )}
@@ -92,35 +121,35 @@ useEffect(() => {
         {data ? (
       <div className="App-link">
         <div className="data-box">
-          <h7>Total Sales:</h7>
+          <div>Total Sales:</div>
           <span className="App-link-values">${data.total_sales}</span>
         </div>
         <div className="data-box">
-          <h7>Total Order Count:</h7>
+          <div>Total Order Count:</div>
           <span className="App-link-values">{data.total_order_count}</span>
         </div>
         <div className="data-box">
-          <h7>FBM Sales:</h7>
+          <div>FBM Sales:</div>
           <span className="App-link-values">${data.fbm_sales}</span>
         </div>
         <div className="data-box">
-          <h7>FBA Sales:</h7>
+          <div>FBA Sales:</div>
           <span className="App-link-values">${data.fba_sales}</span>
         </div>
         <div className="data-box">
-          <h7>FBA Pending Sales:</h7>
+          <div>FBA Pending Sales:</div>
           <span className="App-link-values">${data.fba_pending_sales}</span>
         </div>
         <div className="data-box">
-          <h7>FBM Pending Sales:</h7>
+          <div>FBM Pending Sales:</div>
           <span className="App-link-values">${data.fbm_pending_sales}</span>
         </div>
         <div className="data-box">
-          <h7>Orders Pending:</h7>
+          <div>Orders Pending:</div>
           <span className="App-link-values">{data.order_pending_count}</span>
         </div>
         <div className="data-box">
-          <h7>Shipped Order Count:</h7>
+          <div>Shipped Order Count:</div>
           <span className="App-link-values">{data.shipped_order_count}</span>
         </div>
       </div>

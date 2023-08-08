@@ -38,6 +38,7 @@ logger_file_handler = logging.handlers.RotatingFileHandler(
     backupCount=1,
     encoding="utf8",
 )
+
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger_file_handler.setFormatter(formatter)
 logger.addHandler(logger_file_handler)
@@ -147,6 +148,7 @@ def check_and_send_notifications(pause_flag, fba_sales, number, message, provide
 
 # Initialize the global variable
 pause_flag = False
+
 
 
 def main():
@@ -274,8 +276,14 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
-    # Set the threshold value
-    threshold = 60
+    # Read the threshold value from the config.json file
+    # Read the threshold value from the config.json file
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+        threshold = float(config.get('fbm_threshold', 0))  # Default to 0 if not found
+    
+
+    print(f'threshold: {threshold}')
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
@@ -298,7 +306,8 @@ def main():
         'shipped_order_count': [shipped_order_count],
         'order_pending_count': [order_pending_count],
         'total_order_count': [order_count],
-        'last_updated': [current_timestamp]
+        'last_updated': [current_timestamp],
+        'threshold': [threshold]
     }
 
 
