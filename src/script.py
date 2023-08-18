@@ -12,6 +12,7 @@ from sp_api.api import Products
 # Data Manipulation and Analysis 
 from collections import Counter 
 from datetime import datetime, timedelta 
+import pandas as pd
 
  
 # Communication and Notification 
@@ -66,7 +67,6 @@ except KeyError:
     SOME_SECRET = "Token not available!"
     #logger.info("Token not available!")
     #raise
-
 
 
 
@@ -146,9 +146,8 @@ def check_and_send_notifications(pause_flag, fba_sales, number, message, provide
         pause_flag = True
 
 
-# Initialize the global variable
+# Initialize the global variables
 pause_flag = False
-
 
 
 def main():
@@ -175,10 +174,16 @@ def main():
         timezone_offset = "-05:00"  # Eastern Standard Time (EST) - UTC-5
 
     # Format the start_date and end_date with the adjusted timezone offset
-    start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
-    adjusted_date = current_time - timedelta(minutes=3)
-    end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # adjusted_date = current_time - timedelta(minutes=3)
+    # end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
 
+   # Set start date to June 1st, 2023
+    start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # Subtract 3 minutes from current time
+    adjusted_date = current_time - timedelta(minutes=3)
+    # Set end date to July 31st, 2023
+    end_date = datetime(2023, 7, 31).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
         
     # Use the modified values in the API call
     response = orders_client.get_orders(
@@ -187,6 +192,22 @@ def main():
         MarketplaceIds=["ATVPDKIKX0DER"]
     )
 
+    # # Convert JSON response to DataFrame
+    # pandas_response = pd.json_normalize(response['Orders'])
+
+    # # Define the CSV filename and path
+    # csv_filename = 'response.csv'
+    # csv_path = os.path.join('files', csv_filename)
+
+    # # Create the 'files' folder if it doesn't exist
+    # os.makedirs('files', exist_ok=True)
+
+    # # Save DataFrame to CSV
+    # pandas_response.to_csv(csv_path, index=True)
+
+    # print(f"Response data has been saved to '{csv_path}'.")
+
+
     fba_order_ids = []
     fbm_order_ids = []
     order_count = 0
@@ -194,15 +215,27 @@ def main():
     order_pending_count = 0
     fba_sales = 0
     fbm_sales = 0
+
+
+    # Read the threshold value from the config.json file
+    with open('config.json', 'r') as file:
+        config = json.load(file)
+        threshold = float(config.get('fbm_threshold', 0))  # Default to 0 if not found
+    
+
+    print(f'threshold: {threshold}')
     
     number = '7742396843'
-    message = 'Total sales has met the threshold of $60.'
+    message = f'Total sales has met the threshold of ${threshold}.'
     provider = 'Verizon'
     sender_credentials = (gmail_credentials['gmail_username'], gmail_credentials['gmail_password'])
 
+    fbm_order_list = []
+    fba_order_list = []
+
     # Iterate over the orders and extract the order IDs
     for order in response.payload['Orders']:
-
+        
         # print the order data
         print(f'order: {json.dumps(order, indent=4)}')
         
@@ -216,11 +249,12 @@ def main():
             if order['FulfillmentChannel'] == 'AFN' and 'OrderTotal' in order:
                 fba_sales += float(order['OrderTotal']['Amount'])
                 print(f'fba_sales: {fba_sales}')
+                fba_order_list.append(order)
 
             # extract FBM orders (MFN)
             elif order['FulfillmentChannel'] == 'MFN' and 'OrderTotal' in order:
                 fbm_sales += float(order['OrderTotal']['Amount'])
-
+                fbm_order_list.append(order)
 
         # get pending orders' ids
         elif order['OrderStatus'] == 'Pending':
@@ -235,6 +269,18 @@ def main():
                 fba_order_ids.append(order['AmazonOrderId'])
         else:
             continue
+
+    # Create a DataFrame from the list of dictionaries
+    fbm_df = pd.DataFrame(fbm_order_list)
+    fba_df = pd.DataFrame(fba_order_list)
+
+    # Save the DataFrame to a CSV file
+    fbm_csv_filename = 'files/fbmorders.csv'  # Path to the CSV file
+    fbm_df.to_csv(fbm_csv_filename, index=False)
+    
+    fba_csv_filename = 'files/fbaorders.csv'  # Path to the CSV file
+    fba_df.to_csv(fba_csv_filename, index=False)
+
 
     # get counter object of asins
     fbm_asin_counter = get_asin_counter(fbm_order_ids, orders_client)
@@ -276,15 +322,6 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
-    # Read the threshold value from the config.json file
-    # Read the threshold value from the config.json file
-    with open('config.json', 'r') as file:
-        config = json.load(file)
-        threshold = float(config.get('fbm_threshold', 0))  # Default to 0 if not found
-    
-
-    print(f'threshold: {threshold}')
-
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
 
@@ -298,16 +335,16 @@ def main():
 
     # Exit the function to pause the program
     return {
-        'fba_pending_sales': [fba_pending_sales],
-        'fbm_pending_sales': [fbm_pending_sales],
-        'total_sales': [fbm_sales + fba_sales], 
-        'fbm_sales': [fbm_sales],
-        'fba_sales': [fba_sales],
+        'fba_pending_sales': [round(fba_pending_sales,2)],
+        'fbm_pending_sales': [round(fbm_pending_sales,2)],
+        'total_sales': [round(fbm_sales,2) + fba_sales], 
+        'fbm_sales': [round(fbm_sales,2)],
+        'fba_sales': [round(fba_sales,2)],
         'shipped_order_count': [shipped_order_count],
         'order_pending_count': [order_pending_count],
         'total_order_count': [order_count],
         'last_updated': [current_timestamp],
-        'threshold': [threshold]
+        'threshold': [round(threshold,2)]
     }
 
 

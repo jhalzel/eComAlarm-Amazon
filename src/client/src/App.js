@@ -73,7 +73,7 @@ useEffect(() => {
 
   fetchMembersData(); // Initial fetch
 
-  const interval = setInterval(fetchMembersData, 60000); // Fetch every minute (adjust as needed)
+  const interval = setInterval(fetchMembersData, 3600000); // Fetch every minute (adjust as needed)
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 }, []);
@@ -111,12 +111,11 @@ useEffect(() => {
         </>) : (
         <div className='Sales_threshold2'>
         <div className='Sales_threshold_title'>FBM Sales Threshold: {" "}
-        <span className='fbm_threshold'>${fbm_threshold}</span> {" "}</div>
-        <button onClick={handleEdit}>Edit</button>
+        <span className='fbm_threshold'>${fbm_threshold}</span> {" "}<span><button onClick={handleEdit}>Edit</button></span></div>
+        
         </div>
       )}
        
-      
         
         {data ? (
       <div className="App-link">
