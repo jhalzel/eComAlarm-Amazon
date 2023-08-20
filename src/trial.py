@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 from script import main
 from flask import request
 import json
@@ -27,6 +27,11 @@ def set_threshold():
 
     return jsonify({'message': 'Threshold updated successfully'})
 
+# Get Json Data
+@app.route('/get_json_data')
+def get_json_data():
+    json_filename = 'data.json'
+    return send_file(json_filename)
 
 
 # Members API Route

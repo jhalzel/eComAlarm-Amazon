@@ -270,18 +270,6 @@ def main():
         else:
             continue
 
-    # Create a DataFrame from the list of dictionaries
-    fbm_df = pd.DataFrame(fbm_order_list)
-    fba_df = pd.DataFrame(fba_order_list)
-
-    # Save the DataFrame to a CSV file
-    fbm_csv_filename = 'files/fbmorders.csv'  # Path to the CSV file
-    fbm_df.to_csv(fbm_csv_filename, index=False)
-    
-    fba_csv_filename = 'files/fbaorders.csv'  # Path to the CSV file
-    fba_df.to_csv(fba_csv_filename, index=False)
-
-
     # get counter object of asins
     fbm_asin_counter = get_asin_counter(fbm_order_ids, orders_client)
     fba_asin_counter = get_asin_counter(fba_order_ids, orders_client)
@@ -322,6 +310,44 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
+    # if the time is past 11:00pm Est collect the data from the day 
+    if current_time.hour >= 6:
+        # collect data into a dataframe for the day
+        data = {
+            'fba_sales': [round(fba_sales,2)],
+            'fbm_sales': [round(fbm_sales,2)],
+            'total_order_count': [order_count],
+            'order_pending_count': [order_pending_count],
+            'shipped_order_count': [shipped_order_count],
+            'fba_pending_sales': [round(fba_pending_sales,2)],
+            'fbm_pending_sales': [round(fbm_pending_sales,2)],
+            'threshold': [round(threshold,2)]
+            }
+        
+        # Serialize data to JSON format
+        json_data = json.dumps(data)
+
+        json_filename = 'data.json'
+
+        # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
+        try:
+            with open(json_filename, 'r') as json_file:
+                existing_data = json.load(json_file)
+        except FileNotFoundError:
+            existing_data = []
+
+    
+        # Append the new data to the existing data
+        existing_data.append(json_data)
+
+        # Write JSON data to file
+        with open(json_filename, 'w') as json_file:
+            json.dump(existing_data, json_file, indent=4)
+
+        print(f"Response data has been saved to '{json_filename}'.")
+        
+
+
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
 
@@ -332,6 +358,7 @@ def main():
 
     # Format the timestamp
     current_timestamp = current_timestamp.strftime(custom_format)
+
 
     # Exit the function to pause the program
     return {

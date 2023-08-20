@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import Chart from './components/Chart'
 
 function App() {
   const [data, setData] = useState(null);
@@ -69,7 +70,6 @@ useEffect(() => {
       console.log('Error:', error);
     }
   };
-
 
   fetchMembersData(); // Initial fetch
 
@@ -155,6 +155,11 @@ useEffect(() => {
     ) : (
       <p className="App">Loading...</p>
     )}
+    <section>
+      <div className="chart">
+        <Chart />
+      </div>
+    </section>
   </div>
   );
 }
