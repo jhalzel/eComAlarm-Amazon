@@ -51,13 +51,13 @@ export const Chart = () => {
                 <LineChart data={json_data}>
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis dataKey="name" />
-                    <YAxis />
+                    <YAxis tick={{ fontSize: 17, fill:'#61dafb' }} tickFormatter={(value) => `$${value}`} />
                     <Tooltip />
                     <Legend />
                     <Line type="monotone" dataKey="fba_sales" stroke="#8884d8" />
                     <Line type="monotone" dataKey="fbm_sales" stroke="#82ca9d" />
-                    <Line type="monotone" dataKey="fba_pending_sales" stroke="beige" />
-                    <Line type="monotone" dataKey="fbm_pending_sales" stroke="maroon" />
+                    <Line type="monotone" dataKey="fba_pending_sales" stroke="#065535" />
+                    <Line type="monotone" dataKey="threshold" stroke="maroon" />
                 </LineChart>
             </ResponsiveContainer>
             </div>
@@ -68,11 +68,11 @@ export const Chart = () => {
             <BarChart data={json_data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="name" />
-                <YAxis />
+                <YAxis  tick={{ fontSize: 17, fill:'#61dafb' }} />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="total_order_count" stackId="b" fill="#ffc658" />
-                <Bar dataKey="order_pending_count" stackId="b" fill="#3fwe8f" />
+                <Bar dataKey="order_pending_count" stackId="b" fill="#ffe4e1" />
                 <Bar dataKey="shipped_order_count" stackId="b" fill="green" />
             </BarChart>
             </ResponsiveContainer>
