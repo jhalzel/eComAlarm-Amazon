@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-
+import { BarChart,LineChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import '../App.css'
 
 
 export const Chart = () => {
@@ -44,23 +44,29 @@ export const Chart = () => {
 
 
     return (
-        <>
-            <h1>Chart</h1>
-            <BarChart width={600} height={400} data={json_data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="fba_sales" stackId="a" fill="#8884d8" />
-                <Bar dataKey="fbm_sales" stackId="a" fill="#82ca9d" />
-                
-                <Bar dataKey="fba_pending_sales" stackId="c" fill="beige" />
-                <Bar dataKey="fbm_pending_sales" stackId="c" fill="maroon" />
-            </BarChart>
-            {" "}
-            <BarChart width={600} height={400} data={json_data}>
-                <CartesianGrid strokeDasharray="3 3" />
+        <div className='chart-section'>
+            <div className='chart-container'>
+            <h1>Sales Data</h1>
+            <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={json_data}>
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="fba_sales" stroke="#8884d8" />
+                    <Line type="monotone" dataKey="fbm_sales" stroke="#82ca9d" />
+                    <Line type="monotone" dataKey="fba_pending_sales" stroke="beige" />
+                    <Line type="monotone" dataKey="fbm_pending_sales" stroke="maroon" />
+                </LineChart>
+            </ResponsiveContainer>
+            </div>
+            
+            <div className='chart-container'>
+            <h1>Order Data</h1>
+            <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={json_data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
@@ -69,7 +75,10 @@ export const Chart = () => {
                 <Bar dataKey="order_pending_count" stackId="b" fill="#3fwe8f" />
                 <Bar dataKey="shipped_order_count" stackId="b" fill="green" />
             </BarChart>
-        </>
+            </ResponsiveContainer>
+            {/* </div> */}
+            </div>
+        </div>
     );
 };
 

@@ -148,8 +148,6 @@ header a {
   font-weight: 800;
 }
 
-
-
 /* =================================================================== */
 
 /* Sales threshold (2) styles */
@@ -183,4 +181,63 @@ header a {
 .Sales_threshold2 button:hover {
   background-color: #61dafb;
   color: #1b1d21;
+}
+
+
+
+/* =================================================================== */
+
+/* Apply styles to the chart section */
+.chart-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* Center the charts horizontally */
+  align-self: center; /* Center the charts vertically */
+  flex-wrap: wrap; /* Allow charts to wrap to the next row if the window is too small */
+  background-color: #282c34; /* Match the app's background color */
+  width: 100vw; /* Make the chart section take up the entire width of the screen */
+  height: max-content;
+}
+
+/* Style for each chart container */
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 20px; /* Add margin to separate chart containers */
+  padding: 20px; /* Add padding inside the chart containers */
+  border: 1px solid greenyellow; /* Add a border */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #1b1d21; /* Match the app's background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically */
+  width: 44%;
+  height: 100%;
+}
+
+/* Style for the chart titles (optional) */
+.chart h1 {
+  color: #61dafb;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+
+/* Media query for screens less than 1367px */
+@media (max-width: 1367px) {
+  .chart-container {
+    width: 85%; 
+    /* min-width: none; */
+  }
+}
+
+@media (max-width: 365px) {
+  .chart-container {
+    width: 85%; 
+    /* min-width: none; */
+  }
+  .data-box {
+    width: 90%;
+  }
 }
