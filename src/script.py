@@ -17,6 +17,7 @@ import pandas as pd
  
 # Communication and Notification 
 from sms import send_sms_via_email 
+import pyshorteners
 
 # Timezone Handling 
 import pytz 
@@ -226,7 +227,14 @@ def main():
     print(f'threshold: {threshold}')
     
     number = '7742396843'
-    message = f'Total sales has met the threshold of ${threshold}.'
+    # Initialize the URL shortener
+    link_url = 'https://apps.apple.com/us/app/amazon-seller/id794141485'
+    link_text = "Visit Amazon Seller App"
+    # Create the HTML code for the anchor tag
+    # anchor_tag = f'<a href="{link_url}">{link_text}</a>'
+
+    # message = f'Total sales has met the threshold of ${threshold}. Please check your Amazon Seller Central account: {anchor_tag}'
+    message = ''
     provider = 'Verizon'
     sender_credentials = (gmail_credentials['gmail_username'], gmail_credentials['gmail_password'])
 
