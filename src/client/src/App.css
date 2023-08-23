@@ -1,3 +1,4 @@
+
 /* Remove default margin and padding on body and HTML elements */
 body, html {
   margin: 0;
@@ -27,6 +28,7 @@ body::-webkit-scrollbar {
   min-height: 100vh;
   min-width: 100vw;
   color: whitesmoke;
+  font-family: 'Sarpanch', sans-serif;
 }
 
 /* Header styles */
@@ -36,6 +38,7 @@ header {
   justify-content: center;
   align-items: center;
   height: 17vh;
+  font-family: 'Gugi', cursive;
 }
 
 header h6 {
