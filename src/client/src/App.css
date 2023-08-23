@@ -35,7 +35,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 10vh;
+  height: 17vh;
 }
 
 header h6 {
@@ -43,12 +43,14 @@ header h6 {
   text-decoration: none;
   color: greenyellow;
   font-weight: 500;
-  font-size: x-large;
+  font-size: 35px;
 }
 
-header a:hover {
+header h6:hover {
   color: #61dafb;
+  position: relative; /* Ensure relative positioning for the tooltip */
 }
+
 
 header a {
   text-decoration: none;
@@ -94,16 +96,48 @@ header a {
   font-size: medium;
 }
 
-
+/* CSS */
+.status-update {
+  position: absolute;
+  top: -10px; /* Adjust the top position as needed */
+  right: 10px; /* Adjust the right position as needed */
+  color: #61dafb;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  font-size: 10px;
+  display: inline-block;
+}
 
 
 /* =================================================================== */
 
+/* Create a container to hold the "Sales Threshold" and "FBM Alert" sections */
+.sales-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  width: fit-content;
+  padding: 10px;
+  border: 1px solid greenyellow;
+  border-radius: 5px;
+  margin: 10px;
+  background-color: #1b1d21;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 720px) {
+  .sales-container {
+    flex-direction: column;
+  }
+}
+
 /* Sales Threshold (1) styles */
 .Sales_threshold_title {
-  color: rgb(255, 71, 47);
+  color:#61dafb ;
   font-weight: 500;
-  font-size: medium;
+  font-size: large;
 }
 
 /* Sales threshold styles */
@@ -113,6 +147,15 @@ header a {
   align-items: start;
   color: #61dafb;
   margin: 0.5rem;
+}
+
+.Sales_threshold_title .fbm_threshold {
+  text-align: center;
+  color: greenyellow;
+  margin: 0.1rem;
+  padding-left: 1rem;
+  font-size: large;
+  font-weight: 700;
 }
 
 .Sales_threshold1 input {
@@ -140,14 +183,6 @@ header a {
   color: #103e99;
 }
 
-.Sales_threshold_title .fbm_threshold {
-  text-align: center;
-  color: #61dafb;
-  margin: 0.5rem;
-  font-size: large;
-  font-weight: 800;
-}
-
 /* =================================================================== */
 
 /* Sales threshold (2) styles */
@@ -170,7 +205,7 @@ header a {
 
 .Sales_threshold2 button {
   margin: 0.6rem;
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.3rem;
   border: 1px solid greenyellow;
   border-radius: 5px;
   background-color: #1b1d21;
@@ -184,6 +219,31 @@ header a {
 }
 
 
+
+/* =================================================================== */
+
+.alert {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+  
+  text-align: center;
+  justify-content: center;
+}
+
+.alert-title {
+  color: rgb(255, 71, 47);
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.alert-message {
+  margin-left: 16px;
+  margin-right: 16px;
+  color: #61dafb;
+  font-size: 1rem;
+}
 
 /* =================================================================== */
 

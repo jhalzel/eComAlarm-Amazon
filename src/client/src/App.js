@@ -8,7 +8,6 @@ function App() {
   const [temp_threshold, setTemp_threshold] = useState(0);
 
 
-
 // Function to Post the data to the API
 const setThreshold = async (newThreshold) => {
   try {
@@ -88,36 +87,55 @@ useEffect(() => {
       </header>
     
       <div>
-        <h4 className='App-status'>Last Updated: {data ? data.last_updated : 'N/A'}</h4>
+        <h4 className='status-update'>Last Updated: {data ? data.last_updated : 'N/A'}</h4>
       </div>
 
-      {/* Input for FBM Sales Threshold */}
-      {!fbm_threshold ? (
-        <>
-        <div className='Sales_threshold_title'>FBM Sales Threshold: {" "}{fbm_threshold} {" "}</div>
-        <div  className='Sales_threshold1'>
-        {/* Use the value prop to bind the input field to the state */}
-        <input
-          type="text"
-          id="fbm_threshold"
-          name="fbm_threshold"
-          placeholder="FBM Sales Threshold"
-          value={temp_threshold}
-          onChange={handleThresholdChange}
-          onKeyDown={handleKeyPress}
-        />
-          <button onClick={handleClick}>Update</button>
-        </div>
-        </>) : (
-        <div className='Sales_threshold2'>
-        <div className='Sales_threshold_title'>FBM Sales Threshold: {" "}
-        <span className='fbm_threshold'>${fbm_threshold}</span> {" "}<span><button onClick={handleEdit}>Edit</button></span></div>
+      <div className="sales-container">
+        {/* Input for FBM Sales Threshold */}
+        {!fbm_threshold ? (
+          <>
+          <div className='Sales_threshold_title'>FBM Sales Threshold: {fbm_threshold} </div>
+          <div  className='Sales_threshold1'>
+          {/* Use the value prop to bind the input field to the state */}
+          <input
+            type="text"
+            id="fbm_threshold"
+            name="fbm_threshold"
+            placeholder="FBM Sales Threshold"
+            value={temp_threshold}
+            onChange={handleThresholdChange}
+            onKeyDown={handleKeyPress}
+          />
+            <button onClick={handleClick}>Update</button>
+          </div>
+          </>) : (
+          <div className='Sales_threshold2'>
+          <div className='Sales_threshold_title'>FBM Sales Threshold: {" "}
+          <span className='fbm_threshold'>${fbm_threshold}</span><span><button onClick={handleEdit}>Set Threshold</button></span></div>
+          </div>
+        )
+        }
+      
+      {
+        data && data.fbm_sales > fbm_threshold ? (
+          <>
+          <div className="alert">
+            <div className="alert-message" >FBM Sales have exceeded the threshold of <span style={{ color: 'rgb(255, 71, 47)' }}>${fbm_threshold}!</span> </div>
+          </div>
+          </>
+        ) : (
+          <>
+          <div className="alert">
+          <div className='alert-title'>FBM Alert:</div>
+            <div className="alert-message">FBM Sales have not exceeded the threshold of <span style={{ color: 'greenyellow' }}>${fbm_threshold}</span> </div>
+          </div>
+          </>
+        )
+      }
+      </div>
+      
         
-        </div>
-      )}
-       
-        
-        {data ? (
+      {data ? (
       <div className="App-link">
         <div className="data-box">
           <div>Total Sales:</div>
@@ -155,6 +173,7 @@ useEffect(() => {
     ) : (
       <p className="App">Loading...</p>
     )}
+    
     <section>
       <div className="chart">
         <Chart />
