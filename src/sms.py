@@ -18,12 +18,16 @@ from exceptions import (
 
 import json
 
+json_filename = 'config.json'
 
 # Read the threshold value from the config.json file
-with open('./config.json', 'r') as file:
-    config = json.load(file)
-    threshold = int(config.get('fbm_threshold', 0))  # Default to 0 if not found
-    
+try:
+    with open(json_filename, 'r') as json_file:
+        config = json.load(json_file)
+        threshold = int(config.get('fbm_threshold', 0))  # Default to 0 if not found
+except FileNotFoundError:
+    existing_data = []
+
 
 gmail_credentials = {
     "gmail_username": os.environ.get("GMAIL_USER"),
