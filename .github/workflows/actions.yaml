@@ -49,7 +49,7 @@ jobs:
           pip install -r src/requirements.txt
 
       - name: Run Flask App
-        run: python run.py
+        run: python gunicorn.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
           # Amazon credentials
