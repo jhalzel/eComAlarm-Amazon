@@ -217,8 +217,10 @@ def main():
     fbm_sales = 0
 
 
+    config_file_path = os.path.join(current_dir, 'config.json')
+
     # Read the threshold value from the config.json file
-    with open('config.json', 'r') as file:
+    with open(config_file_path, 'r') as file:
         config = json.load(file)
         threshold = float(config.get('fbm_threshold', 0))  # Default to 0 if not found
     
