@@ -174,16 +174,16 @@ def main():
         timezone_offset = "-05:00"  # Eastern Standard Time (EST) - UTC-5
 
     # Format the start_date and end_date with the adjusted timezone offset
-    # start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
-    # adjusted_date = current_time - timedelta(minutes=3)
-    # end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    adjusted_date = current_time - timedelta(minutes=3)
+    end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
 
    # Set start date to June 1st, 2023
-    start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
     # Subtract 3 minutes from current time
-    adjusted_date = current_time - timedelta(minutes=3)
+    # adjusted_date = current_time - timedelta(minutes=3)
     # Set end date to July 31st, 2023
-    end_date = datetime(2023, 7, 31).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # end_date = datetime(2023, 7, 31).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
         
     # Use the modified values in the API call
     response = orders_client.get_orders(
@@ -305,7 +305,7 @@ def main():
     print(f'start_date: {start_date}')
 
     # if the time is past 11:00pm Est collect the data from the day 
-    if current_time.hour >= 3:
+    if current_time.hour >= 23:
         # collect data into a dataframe for the day
         data = {
             'fba_sales': [round(fba_sales,2)],
