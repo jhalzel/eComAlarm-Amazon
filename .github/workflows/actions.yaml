@@ -42,9 +42,6 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('src/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-          
-      - name: Display Runner IP
-        run: echo "Runner IP Address: $RUNNER_IP_ADDRESS"
 
       - name: install python packages
         run: |
