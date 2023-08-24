@@ -6,8 +6,6 @@ import json
 
 app = Flask(__name__)
 
-# status = get_status(total_sales, order_count)
-
 # Store the fbm_threshold value
 fbm_threshold = None
 
