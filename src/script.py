@@ -321,7 +321,7 @@ def main():
         # Serialize data to JSON format
         json_data = json.dumps(data)
 
-        json_filename = os.path.join(current_dir, './client/src/data.json')
+        json_filename = os.path.join(current_dir, 'data.json')
 
         # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
         try:
