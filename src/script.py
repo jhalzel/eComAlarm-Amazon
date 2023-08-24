@@ -17,7 +17,6 @@ import pandas as pd
  
 # Communication and Notification 
 from sms import send_sms_via_email 
-import pyshorteners
 
 # Timezone Handling 
 import pytz 
