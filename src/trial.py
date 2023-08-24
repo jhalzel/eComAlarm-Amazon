@@ -1,12 +1,10 @@
 from flask import Flask, jsonify, send_file
-from flask_cors import CORS
 from script import main
 from flask import request
 import os
 import json
 
 app = Flask(__name__)
-CORS(app)
 
 # status = get_status(total_sales, order_count)
 
