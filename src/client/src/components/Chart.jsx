@@ -107,8 +107,6 @@ export const Chart = () => {
     }, []);
 
 
-
-
     return (
         <>
         <div className='options-section'>
@@ -128,14 +126,14 @@ export const Chart = () => {
             <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={json_data}>
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                    <XAxis dataKey="date" tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
+                    <XAxis dataKey="date"  tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                     <YAxis tick={{ fontSize: 15, fill:'#61dafb' }} tickFormatter={(value) => `$${value}`} />
-                    <Tooltip />
-                    <Legend />
+                    <Tooltip contentStyle={{ backgroundColor: '#282c34' }}/>
+                    <Legend  />
                     <Line type="monotone" dataKey="fba_sales" stroke="#8884d8" />
                     <Line type="monotone" dataKey="fbm_sales" stroke="#82ca9d" />
                     <Line type="monotone" dataKey="fba_pending_sales" stroke="#065535" />
-                    <Line type="monotone" dataKey="threshold" stroke="maroon" />
+                    <Line type="monotone" dataKey="threshold" stroke="red" />
                 </LineChart>
             </ResponsiveContainer>
             </div>
@@ -147,7 +145,7 @@ export const Chart = () => {
                 {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="date" tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                 <YAxis  tick={{ fontSize: 15, fill:'#61dafb' }} />
-                <Tooltip />
+                <Tooltip contentStyle={{ backgroundColor: '#282c34' }} />
                 <Legend />
                 <Bar dataKey="total_order_count" stackId="b" fill="#ffc658" />
                 <Bar dataKey="order_pending_count" stackId="b" fill="#ffe4e1" />

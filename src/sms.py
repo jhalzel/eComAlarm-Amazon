@@ -18,7 +18,9 @@ from exceptions import (
 
 import json
 
-json_filename = 'config.json'
+cur_dir = os.path.dirname(__file__)
+
+json_filename = os.path.join(cur_dir, 'config.json') 
 
 # Read the threshold value from the config.json file
 try:

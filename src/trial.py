@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, send_file
 from script import main
 from flask import request
+import os
 import json
 
 app = Flask(__name__)
@@ -10,19 +11,21 @@ app = Flask(__name__)
 # Store the fbm_threshold value
 fbm_threshold = None
 
+cur_dir = os.path.dirname(__file__)
+config_filename = os.path.join(cur_dir, 'config.json')
+
 # Set the fbm_threshold value
 @app.route('/set_threshold', methods=['POST'])
 def set_threshold():
     data = request.json
     new_threshold = data.get('fbm_threshold')
     
-
     # Update the config.json file with the new threshold
-    with open('config.json', 'r') as file:
+    with open(config_filename, 'r') as file:
         config = json.load(file)
         config['fbm_threshold'] = new_threshold
 
-    with open('config.json', 'w') as file:
+    with open(config_filename, 'w') as file:
         json.dump(config, file)
 
     return jsonify({'message': 'Threshold updated successfully'})
@@ -30,7 +33,7 @@ def set_threshold():
 # Get Json Data
 @app.route('/get_json_data')
 def get_json_data():
-    json_filename = 'data.json'
+    json_filename = os.path.join(cur_dir, 'data.json')
     return send_file(json_filename)
 
 

@@ -297,6 +297,11 @@ header a {
   color: #61dafb;
 }
 
+.recharts-tooltip-wrapper {
+  background-color: black; /* Replace with the background color you prefer */
+  /* Add more styling properties as needed */
+}
+
 /* Assuming you have a CSS file or CSS-in-JS */
 .chart-button {
   margin: 1rem;

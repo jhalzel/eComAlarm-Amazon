@@ -192,21 +192,6 @@ def main():
         MarketplaceIds=["ATVPDKIKX0DER"]
     )
 
-    # # Convert JSON response to DataFrame
-    # pandas_response = pd.json_normalize(response['Orders'])
-
-    # # Define the CSV filename and path
-    # csv_filename = 'response.csv'
-    # csv_path = os.path.join('files', csv_filename)
-
-    # # Create the 'files' folder if it doesn't exist
-    # os.makedirs('files', exist_ok=True)
-
-    # # Save DataFrame to CSV
-    # pandas_response.to_csv(csv_path, index=True)
-
-    # print(f"Response data has been saved to '{csv_path}'.")
-
 
     fba_order_ids = []
     fbm_order_ids = []
@@ -320,7 +305,7 @@ def main():
     print(f'start_date: {start_date}')
 
     # if the time is past 11:00pm Est collect the data from the day 
-    if current_time.hour >= 23:
+    if current_time.hour >= 3:
         # collect data into a dataframe for the day
         data = {
             'fba_sales': [round(fba_sales,2)],
@@ -337,7 +322,7 @@ def main():
         # Serialize data to JSON format
         json_data = json.dumps(data)
 
-        json_filename = 'data.json'
+        json_filename = os.path.join(current_dir, 'data.json')
 
         # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
         try:
@@ -347,14 +332,15 @@ def main():
             existing_data = []
 
     
-        # Append the new data to the existing data
+        # Insert the new data at the end of the existing data
         existing_data.append(json_data)
+
+        # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+        if len(existing_data) > 90:
+            existing_data = existing_data[:90]
 
         # Write JSON data to file
         with open(json_filename, 'w') as json_file:
-            # if file is greater than 90 lines remove the oldest line
-            if len(existing_data) > 90:
-                existing_data.pop(0) # maintain 90 days of data
             json.dump(existing_data, json_file, indent=4)
 
         print(f"Response data has been saved to '{json_filename}'.")
