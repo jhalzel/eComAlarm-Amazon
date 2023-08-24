@@ -18,8 +18,9 @@ from exceptions import (
 
 import json
 
+
 # Read the threshold value from the config.json file
-with open('config.json', 'r') as file:
+with open('./config.json', 'r') as file:
     config = json.load(file)
     threshold = int(config.get('fbm_threshold', 0))  # Default to 0 if not found
     
