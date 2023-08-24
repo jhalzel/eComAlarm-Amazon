@@ -51,7 +51,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
 
-           - name: Execute trial.py # Only run if trial.py or data.json is changed
+      - name: Execute trial.py # Only run if trial.py or data.json is changed
         id: execute_trial
         run: python src/trial.py
         continue-on-error: true # Continue even if this step fails
@@ -84,18 +84,5 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           
-        
-    
-          
-      # - name: commit files
-      #   run: |
-      #     git config --local user.email "action@github.com"
-      #     git config --local user.name "GitHub Action"
-      #     git add -A
-      #     git diff-index --quiet HEAD || (git commit -a -m "updated logs" --allow-empty)
-          
-      # - name: push changes
-      #   uses: ad-m/github-push-action@v0.6.0
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: main
+      - name: Display Runner IP
+        run: echo "Runner IP Address: $RUNNER_IP_ADDRESS"
