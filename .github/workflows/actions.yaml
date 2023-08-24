@@ -82,4 +82,11 @@ jobs:
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           
       - name: Display Runner IP
-        run: echo "Runner IP Address: $RUNNER_IP_ADDRESS"
+        run: |
+          echo "Runner IP Address: $RUNNER_IP_ADDRESS"
+          # Find an available port and assign it to a variable
+          PORT=5000  # You can change this to any port you prefer
+          while ! nc -z localhost $PORT; do
+            PORT=$((PORT + 1))
+          done
+          echo "Flask App is running at http://localhost:$PORT/"
