@@ -6,7 +6,7 @@ import os
 import json
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5333"}})
+CORS(app)
 
 # status = get_status(total_sales, order_count)
 
@@ -14,7 +14,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5333"}})
 fbm_threshold = None
 
 cur_dir = os.path.dirname(__file__)
-config_filename = os.path.join(cur_dir, './client/src/config.json')
+config_filename = os.path.join(cur_dir, '.config.json')
 
 # Set the fbm_threshold value
 @app.route('/set_threshold', methods=['POST'])
@@ -66,5 +66,4 @@ def members():
                     )
 
 if __name__ == '__main__':
-    app.run(host='http://127.0.0.1:5333', port=5333, debug=True)
- 
+    app.run(host='localhost', port=5000, debug=True)

@@ -201,7 +201,7 @@ def main():
     fbm_sales = 0
 
 
-    config_file_path = os.path.join(current_dir, './client/src/config.json')
+    config_file_path = os.path.join(current_dir, 'config.json')
 
     # Read the threshold value from the config.json file
     with open(config_file_path, 'r') as file:
