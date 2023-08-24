@@ -329,7 +329,8 @@ def main():
             'shipped_order_count': [shipped_order_count],
             'fba_pending_sales': [round(fba_pending_sales,2)],
             'fbm_pending_sales': [round(fbm_pending_sales,2)],
-            'threshold': [round(threshold,2)]
+            'threshold': [round(threshold,2)],
+            'date': [current_time.strftime("%m/%d/%Y")]
             }
         
         # Serialize data to JSON format
