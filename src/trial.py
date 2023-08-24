@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, send_file
+from flask_cors import CORS
 from script import main
 from flask import request
 import os
 import json
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://127.0.0.1:5333"}})
 
 # status = get_status(total_sales, order_count)
 
@@ -12,7 +14,7 @@ app = Flask(__name__)
 fbm_threshold = None
 
 cur_dir = os.path.dirname(__file__)
-config_filename = os.path.join(cur_dir, 'config.json')
+config_filename = os.path.join(cur_dir, './client/src/config.json')
 
 # Set the fbm_threshold value
 @app.route('/set_threshold', methods=['POST'])
@@ -64,5 +66,5 @@ def members():
                     )
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5000, debug=True)
+    app.run(host='http://127.0.0.1:5333', port=5333, debug=True)
  

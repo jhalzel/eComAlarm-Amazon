@@ -24,7 +24,6 @@ import pytz
 # JSON Handling 
 import json 
 
-
 load_dotenv()
 
 # Get the current script's directory
@@ -202,7 +201,7 @@ def main():
     fbm_sales = 0
 
 
-    config_file_path = os.path.join(current_dir, 'config.json')
+    config_file_path = os.path.join(current_dir, './client/src/config.json')
 
     # Read the threshold value from the config.json file
     with open(config_file_path, 'r') as file:
@@ -322,7 +321,7 @@ def main():
         # Serialize data to JSON format
         json_data = json.dumps(data)
 
-        json_filename = os.path.join(current_dir, 'data.json')
+        json_filename = os.path.join(current_dir, './client/src/data.json')
 
         # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
         try:
