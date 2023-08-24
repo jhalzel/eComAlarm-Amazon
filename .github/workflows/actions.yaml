@@ -48,10 +48,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
 
-      - name: Execute trial.py # Only run if trial.py or data.json is changed
-        id: execute_trial
-        run: python src/trial.py
-        continue-on-error: true # Continue even if this step fails
+      - name: Run Flask App
+        run: python run.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
           # Amazon credentials
