@@ -212,18 +212,12 @@ def main():
     fba_sales = 0
     fbm_sales = 0
 
-    
-    threshold = get_threshold()[0]
-    if threshold is not None:
-        print(f"Current threshold: {threshold}")
-    else:
-        print("Threshold retrieval failed.")
 
     config_file_path = os.path.join(current_dir, 'config.json')
 
-    # write new threshold to config.json file
-    with open(config_file_path, 'w') as file:
-        json.dump({'fbm_threshold': threshold}, file)
+    with open(config_file_path, 'r') as file:
+            config = json.load(file)
+            threshold = config.get('fbm_threshold', 0)
     
     
     number = '7742396843'
