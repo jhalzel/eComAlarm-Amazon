@@ -9,21 +9,6 @@ function App() {
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
 
-// // Function to fetch data from your Flask server
-// const fetchData = async () => {
-//   try {
-//     const response = await fetch(`${apiUrl}/members`); // Use the correct endpoint URL
-//     if (response.ok) {
-//       const jsonData = await response.json();
-//       setData(jsonData); // Update your component's state with the fetched data
-//     } else {
-//       console.error('Failed to fetch data. Response status:', response.status);
-//     }
-//   } catch (error) {
-//     console.error('Error:', error);
-//   }
-// };
-
 
 // Function to Post the data to the API
 const setThreshold = async (newThreshold) => {
@@ -63,6 +48,7 @@ const handleKeyPress = (e) => {
     setThreshold(e.target.value)
   }
 };
+
 
 // Function to handle the button click
 const handleClick = () => {

@@ -8,6 +8,8 @@ export const Chart = () => {
     const [json_data, setJson_data] = useState([]);
     const [originalData, setOriginalData] = useState([]);
 
+    const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
+
     const filter_dates = (e, data) => {
         // Get current date
         const today = new Date();
@@ -66,7 +68,7 @@ export const Chart = () => {
 
 
     useEffect(() => {
-        axios.get('/get_json_data')
+        axios.get(`${apiUrl}/get_json_data`)
             .then((response) => {
                 // Parse the JSON data
                 const rawData = response.data.map(JSON.parse);
