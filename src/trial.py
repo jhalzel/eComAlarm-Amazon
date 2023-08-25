@@ -16,6 +16,12 @@ fbm_threshold = None
 cur_dir = os.path.dirname(__file__)
 config_filename = os.path.join(cur_dir, 'config.json')
 
+@app.route('/')
+def home():
+    # Your code to render the home page or return some content
+    return "Welcome to My App"
+
+
 # Set the fbm_threshold value
 @app.route('/set_threshold', methods=['POST'])
 def set_threshold():
