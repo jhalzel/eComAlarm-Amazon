@@ -24,48 +24,6 @@ import pytz
 # JSON Handling 
 import json 
 
-load_dotenv()
-
-# Get the current script's directory
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-logger_file_handler = logging.handlers.RotatingFileHandler(
-    os.path.join(current_dir, "status.log"),
-    "status.log",
-    maxBytes=1024 * 1024,
-    backupCount=1,
-    encoding="utf8",
-)
-
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-logger_file_handler.setFormatter(formatter)
-logger.addHandler(logger_file_handler)
-
-
-
-# Access credentials from the dictionary
-credentials = {
-    "refresh_token": os.environ.get("SP_API_REFRESH_TOKEN"),
-    "lwa_app_id": os.environ.get("LWA_APP_ID"),
-    "lwa_client_secret": os.environ.get("LWA_CLIENT_SECRET"),
-    "aws_access_key": os.environ.get("SP_API_ACCESS_KEY"),
-    "aws_secret_key": os.environ.get("SP_API_SECRET_KEY"),
-    "role_arn": os.environ.get("SP_API_ROLE_ARN")
-}
-
-gmail_credentials = {
-    "gmail_username": os.environ.get("GMAIL_USERNAME"),
-    "gmail_password": os.environ.get("GMAIL_PASSWORD")
-}
-
-try:
-    SOME_SECRET = os.environ["SOME_SECRET"]
-except KeyError:
-    SOME_SECRET = "Token not available!"
-    #logger.info("Token not available!")
-    #raise
 
 
 
@@ -152,6 +110,51 @@ pause_flag = False
 def main():
     # Access the global variable inside the main function
     global pause_flag
+
+    load_dotenv()
+
+    # Get the current script's directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger_file_handler = logging.handlers.RotatingFileHandler(
+        os.path.join(current_dir, "status.log"),
+        "status.log",
+        maxBytes=1024 * 1024,
+        backupCount=1,
+        encoding="utf8",
+    )
+
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    logger_file_handler.setFormatter(formatter)
+    logger.addHandler(logger_file_handler)
+
+
+
+    # Access credentials from the dictionary
+    credentials = {
+        "refresh_token": os.environ.get("SP_API_REFRESH_TOKEN"),
+        "lwa_app_id": os.environ.get("LWA_APP_ID"),
+        "lwa_client_secret": os.environ.get("LWA_CLIENT_SECRET"),
+        "aws_access_key": os.environ.get("SP_API_ACCESS_KEY"),
+        "aws_secret_key": os.environ.get("SP_API_SECRET_KEY"),
+        "role_arn": os.environ.get("SP_API_ROLE_ARN")
+    }
+
+    gmail_credentials = {
+        "gmail_username": os.environ.get("GMAIL_USERNAME"),
+        "gmail_password": os.environ.get("GMAIL_PASSWORD")
+    }
+
+    try:
+        SOME_SECRET = os.environ["SOME_SECRET"]
+    except KeyError:
+        SOME_SECRET = "Token not available!"
+        #logger.info("Token not available!")
+        #raise
+
+    
 
     # Print the token value
     logger.info(f"Token value: {SOME_SECRET}")

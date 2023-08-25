@@ -79,7 +79,7 @@ useEffect(() => {
   // Function to fetch the data from the API
   const fetchMembersData = async () => {
     try {
-      const response = await fetch('/members'); // The API route URL
+      const response = await fetch(`${apiUrl}/members`); // The API route URL
       const data = await response.json();
       setData(data);
     } catch (error) {
