@@ -102,6 +102,9 @@ def get_asin_counter(order_ids, orders_client):
 
 # Define the function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
 def check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold):
+    if type(threshold) not in [float, int]:
+        threshold = 0
+    
     # If total_sales reaches threshold, send text message
     if fba_sales > threshold and not pause_flag:
         try:
