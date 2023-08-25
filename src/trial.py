@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, send_file
+from flask_cors import CORS
 from script import main
 from flask import request
 import os
@@ -6,6 +7,8 @@ import json
 
 app = Flask(__name__)
 
+# Enable CORS for all routes
+CORS(app)
 
 # Store the fbm_threshold value
 fbm_threshold = None
