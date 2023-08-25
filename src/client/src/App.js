@@ -7,28 +7,29 @@ function App() {
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(0);
 
-// Function to fetch data from your Flask server
-const fetchData = async () => {
-  try {
-    const response = await fetch('/members'); // Use the correct endpoint URL
-    if (response.ok) {
-      const jsonData = await response.json();
-      setData(jsonData); // Update your component's state with the fetched data
-    } else {
-      console.error('Failed to fetch data. Response status:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
+  const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
 
+// // Function to fetch data from your Flask server
+// const fetchData = async () => {
+//   try {
+//     const response = await fetch(`${apiUrl}/members`); // Use the correct endpoint URL
+//     if (response.ok) {
+//       const jsonData = await response.json();
+//       setData(jsonData); // Update your component's state with the fetched data
+//     } else {
+//       console.error('Failed to fetch data. Response status:', response.status);
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// };
 
 
 // Function to Post the data to the API
 const setThreshold = async (newThreshold) => {
   try {
     console.log(newThreshold)
-    const response = await fetch('/set_threshold', {
+    const response = await fetch(`${apiUrl}/set_threshold`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
