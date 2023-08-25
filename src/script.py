@@ -122,6 +122,7 @@ pause_flag = False
 def main():
     # Access the global variable inside the main function
     global pause_flag
+    global threshold
 
     load_dotenv()
 
@@ -218,10 +219,16 @@ def main():
 
     config_file_path = os.path.join(current_dir, 'config.json')
 
-    with open(config_file_path, 'r') as file:
-            config = json.load(file)
-            threshold = config.get('fbm_threshold', 0)
+    # Read the threshold value from the config.json file
+    try:
+        with open(config_file_path, 'r') as json_file:
+            config = json.load(json_file)
+            threshold = int(config.get('fbm_threshold', 0))  # Default to 0 if not found
+    except FileNotFoundError:
+        existing_data = []
     
+    print(f'threshold: {threshold}')
+
     
     number = '7742396843'
     # Initialize the URL shortener
