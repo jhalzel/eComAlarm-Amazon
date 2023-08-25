@@ -2,6 +2,7 @@
 import logging 
 import logging.handlers 
 import os 
+import requests
 from dotenv import load_dotenv 
  
 # Amazon Seller API 
@@ -25,6 +26,14 @@ import pytz
 import json 
 
 
+def get_threshold():
+    try:
+        response = requests.get("https://amazon-ecom-alarm.onrender.com/members")
+        data = response.json()
+        return data.get("fbm_threshold")
+    except Exception as e:
+        print(f"Failed to retrieve threshold: {e}")
+        return None
 
 
 def calculate_total_sales(asin_counter, asins_list, client):
@@ -203,16 +212,19 @@ def main():
     fba_sales = 0
     fbm_sales = 0
 
+    
+    threshold = get_threshold()[0]
+    if threshold is not None:
+        print(f"Current threshold: {threshold}")
+    else:
+        print("Threshold retrieval failed.")
 
     config_file_path = os.path.join(current_dir, 'config.json')
 
-    # Read the threshold value from the config.json file
-    with open(config_file_path, 'r') as file:
-        config = json.load(file)
-        threshold = float(config.get('fbm_threshold', 0))  # Default to 0 if not found
+    # write new threshold to config.json file
+    with open(config_file_path, 'w') as file:
+        json.dump({'fbm_threshold': threshold}, file)
     
-
-    print(f'threshold: {threshold}')
     
     number = '7742396843'
     # Initialize the URL shortener
