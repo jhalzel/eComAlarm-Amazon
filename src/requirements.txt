@@ -1,5 +1,5 @@
 etext==0.0.1
-Flask==2.3.2
+Flask==2.2.5
 Flask-Cors==4.0.0
 python_amazon_sp_api==0.18.8
 pytz==2022.1
@@ -7,5 +7,4 @@ Requests==2.31.0
 python-dotenv==1.0.0
 schedule==1.2.0
 pandas==2.0.3
-Jinja2==3.1.2
 gunicorn==21.2.0
