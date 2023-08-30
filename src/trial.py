@@ -38,11 +38,38 @@ def set_threshold():
 
     return jsonify({'message': 'Threshold updated successfully'})
 
-# Get Json Data
-@app.route('/get_json_data')
-def get_json_data():
+# Route to receive POST data and update the JSON file
+@app.route('/update_data', methods=['POST'])
+def update_data():
     json_filename = os.path.join(cur_dir, 'data.json')
-    return send_file(json_filename)
+    data = request.json
+
+    try:
+        with open(json_filename, 'r') as json_file:
+            existing_data = json.load(json_file)
+    except FileNotFoundError:
+        existing_data = []
+
+    # Check if there is data with the same date in the existing entries
+    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+
+    for idx, entry in enumerate(existing_data):
+        if entry.get('date') == date_to_update:
+            # Update the existing entry with the new data
+            existing_data[idx] = data
+            break
+
+    # Truncate the list if it exceeds a certain length (e.g., 90)
+    max_data_length = 90
+    if len(existing_data) > max_data_length:
+        existing_data = existing_data[-max_data_length:]
+
+    # Write the updated data back to the JSON file
+    with open(json_filename, 'w') as json_file:
+        json.dump(existing_data, json_file, indent=4)
+
+    return jsonify({'message': 'Data updated successfully'})
+
 
 
 # Members API Route
