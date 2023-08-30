@@ -8,7 +8,7 @@ import json
 app = Flask(__name__)
 
 # Enable CORS for all routes
-CORS(app, origins=["http://localhost:3000"])
+CORS(app)
 
 # Store the fbm_threshold value
 fbm_threshold = None
