@@ -48,9 +48,13 @@ def get_json_data():
 # Members API Route
 @app.route('/members')
 def members():
-    global fbm_threshold
     status = main()  # Call the main function to execute the code
-    fbm_threshold = status['threshold']  # Extract the fbm_threshold value from the dictionary
+    
+    # get the fbm_threshold value from the config.json file
+    with open(config_filename, 'r') as file:
+        config = json.load(file)
+        fbm_threshold = config['fbm_threshold']
+
     fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
     fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary
     total_sales = status['total_sales']  # Extract the total sales value from the dictionary
