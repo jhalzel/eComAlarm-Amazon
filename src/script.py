@@ -35,16 +35,13 @@ def get_threshold():
         print(f"Failed to retrieve threshold: {e}")
         return None
     
-
 def update_members(data):
-    try:
-        response = requests.post("http://amazon-ecom-alarm.onrender.com/get_json_data", json=data)
-        if response.status_code == 200:
-            print("Data updated successfully")
-        else:
-            print(f"Failed to update data: {response.text}")
+    try: 
+        response = requests.post("https://amazon-ecom-alarm.onrender.com/members", json=data)
+        print(f"Response: {response.json()}")
     except Exception as e:
-        print(f"Failed to update data: {e}")
+        print(f"Failed to update members: {e}")
+        return None
     
 
 def calculate_total_sales(asin_counter, asins_list, client):
@@ -351,29 +348,28 @@ def main():
         # Serialize data to JSON format
         json_data = json.dumps(data)
 
-        # json_filename = os.path.join(current_dir, 'data.json')
+        json_filename = os.path.join(current_dir, 'data.json')
 
-        # # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
-        # try:
-        #     with open(json_filename, 'r') as json_file:
-        #         existing_data = json.load(json_file)
-        # except FileNotFoundError:
-        #     existing_data = []
+        # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
+        try:
+            with open(json_filename, 'r') as json_file:
+                existing_data = json.load(json_file)
+        except FileNotFoundError:
+            existing_data = []
 
-        # # Insert the new data at the end of the existing data
-        # existing_data.append(json_data)
+        # Insert the new data at the end of the existing data
+        existing_data.append(json_data)
 
-        # # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-        # if len(existing_data) > 90:
-        #     existing_data = existing_data[:90]
+        # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+        if len(existing_data) > 90:
+            existing_data = existing_data[:90]
 
-        # # Write JSON data to file
-        # with open(json_filename, 'w') as json_file:
-        #     json.dump(existing_data, json_file, indent=4)
+        # Write JSON data to file
+        with open(json_filename, 'w') as json_file:
+            json.dump(existing_data, json_file, indent=4)
 
-        update_members(json_data)
 
-        # print(f"Response data has been saved to '{json_filename}'.")
+        print(f"Response data has been saved to '{json_filename}'.")
         
     print(f'threshold: {threshold}')
 
