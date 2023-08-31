@@ -35,16 +35,6 @@ def get_threshold():
         print(f"Failed to retrieve threshold: {e}")
         return None
     
-def update_data(data):
-    try:
-        response = requests.get("https://amazon-ecom-alarm.onrender.com/update_data", json=data)
-        if response.status_code == 200:
-            print("Data sent successfully.")
-            print("Response:", response.text)
-    except Exception as e:  
-        print(f"Failed to send data: {e}")
-        return None
-    
 
 def calculate_total_sales(asin_counter, asins_list, client):
     price_total = 0
@@ -351,8 +341,6 @@ def main():
 
     json_filename = os.path.join(current_dir, 'data.json')
 
-    update_data(json_data)
-
     # # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
     # try:
     #     with open(json_filename, 'r') as json_file:
@@ -360,20 +348,26 @@ def main():
     # except FileNotFoundError:
     #     existing_data = []
 
-    # # Insert the new data at the end of the existing data
-    # existing_data.append(json_data)
+    # call to API to retreive the json data
+    try:
+        response = requests.get("https://amazon-ecom-alarm.onrender.com/get_data")
+        existing_data = response.json()
+    except Exception as e:
+        print(f"Failed to retrieve data: {e}")
+        existing_data = []
 
-    # # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-    # if len(existing_data) > 90:
-    #     existing_data = existing_data[:90]
+    # call to API to update the json data
+    try:
+        response = requests.post("https://amazon-ecom-alarm.onrender.com/set_data", json=json_data)
+        print(f"Response: {response}")
+    except Exception as e:
+        print(f"Failed to update data: {e}")
+
 
     # # Write JSON data to file
     # with open(json_filename, 'w') as json_file:
     #     json.dump(existing_data, json_file, indent=4)
 
-    # print(f"Response data has been saved to '{json_filename}'.")
-        
-    # print(f'threshold: {threshold}')
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)

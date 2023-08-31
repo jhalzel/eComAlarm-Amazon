@@ -8,7 +8,11 @@ import json
 app = Flask(__name__)
 
 # Enable CORS for all routes
-CORS(app, resources={r'/*': {'origins': '*'}})
+app.use(CORS({
+    'origin': 'https://amazon-ecom-alarm.onrender.com/',
+    'methods': ['GET','POST'],
+    'allowHeaders': ['Content-Type', 'Authorization']
+}))
 
 # Store the fbm_threshold value
 fbm_threshold = None
@@ -38,9 +42,23 @@ def set_threshold():
 
     return jsonify({'message': 'Threshold updated successfully'})
 
-# Route to receive POST data and update the JSON file
-@app.route('/update_data', methods=['POST'])
-def update_data():
+
+# Route to retrieve JSON data (GET)
+@app.route('/get_data', methods=['GET'])
+def get_json_data():
+    json_filename = os.path.join(cur_dir, 'data.json')
+
+    try:
+        with open(json_filename, 'r') as json_file:
+            data = json.load(json_file)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({'message': 'Data not found'}), 404
+    
+    
+# Route to update JSON data (POST)
+@app.route('/set_data', methods=['POST'])
+def set_json_data():
     json_filename = os.path.join(cur_dir, 'data.json')
     data = request.json
 
@@ -69,6 +87,7 @@ def update_data():
         json.dump(existing_data, json_file, indent=4)
 
     return jsonify({'message': 'Data updated successfully'})
+
 
 
 
