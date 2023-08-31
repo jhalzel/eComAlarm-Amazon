@@ -8,7 +8,7 @@ import json
 app = Flask(__name__)
 
 # Enable CORS for all routes
-app(CORS, origins='*', allow_headers='*')
+CORS(app, origins=["http://localhost:3000"])
 
 # Store the fbm_threshold value
 fbm_threshold = None
@@ -83,7 +83,6 @@ def set_json_data():
         json.dump(existing_data, json_file, indent=4)
 
     return jsonify({'message': 'Data updated successfully'})
-
 
 
 
