@@ -8,11 +8,7 @@ import json
 app = Flask(__name__)
 
 # Enable CORS for all routes
-app.use(CORS({
-    'origin': 'https://amazon-ecom-alarm.onrender.com/',
-    'methods': ['GET','POST'],
-    'allowHeaders': ['Content-Type', 'Authorization']
-}))
+app(CORS, origins='*', allow_headers='*')
 
 # Store the fbm_threshold value
 fbm_threshold = None
