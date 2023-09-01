@@ -7,6 +7,14 @@ import '../App.css'
 export const Chart = () => {
     const [json_data, setJson_data] = useState([]);
     const [originalData, setOriginalData] = useState([]);
+    const today = new Date();
+
+    // Format the date as "MM/DD/YYYY"
+    const formattedDate = today.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    });
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
 
@@ -68,6 +76,9 @@ export const Chart = () => {
 
 
     useEffect(() => {
+        // eastern timezone date 
+        const today = new Date();
+
         axios.get(`${apiUrl}/members`)
             .then((response) => {
                 // Parse the JSON data
@@ -88,7 +99,7 @@ export const Chart = () => {
                     fba_pending_sales: item.fba_pending_sales[0],
                     fbm_pending_sales: item.fbm_pending_sales[0],
                     threshold: item.threshold[0],
-                    date: item.lastupdated[0],
+                    date: formattedDate
                 };
 
                 // Push the data point into the formattedData array
