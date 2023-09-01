@@ -44,7 +44,16 @@ def set_threshold():
 # Route to retrieve JSON data (GET)
 @app.route('/get_data', methods=['GET'])
 def get_json_data():
-    return jsonify(data)
+    json_filename = os.path.join(cur_dir, 'data.json')
+
+    try:
+        with open(json_filename, 'r') as json_file:
+            data = json.load(json_file)
+        return jsonify(data)
+    
+
+    except FileNotFoundError:
+        return jsonify({'message': 'Data not found'}), 404
     
     
 # Route to update JSON data (POST)

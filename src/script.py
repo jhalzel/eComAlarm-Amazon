@@ -341,18 +341,16 @@ def main():
     print(f'date_to_update: {date_to_update[0]}')
 
     parsed_data = [json.loads(entry) for entry in existing_data]
+
+    for entry in parsed_data:
+        if entry['date'][0] == date_to_update[0]:
+            # Update the existing entry with the new data
+            existing_data[0] = json_data
     
     if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
         existing_data.append(json_data)
-    else:
-        for entry in parsed_data:
-            if entry['date'][0] == date_to_update[0]:
-                print('date match found')
-                entry.update(data)
-                break
+
         
-
-
         # if entry.get('date') == date_to_update:
         #     # Update the existing entry with the new data
         #     existing_data[idx] = data
