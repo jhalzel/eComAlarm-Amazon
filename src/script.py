@@ -206,12 +206,6 @@ def main():
     fbm_sales = 0
 
 
-    config_file_path = os.path.join(current_dir, 'config.json')
-
-    with open(config_file_path, 'r') as file:
-            config = json.load(file)
-            threshold = config.get('fbm_threshold', 0)
-    
     
     number = '7742396843'
     # Initialize the URL shortener
@@ -305,6 +299,14 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
+
+    config_file_path = os.path.join(current_dir, 'config.json')
+
+    with open(config_file_path, 'r') as file:
+            config = json.load(file)
+            threshold = config.get('fbm_threshold', 0)
+    
+
     # collect data into a dataframe for the day
     data = {
         'fba_sales': [round(fba_sales,2)],
@@ -318,35 +320,57 @@ def main():
         'date': [current_time.strftime("%m/%d/%Y")]
         }
 
-    # if the time is past 11:00pm Est collect the data from the day 
-    if current_time.hour >= 23:
         
-        
-        # Serialize data to JSON format
-        json_data = json.dumps(data)
+    # Serialize data to JSON format
+    json_data = json.dumps(data)
 
-        json_filename = os.path.join(current_dir, 'data.json')
+    json_filename = os.path.join(current_dir, 'data.json')
 
-        # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
-        try:
-            with open(json_filename, 'r') as json_file:
-                existing_data = json.load(json_file)
-        except FileNotFoundError:
-            existing_data = []
+    # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
+    try:
+        with open(json_filename, 'r') as json_file:
+            existing_data = json.load(json_file)
+    except FileNotFoundError:
+        existing_data = []
 
+    print(f'existing_data: {existing_data}')
+
+    # Check if there is data with the same date in the existing entries
+    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+
+    print(f'date_to_update: {date_to_update[0]}')
+
+    parsed_data = [json.loads(entry) for entry in existing_data]
     
-        # Insert the new data at the end of the existing data
+    if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
         existing_data.append(json_data)
+    else:
+        for entry in parsed_data:
+            if entry['date'][0] == date_to_update[0]:
+                print('date match found')
+                entry.update(data)
+                break
+        
 
-        # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-        if len(existing_data) > 90:
-            existing_data = existing_data[:90]
 
-        # Write JSON data to file
-        with open(json_filename, 'w') as json_file:
-            json.dump(existing_data, json_file, indent=4)
+        # if entry.get('date') == date_to_update:
+        #     # Update the existing entry with the new data
+        #     existing_data[idx] = data
+        #     break
+        # else:
+        #     # Insert the new data at the end of the existing data
+        #     existing_data.append(json_data)
+    
 
-        print(f"Response data has been saved to '{json_filename}'.")
+    # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+    if len(existing_data) > 90:
+        existing_data = existing_data[:90]
+
+    # Write JSON data to file
+    with open(json_filename, 'w') as json_file:
+        json.dump(existing_data, json_file, indent=4)
+
+    print(f"Response data has been saved to '{json_filename}'.")
         
     print(f'threshold: {threshold}')
 
@@ -360,7 +384,6 @@ def main():
 
     # Format the timestamp
     current_timestamp = current_timestamp.strftime(custom_format)
-
 
     # Exit the function to pause the program
     return {

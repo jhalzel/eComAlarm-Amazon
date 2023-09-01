@@ -96,6 +96,7 @@ def members():
         with open(config_filename, 'r') as file:
             config = json.load(file)
             fbm_threshold = config['fbm_threshold']
+            print('fbm_threshold: ', fbm_threshold)
     except FileNotFoundError:
         fbm_threshold = None
 
