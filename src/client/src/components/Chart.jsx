@@ -79,7 +79,7 @@ export const Chart = () => {
         // eastern timezone date 
         const today = new Date();
 
-        axios.get(`${apiUrl}/members`)
+        axios.get(`${apiUrl}/get_data`)
             .then((response) => {
                 // Parse the JSON data
                 const rawData = response.data.map(JSON.parse);
