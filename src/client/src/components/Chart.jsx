@@ -88,7 +88,7 @@ export const Chart = () => {
                     fba_pending_sales: item.fba_pending_sales[0],
                     fbm_pending_sales: item.fbm_pending_sales[0],
                     threshold: item.threshold[0],
-                    date: item.date,
+                    date: item.lastupdated[0],
                 };
 
                 // Push the data point into the formattedData array

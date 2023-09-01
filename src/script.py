@@ -305,20 +305,22 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
+    # collect data into a dataframe for the day
+    data = {
+        'fba_sales': [round(fba_sales,2)],
+        'fbm_sales': [round(fbm_sales,2)],
+        'total_order_count': [order_count],
+        'order_pending_count': [order_pending_count],
+        'shipped_order_count': [shipped_order_count],
+        'fba_pending_sales': [round(fba_pending_sales,2)],
+        'fbm_pending_sales': [round(fbm_pending_sales,2)],
+        'threshold': [round(threshold,2)],
+        'date': [current_time.strftime("%m/%d/%Y")]
+        }
+
     # if the time is past 11:00pm Est collect the data from the day 
     if current_time.hour >= 23:
-        # collect data into a dataframe for the day
-        data = {
-            'fba_sales': [round(fba_sales,2)],
-            'fbm_sales': [round(fbm_sales,2)],
-            'total_order_count': [order_count],
-            'order_pending_count': [order_pending_count],
-            'shipped_order_count': [shipped_order_count],
-            'fba_pending_sales': [round(fba_pending_sales,2)],
-            'fbm_pending_sales': [round(fbm_pending_sales,2)],
-            'threshold': [round(threshold,2)],
-            'date': [current_time.strftime("%m/%d/%Y")]
-            }
+        
         
         # Serialize data to JSON format
         json_data = json.dumps(data)
