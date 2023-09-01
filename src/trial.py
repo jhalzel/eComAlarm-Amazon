@@ -5,6 +5,8 @@ from flask import request
 import os
 import json
 
+from script import data
+
 app = Flask(__name__)
 
 # Enable CORS for all routes
@@ -42,14 +44,7 @@ def set_threshold():
 # Route to retrieve JSON data (GET)
 @app.route('/get_data', methods=['GET'])
 def get_json_data():
-    json_filename = os.path.join(cur_dir, 'data.json')
-
-    try:
-        with open(json_filename, 'r') as json_file:
-            data = json.load(json_file)
-        return jsonify(data)
-    except FileNotFoundError:
-        return jsonify({'message': 'Data not found'}), 404
+    return jsonify(data)
     
     
 # Route to update JSON data (POST)
