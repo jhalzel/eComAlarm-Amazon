@@ -342,11 +342,14 @@ def main():
 
     parsed_data = [json.loads(entry) for entry in existing_data]
 
-    for entry in parsed_data:
-        if entry['date'][0] == date_to_update[0]:
-            # Update the existing entry with the new data
-            existing_data[0] = json_data
-    
+    if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+        for entry in parsed_data:
+            if entry['date'][0] == date_to_update[0]:
+                # delete the entry
+                existing_data.remove(json.dumps(entry))
+        # append the new entry to the end of the list
+        existing_data.append(json_data)
+
     if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
         existing_data.append(json_data)
 
