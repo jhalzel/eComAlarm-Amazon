@@ -5,8 +5,6 @@ from flask import request
 import os
 import json
 
-from script import data
-
 app = Flask(__name__)
 
 # Enable CORS for all routes
