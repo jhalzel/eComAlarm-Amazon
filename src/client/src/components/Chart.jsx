@@ -68,7 +68,7 @@ export const Chart = () => {
 
 
     useEffect(() => {
-        axios.get(`${apiUrl}/get_data`)
+        axios.get(`${apiUrl}/members`)
             .then((response) => {
                 // Parse the JSON data
                 const rawData = response.data.map(JSON.parse);

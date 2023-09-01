@@ -26,16 +26,6 @@ import pytz
 import json 
 
 
-def get_threshold():
-    try:
-        response = requests.get("https://amazon-ecom-alarm.onrender.com/members")
-        data = response.json()
-        return data.get("fbm_threshold")
-    except Exception as e:
-        print(f"Failed to retrieve threshold: {e}")
-        return None
-    
-
 def calculate_total_sales(asin_counter, asins_list, client):
     price_total = 0
     total_sales = 0
@@ -122,7 +112,6 @@ pause_flag = False
 def main():
     # Access the global variable inside the main function
     global pause_flag
-    global threshold
 
     load_dotenv()
 
@@ -219,16 +208,10 @@ def main():
 
     config_file_path = os.path.join(current_dir, 'config.json')
 
-    # Read the threshold value from the config.json file
-    try:
-        with open(config_file_path, 'r') as json_file:
-            config = json.load(json_file)
-            threshold = int(config.get('fbm_threshold', 0))  # Default to 0 if not found
-    except FileNotFoundError:
-        existing_data = []
+    with open(config_file_path, 'r') as file:
+            config = json.load(file)
+            threshold = config.get('fbm_threshold', 0)
     
-    print(f'threshold: {threshold}')
-
     
     number = '7742396843'
     # Initialize the URL shortener
@@ -322,52 +305,48 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
-
-    # collect data into a dataframe for the day
-    data = {
-        'fba_sales': [round(fba_sales,2)],
-        'fbm_sales': [round(fbm_sales,2)],
-        'total_order_count': [order_count],
-        'order_pending_count': [order_pending_count],
-        'shipped_order_count': [shipped_order_count],
-        'fba_pending_sales': [round(fba_pending_sales,2)],
-        'fbm_pending_sales': [round(fbm_pending_sales,2)],
-        'threshold': [round(threshold,2)],
-        'date': [current_time.strftime("%m/%d/%Y")]
-        }
+    # if the time is past 11:00pm Est collect the data from the day 
+    if current_time.hour >= 23:
+        # collect data into a dataframe for the day
+        data = {
+            'fba_sales': [round(fba_sales,2)],
+            'fbm_sales': [round(fbm_sales,2)],
+            'total_order_count': [order_count],
+            'order_pending_count': [order_pending_count],
+            'shipped_order_count': [shipped_order_count],
+            'fba_pending_sales': [round(fba_pending_sales,2)],
+            'fbm_pending_sales': [round(fbm_pending_sales,2)],
+            'threshold': [round(threshold,2)],
+            'date': [current_time.strftime("%m/%d/%Y")]
+            }
         
-    # Serialize data to JSON format
-    json_data = json.dumps(data)
+        # Serialize data to JSON format
+        json_data = json.dumps(data)
 
-    json_filename = os.path.join(current_dir, 'data.json')
+        json_filename = os.path.join(current_dir, 'data.json')
 
-    # # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
-    # try:
-    #     with open(json_filename, 'r') as json_file:
-    #         existing_data = json.load(json_file)
-    # except FileNotFoundError:
-    #     existing_data = []
+        # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
+        try:
+            with open(json_filename, 'r') as json_file:
+                existing_data = json.load(json_file)
+        except FileNotFoundError:
+            existing_data = []
 
-    # call to API to retreive the json data
-    try:
-        response = requests.get("https://amazon-ecom-alarm.onrender.com/get_data")
-        existing_data = response.json()
-    except Exception as e:
-        print(f"Failed to retrieve data: {e}")
-        existing_data = []
+    
+        # Insert the new data at the end of the existing data
+        existing_data.append(json_data)
 
-    # call to API to update the json data
-    try:
-        response = requests.post("https://amazon-ecom-alarm.onrender.com/set_data", json=json_data)
-        print(f"Response: {response}")
-    except Exception as e:
-        print(f"Failed to update data: {e}")
+        # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+        if len(existing_data) > 90:
+            existing_data = existing_data[:90]
 
+        # Write JSON data to file
+        with open(json_filename, 'w') as json_file:
+            json.dump(existing_data, json_file, indent=4)
 
-    # # Write JSON data to file
-    # with open(json_filename, 'w') as json_file:
-    #     json.dump(existing_data, json_file, indent=4)
-
+        print(f"Response data has been saved to '{json_filename}'.")
+        
+    print(f'threshold: {threshold}')
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
