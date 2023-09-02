@@ -299,7 +299,19 @@ def main():
     print(f'end_date: {end_date}')
     print(f'start_date: {start_date}')
 
+    # timestamp format
+    custom_format = "%B %d, %H:%M:%S"
+    
+    # Get the current timestamp when main() is called EST format
+    current_timestamp = datetime.now(eastern_timezone)
 
+    # Format the timestamp
+    current_timestamp = current_timestamp.strftime(custom_format)
+
+    # Check timestamp for EST
+    print(f'current_timestamp: {current_timestamp}')
+
+    # Get the current directory of the script file for threshold
     config_file_path = os.path.join(current_dir, 'config.json')
 
     with open(config_file_path, 'r') as file:
@@ -317,7 +329,8 @@ def main():
         'fba_pending_sales': [round(fba_pending_sales,2)],
         'fbm_pending_sales': [round(fbm_pending_sales,2)],
         'threshold': [round(threshold,2)],
-        'date': [current_time.strftime("%m/%d/%Y")]
+        'date': [current_time.strftime("%m/%d/%Y")],
+        'last_updated': [current_timestamp]
         }
 
         
@@ -377,14 +390,6 @@ def main():
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
-
-    custom_format = "%B %d, %H:%M:%S"
-    
-    # Get the current timestamp when main() is called
-    current_timestamp = datetime.now()
-
-    # Format the timestamp
-    current_timestamp = current_timestamp.strftime(custom_format)
 
     # Exit the function to pause the program
     return {
