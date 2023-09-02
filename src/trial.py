@@ -61,8 +61,6 @@ def get_json_data():
     try:
         with open(json_filename, 'r') as json_file:
             data = json.load(json_file)
-             # Include the threshold value in the JSON data
-            data['threshold'] = get_threshold()  # Use the existing function to get the threshold
         return jsonify(data)
     
 
