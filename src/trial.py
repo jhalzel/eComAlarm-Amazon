@@ -36,6 +36,9 @@ def set_threshold():
     with open(config_filename, 'w') as file:
         json.dump(config, file)
 
+    # Log the updated threshold
+    print('Updated threshold:', config['fbm_threshold'])
+
     return jsonify({'message': f'Threshold updated successfully to {config["fbm_threshold"]}'})
 
 
@@ -58,6 +61,8 @@ def get_json_data():
     try:
         with open(json_filename, 'r') as json_file:
             data = json.load(json_file)
+             # Include the threshold value in the JSON data
+            data['threshold'] = get_threshold()  # Use the existing function to get the threshold
         return jsonify(data)
     
 
