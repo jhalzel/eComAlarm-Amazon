@@ -39,6 +39,17 @@ def set_threshold():
     return jsonify({'message': f'Threshold updated successfully to {config["fbm_threshold"]}'})
 
 
+@app.route('/get_threshold', methods=['GET'])
+def get_threshold():
+    try:
+        with open(config_filename, 'r') as file:
+            config = json.load(file)
+            fbm_threshold = config.get('fbm_threshold')
+            return jsonify({'fbm_threshold': fbm_threshold})
+    except FileNotFoundError:
+        return jsonify({'error': 'Config file not found'})
+    
+    
 # Route to retrieve JSON data (GET)
 @app.route('/get_data', methods=['GET'])
 def get_json_data():
