@@ -28,19 +28,14 @@ def set_threshold():
     data = request.json
     new_threshold = data.get('fbm_threshold')
     
-    # Update the config.json file with the new threshold
-    with open(config_filename, 'r') as file:
-        config = json.load(file)
-        config['fbm_threshold'] = new_threshold
-
+    # Create a dictionary with the new threshold
+    data_to_write = {"fbm_threshold": new_threshold}
+    
+    # Write the new threshold to the config.json file
     with open(config_filename, 'w') as file:
-        json.dump(config, file)
+        json.dump(data_to_write, file, indent=4)    
 
-    # Log the updated threshold
-    print('Updated threshold:', config['fbm_threshold'])
-
-    return jsonify({'message': f'Threshold updated successfully to {config["fbm_threshold"]}'})
-
+    return jsonify({'message': f'Threshold updated to {new_threshold}'})
 
 @app.route('/get_threshold', methods=['GET'])
 def get_threshold():
