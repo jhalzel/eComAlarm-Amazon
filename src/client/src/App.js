@@ -75,7 +75,7 @@ useEffect(() => {
 
   fetchMembersData(); // Initial fetch
 
-  const interval = setInterval(fetchMembersData, 60000); // Fetch every minute (adjust as needed)
+  const interval = setInterval(fetchMembersData, 300000); // Fetch every 5 minutes (adjust as needed)
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 }, []);
