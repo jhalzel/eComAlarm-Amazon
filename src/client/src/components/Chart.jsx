@@ -4,11 +4,13 @@ import { BarChart,LineChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Le
 import '../App.css'
 
 
-export const Chart = () => {
+export const Chart = ({threshold}) => {
     const [json_data, setJson_data] = useState([]);
     const [originalData, setOriginalData] = useState([]);
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
+
+    
 
     const filter_dates = (e, data) => {
         // Get current date
@@ -66,6 +68,8 @@ export const Chart = () => {
         setJson_data(filteredData);
     };
 
+ 
+      
 
     useEffect(() => {
         // Function to fetch the data from the API
@@ -77,11 +81,11 @@ export const Chart = () => {
                     console.log(rawData);
                     // Initialize an empty array to store the formatted data
                     const formattedData = [];
-                    
+
                     // Loop through the rawData
                     rawData.forEach(item => {
-                    // Create a new object for each data point
-                    const dataPoint = {
+                        // Create a new object for each data point
+                        const dataPoint = {
                         fba_sales: item.fba_sales[0],
                         fbm_sales: item.fbm_sales[0],
                         total_order_count: item.total_order_count[0],
@@ -89,14 +93,13 @@ export const Chart = () => {
                         shipped_order_count: item.shipped_order_count[0],
                         fba_pending_sales: item.fba_pending_sales[0],
                         fbm_pending_sales: item.fbm_pending_sales[0],
-                        threshold: item.threshold[0],
+                        threshold: threshold, // Set the threshold value
                         date: item.date
-                    };
+                        };
 
-                    // Push the data point into the formattedData array
-                    formattedData.push(dataPoint);
-                });
-                
+                        // Push the data point into the formattedData array
+                        formattedData.push(dataPoint);
+                    });
                 // Set both json_data and originalData
                 setJson_data(formattedData);
                 setOriginalData(formattedData);
@@ -105,50 +108,10 @@ export const Chart = () => {
                     console.log(err);
                 });  
             };
-        
+    
         fetchData(); // Initial fetch
 
     }, []);
-
-    // useEffect(() => {
-    //     // Function to fetch the data from the API
-    //     const fetchData = async () => {
-    //       try {
-    //         const response = await axios.get(`${apiUrl}/get_data`);
-            
-    //         if (!response.data || !Array.isArray(response.data)) {
-    //           throw new Error('Invalid data format received');
-    //         }
-      
-    //         // Parse the JSON data
-    //         const formattedData = response.data.forEach((item) => ({
-    //           fba_sales: item.fba_sales[0],
-    //           fbm_sales: item.fbm_sales[0],
-    //           total_order_count: item.total_order_count[0],
-    //           order_pending_count: item.order_pending_count[0],
-    //           shipped_order_count: item.shipped_order_count[0],
-    //           fba_pending_sales: item.fba_pending_sales[0],
-    //           fbm_pending_sales: item.fbm_pending_sales[0],
-    //           threshold: item.threshold[0],
-    //           date: item.date,
-    //         }));
-      
-    //         // Set both json_data and originalData
-    //         setJson_data(formattedData);
-    //         setOriginalData(formattedData);
-      
-    //         console.log("formattedData: ", formattedData);
-    //       } catch (error) {
-    //         console.error('Error:', error);
-    //       }
-    //     };
-      
-    //     fetchData(); // Initial fetch
-      
-    //     const interval = setInterval(fetchData, 60000); // Fetch every minute (adjust as needed)
-      
-    //     return () => clearInterval(interval); // Cleanup function to clear the interval
-    //   }, []);
       
 
     return (
@@ -177,7 +140,12 @@ export const Chart = () => {
                     <Line type="monotone" dataKey="fba_sales" stroke="#8884d8" />
                     <Line type="monotone" dataKey="fbm_sales" stroke="#82ca9d" />
                     <Line type="monotone" dataKey="fba_pending_sales" stroke="#065535" />
-                    <Line type="monotone" dataKey="threshold" stroke="red" />
+                    <Line
+                        type="monotone"
+                        dataKey="threshold"
+                        stroke="red"
+                        dot={false} // Remove dots if you don't want them on the threshold line
+                    />
                 </LineChart>
             </ResponsiveContainer>
             </div>

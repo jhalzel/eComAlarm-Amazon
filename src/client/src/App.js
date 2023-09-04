@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import Chart from './components/Chart'
+import axios from 'axios';
 
 function App() {
   const [data, setData] = useState(null);
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
-  const [temp_threshold, setTemp_threshold] = useState(0);
+  const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
+  const [last_updated, setLast_updated] = useState(null);
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
 
@@ -63,22 +65,54 @@ const handleEdit = () => {
 
 useEffect(() => {
   // Function to fetch the data from the API
-  const fetchMembersData = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/members`); // The API route URL
-      const data = await response.json();
-      setData(data);
-    } catch (error) {
-      console.log('Error:', error);
-    }
-  };
+  const fetchData = async () => {
+      axios.get(`${apiUrl}/get_data`)
+          .then((response) => {
+              // Parse the JSON data
+              const rawData = response.data.map(JSON.parse);
+              console.log(rawData);
+              // Initialize an empty array to store the formatted data
+              const formattedData = [];
+              
+              //obtain the last object in the array
+              const lastObject = rawData[rawData.length - 1];
+              console.log(lastObject);
+              
+              setLast_updated(lastObject.date);
 
-  fetchMembersData(); // Initial fetch
+              // Create a new object for each data point
+              const dataPoint = {
+                  fba_sales: lastObject.fba_sales[0],
+                  fbm_sales: lastObject.fbm_sales[0],
+                  total_order_count: lastObject.total_order_count[0],
+                  order_pending_count: lastObject.order_pending_count[0],
+                  shipped_order_count: lastObject.shipped_order_count[0],
+                  fba_pending_sales: lastObject.fba_pending_sales[0],
+                  fbm_pending_sales: lastObject.fbm_pending_sales[0],
+                  threshold: lastObject.threshold[0],
+                  date: last_updated
+              };
 
-  const interval = setInterval(fetchMembersData, 300000); // Fetch every 5 minutes (adjust as needed)
+              // Push the data point into the formattedData array
+              formattedData.push(dataPoint);
+          
+          setData(formattedData);
+          console.log('Data: ', data)
+          console.log('Threshold: ', data[0].threshold)
+          })
+          .catch((err) => {
+              console.log(err);
+          });  
+      };
+  
+  fetchData(); // Initial fetch
+
+  const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
+
 }, []);
+
 
   return (
     <div className='App'>
@@ -90,7 +124,7 @@ useEffect(() => {
       </header>
     
       <div>
-        <h4 className='status-update'>Last Updated: {data ? data.last_updated : 'N/A'}</h4>
+        <h4 className='status-update'>Last Updated: {data ? last_updated : 'N/A'}</h4>
       </div>
 
       <div className="sales-container">
@@ -142,35 +176,35 @@ useEffect(() => {
       <div className="App-link">
         <div className="data-box">
           <div>Total Sales:</div>
-          <span className="App-link-values">${data.total_sales}</span>
+          <span className="App-link-values">${data[0].total_sales}</span>
         </div>
         <div className="data-box">
           <div>Total Order Count:</div>
-          <span className="App-link-values">{data.total_order_count}</span>
+          <span className="App-link-values">{data[0].total_order_count}</span>
         </div>
         <div className="data-box">
           <div>FBM Sales:</div>
-          <span className="App-link-values">${data.fbm_sales}</span>
+          <span className="App-link-values">${data[0].fbm_sales}</span>
         </div>
         <div className="data-box">
           <div>FBA Sales:</div>
-          <span className="App-link-values">${data.fba_sales}</span>
+          <span className="App-link-values">${data[0].fba_sales}</span>
         </div>
         <div className="data-box">
           <div>FBA Pending Sales:</div>
-          <span className="App-link-values">${data.fba_pending_sales}</span>
+          <span className="App-link-values">${data[0].fba_pending_sales}</span>
         </div>
         <div className="data-box">
           <div>FBM Pending Sales:</div>
-          <span className="App-link-values">${data.fbm_pending_sales}</span>
+          <span className="App-link-values">${data[0].fbm_pending_sales}</span>
         </div>
         <div className="data-box">
           <div>Orders Pending:</div>
-          <span className="App-link-values">{data.order_pending_count}</span>
+          <span className="App-link-values">{data[0].order_pending_count}</span>
         </div>
         <div className="data-box">
           <div>Shipped Order Count:</div>
-          <span className="App-link-values">{data.shipped_order_count}</span>
+          <span className="App-link-values">{data[0].shipped_order_count}</span>
         </div>
       </div>
     ) : (
@@ -179,7 +213,7 @@ useEffect(() => {
     
     <section>
       <div className="chart">
-        <Chart />
+        <Chart threshold={fbm_threshold} />
       </div>
     </section>
   </div>
