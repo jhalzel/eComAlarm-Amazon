@@ -102,12 +102,12 @@ def set_json_data():
 def get_event():
     try:
         with open(event_filename, 'r') as json_file:
-            threshold = get_threshold() 
             event = json.load(json_file)
-            event['fbm_threshold'] = threshold
         return jsonify(event)
-    except FileNotFoundError:
-        return jsonify({'error': 'Event file not found'}), 404
+    except Exception as e:
+        print(str(e))  # Print the exception for debugging
+        return jsonify({'error': 'Internal Server Error'}), 500
+
 
 # Members API Route
 @app.route('/members')
