@@ -66,7 +66,7 @@ const handleEdit = () => {
 useEffect(() => {
   // Function to fetch the data from the API
   const fetchData = async () => {
-      axios.get(`${apiUrl}/members`)
+      axios.get(`${apiUrl}/get_event`)
           .then((response) => {
               // Parse the JSON data
               const rawData = response.data

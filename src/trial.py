@@ -160,7 +160,7 @@ def members():
     except FileNotFoundError:
         return jsonify({'error': 'Event file not found'}), 404
     
-    return json_data
+    return 
 
 if __name__ == '__main__':
     app.run()
