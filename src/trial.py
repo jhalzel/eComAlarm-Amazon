@@ -97,6 +97,17 @@ def set_json_data():
     return jsonify({'message': 'Data updated successfully'})
 
 
+# Route to retrieve the event.json file (GET)
+@app.route('/get_event', methods=['GET'])
+def get_event():
+    try:
+        with open(event_filename, 'r') as json_file:
+            threshold = get_threshold() 
+            event = json.load(json_file)
+            event['fbm_threshold'] = threshold
+        return jsonify(event)
+    except FileNotFoundError:
+        return jsonify({'error': 'Event file not found'}), 404
 
 # Members API Route
 @app.route('/members')
@@ -124,6 +135,23 @@ def members():
                     'fbm_pending_sales': fbm_pending_sales,
                     'fbm_threshold': fbm_threshold
                     })
+
+    # # Create a dictionary containing the data
+    # data_dict = {
+    #     'fba_sales': fba_sales,
+    #     'fbm_sales': fbm_sales,
+    #     'total_order_count': total_order_count,
+    #     'order_pending_count': order_pending_count,
+    #     'last_updated': last_updated,
+    #     'shipped_order_count': shipped_order_count,
+    #     'total_sales': total_sales,
+    #     'fba_pending_sales': fba_pending_sales,
+    #     'fbm_pending_sales': fbm_pending_sales,
+    #     'fbm_threshold': fbm_threshold  # Assuming fbm_threshold is defined elsewhere
+    # }
+
+    # # Serialize the data to JSON
+    # json_data = json.dumps(data_dict, indent=4)
 
     try: 
         # Write the JSON data to 'event.json' file
