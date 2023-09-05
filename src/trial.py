@@ -101,15 +101,6 @@ def set_json_data():
 @app.route('/members')
 def members():
     status = main()  # Call the main function to execute the code
-    
-    # get the fbm_threshold value from the config.json file
-    try:
-        with open(config_filename, 'r') as file:
-            config = json.load(file)
-            fbm_threshold = config['fbm_threshold']
-            print('fbm_threshold: ', fbm_threshold)
-    except FileNotFoundError:
-        fbm_threshold = None
 
     fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
     fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary

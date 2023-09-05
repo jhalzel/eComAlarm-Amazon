@@ -66,37 +66,14 @@ const handleEdit = () => {
 useEffect(() => {
   // Function to fetch the data from the API
   const fetchData = async () => {
-      axios.get(`${apiUrl}/get_data`)
+      axios.get(`${apiUrl}/members`)
           .then((response) => {
               // Parse the JSON data
-              const rawData = response.data.map(JSON.parse);
+              const rawData = response.data
               console.log(rawData);
-              // Initialize an empty array to store the formatted data
-              const formattedData = [];
-              
-              //obtain the last object in the array
-              const lastObject = rawData[rawData.length - 1];
-              console.log(lastObject);
-              
-              setLast_updated(lastObject.date);
-
-              // Create a new object for each data point
-              const dataPoint = {
-                  fba_sales: lastObject.fba_sales[0],
-                  fbm_sales: lastObject.fbm_sales[0],
-                  total_order_count: lastObject.total_order_count[0],
-                  order_pending_count: lastObject.order_pending_count[0],
-                  shipped_order_count: lastObject.shipped_order_count[0],
-                  fba_pending_sales: lastObject.fba_pending_sales[0],
-                  fbm_pending_sales: lastObject.fbm_pending_sales[0],
-                  threshold: lastObject.threshold[0],
-                  date: last_updated
-              };
-
-              // Push the data point into the formattedData array
-              formattedData.push(dataPoint);
+            
           
-          setData(formattedData);
+          setData(rawData);
           console.log('Data: ', data)
           console.log('Threshold: ', data[0].threshold)
           })
