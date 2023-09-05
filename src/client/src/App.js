@@ -153,35 +153,35 @@ useEffect(() => {
       <div className="App-link">
         <div className="data-box">
           <div>Total Sales:</div>
-          <span className="App-link-values">${data[0].total_sales}</span>
+          <span className="App-link-values">${data.total_sales}</span>
         </div>
         <div className="data-box">
           <div>Total Order Count:</div>
-          <span className="App-link-values">{data[0].total_order_count}</span>
+          <span className="App-link-values">{data.total_order_count}</span>
         </div>
         <div className="data-box">
           <div>FBM Sales:</div>
-          <span className="App-link-values">${data[0].fbm_sales}</span>
+          <span className="App-link-values">${data.fbm_sales}</span>
         </div>
         <div className="data-box">
           <div>FBA Sales:</div>
-          <span className="App-link-values">${data[0].fba_sales}</span>
+          <span className="App-link-values">${data.fba_sales}</span>
         </div>
         <div className="data-box">
           <div>FBA Pending Sales:</div>
-          <span className="App-link-values">${data[0].fba_pending_sales}</span>
+          <span className="App-link-values">${data.fba_pending_sales}</span>
         </div>
         <div className="data-box">
           <div>FBM Pending Sales:</div>
-          <span className="App-link-values">${data[0].fbm_pending_sales}</span>
+          <span className="App-link-values">${data.fbm_pending_sales}</span>
         </div>
         <div className="data-box">
           <div>Orders Pending:</div>
-          <span className="App-link-values">{data[0].order_pending_count}</span>
+          <span className="App-link-values">{data.order_pending_count}</span>
         </div>
         <div className="data-box">
           <div>Shipped Order Count:</div>
-          <span className="App-link-values">{data[0].shipped_order_count}</span>
+          <span className="App-link-values">{data.shipped_order_count}</span>
         </div>
       </div>
     ) : (

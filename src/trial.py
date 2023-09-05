@@ -15,6 +15,7 @@ fbm_threshold = None
 
 cur_dir = os.path.dirname(__file__)
 config_filename = os.path.join(cur_dir, 'config.json')
+event_filename = os.path.join(cur_dir, 'event.json')
 
 @app.route('/')
 def home():
@@ -111,7 +112,8 @@ def members():
     shipped_order_count = status['shipped_order_count']  # Extract the shipped order count value from the dictionary
     total_order_count = status['total_order_count']  # Extract the order count value from the dictionary
     last_updated = status['last_updated']  # Extract the last updated timestamp value from the dictionary
-    return jsonify({'fba_sales': fba_sales, 
+    
+    json_data = jsonify({'fba_sales': fba_sales, 
                     'fbm_sales': fbm_sales, 
                     'total_order_count': total_order_count, 
                     'order_pending_count': order_pending_count, 
@@ -122,6 +124,15 @@ def members():
                     'fbm_pending_sales': fbm_pending_sales,
                     'fbm_threshold': fbm_threshold
                     })
+
+    try: 
+        # Write the JSON data to 'event.json' file
+        with open( event_filename, 'w') as json_file:
+            json_file.write(json_data)
+    except FileNotFoundError:
+        return jsonify({'error': 'Event file not found'}), 404
+    
+    return json_data
 
 if __name__ == '__main__':
     app.run()
