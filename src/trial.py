@@ -103,11 +103,20 @@ def get_event():
     try:
         with open(event_filename, 'r') as json_file:
             event = json.load(json_file)
+        # Fetch the 'fbm_threshold' value by calling the '/get_threshold' route as a function
+        fbm_threshold = get_threshold()
+
+        # Update the 'fbm_threshold' in the 'event' dictionary
+        event['fbm_threshold'] = fbm_threshold
+
+        # Save the updated 'event' dictionary back to 'event.json'
+        with open(event_filename, 'w') as json_file:
+            json.dump(event, json_file, indent=4)
+
         return jsonify(event)
     except Exception as e:
         print(str(e))  # Print the exception for debugging
         return jsonify({'error': 'Internal Server Error'}), 500
-
 
 # Members API Route
 @app.route('/members')
