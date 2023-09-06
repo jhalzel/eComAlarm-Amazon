@@ -126,7 +126,6 @@ def get_event():
 def members():
     status = main()  # Call the main function to execute the code
 
-    fbm_threshold = status['threshold']  # Extract the FBM threshold value from the dictionary
     fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
     fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary
     total_sales = status['total_sales']  # Extract the total sales value from the dictionary
@@ -136,6 +135,9 @@ def members():
     shipped_order_count = status['shipped_order_count']  # Extract the shipped order count value from the dictionary
     total_order_count = status['total_order_count']  # Extract the order count value from the dictionary
     last_updated = status['last_updated']  # Extract the last updated timestamp value from the dictionary
+    fbm_threshold = status['threshold']  # Extract the FBM threshold value from the dictionary
+
+    print('threshold', fbm_threshold)
     
     # json_data = jsonify({'fba_sales': fba_sales, 
     #                 'fbm_sales': fbm_sales, 
