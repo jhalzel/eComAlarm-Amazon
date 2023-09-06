@@ -101,13 +101,16 @@ def set_json_data():
 @app.route('/get_event', methods=['GET'])
 def get_event():
     try:
+        with open(config_filename, 'r') as file:
+            config = json.load(file)
+            fbm_threshold = config.get('fbm_threshold')
+    except Exception as e:
+        print(str(e))  # Print the exception for debugging
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+    try:
         with open(event_filename, 'r') as json_file:
             event = json.load(json_file)
-        # Fetch the 'fbm_threshold' value by calling the '/get_threshold' route as a function
-        fbm_threshold = get_threshold()
-
-        # Update the 'fbm_threshold' in the 'event' dictionary
-        event['fbm_threshold'] = fbm_threshold
 
         # Save the updated 'event' dictionary back to 'event.json'
         with open(event_filename, 'w') as json_file:
@@ -123,6 +126,7 @@ def get_event():
 def members():
     status = main()  # Call the main function to execute the code
 
+    fbm_threshold = status['threshold']  # Extract the FBM threshold value from the dictionary
     fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
     fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary
     total_sales = status['total_sales']  # Extract the total sales value from the dictionary
