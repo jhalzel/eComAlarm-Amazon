@@ -312,12 +312,23 @@ def main():
     print(f'current_timestamp: {current_timestamp}')
 
     # Get the current directory of the script file for threshold
-    config_file_path = os.path.join(current_dir, 'config.json')
+    # config_file_path = os.path.join(current_dir, 'config.json')
 
-    with open(config_file_path, 'r') as file:
-            config = json.load(file)
-            threshold = config.get('fbm_threshold', 0)
+    # with open(config_file_path, 'r') as file:
+    #         config = json.load(file)
+    #         threshold = config.get('fbm_threshold', 0)
     
+    url = 'https://amazon-ecom-alarm.onrender.com/get_threshold'
+    
+    # Get the threshold value from the API
+    try:    
+        tresponse = requests.get(url)
+        threshold = tresponse.json()['fbm_threshold']
+        print("fbm_threshold:", threshold)
+    except Exception as e:
+        print(f'Error: {e}')
+        threshold = 0
+
 
     # collect data into a dataframe for the day
     data = {
@@ -387,7 +398,7 @@ def main():
 
     print(f"Response data has been saved to '{json_filename}'.")
         
-    print(f'threshold: {threshold}')
+    # print(f'threshold: {threshold}')
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
