@@ -325,7 +325,7 @@ def main():
         tresponse = requests.get(url)
         threshold = tresponse.json()['fbm_threshold']
         print("fbm_threshold:", threshold)
-        print(type(threshold)))
+        print(type(threshold))
     except Exception as e:
         print(f'Error: {e}')
         threshold = 0
