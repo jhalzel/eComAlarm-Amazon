@@ -110,6 +110,7 @@ def get_event():
 
     try:
         with open(event_filename, 'r') as json_file:
+            json_file['fbm_threshold'] = fbm_threshold
             event = json.load(json_file)
 
         # Save the updated 'event' dictionary back to 'event.json'
