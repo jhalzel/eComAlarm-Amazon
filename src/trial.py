@@ -103,14 +103,12 @@ def get_event():
     try:
         with open(config_filename, 'r') as file:
             config = json.load(file)
-            fbm_threshold = config.get('fbm_threshold')
     except Exception as e:
         print(str(e))  # Print the exception for debugging
         return jsonify({'error': 'Internal Server Error'}), 500
 
     try:
         with open(event_filename, 'r') as json_file:
-            json_file['fbm_threshold'] = fbm_threshold
             event = json.load(json_file)
 
         # Save the updated 'event' dictionary back to 'event.json'
