@@ -321,12 +321,25 @@ def main():
     url = 'https://amazon-ecom-alarm.onrender.com/get_threshold'
     
     # Get the threshold value from the API
-    try:    
+   
+    try:
         tresponse = requests.get(url)
-        threshold = tresponse.json()['fbm_threshold']
-        threshold = float(threshold)
-        print("fbm_threshold:", threshold)
-        print(type(threshold))
+
+        # Check the response status code
+        if tresponse.status_code == 200:
+            data = tresponse.json()
+
+            # Check if 'fbm_threshold' exists in the response
+            if 'fbm_threshold' in data:
+                threshold = float(data['fbm_threshold'])
+                print("fbm_threshold:", threshold)
+                print(type(threshold))
+            else:
+                print("Error: 'fbm_threshold' not found in the API response")
+                threshold = 0
+        else:
+            print(f"Error: Received status code {tresponse.status_code} from the API")
+            threshold = 0
     except Exception as e:
         print(f'Error: {e}')
         threshold = 0
