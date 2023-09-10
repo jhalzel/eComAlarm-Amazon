@@ -3,4 +3,4 @@
 
     publish = "build/"
 
-    command = "echo 'default context'"
+    command = "npm run build"
