@@ -1,30 +1,32 @@
 {
     "fba_sales": [
-        0
+        377.02
     ],
     "fbm_sales": [
         0
     ],
     "total_order_count": [
-        0
+        6
     ],
     "order_pending_count": [
-        0
+        5
     ],
     "last_updated": [
-        "September 05, 08:10:25"
+        "September 09, 23:58:25"
     ],
     "shipped_order_count": [
-        0
+        1
     ],
     "total_sales": [
-        0
+        377.02
     ],
     "fba_pending_sales": [
-        0
+        369.65
     ],
     "fbm_pending_sales": [
         0
     ],
-    "fbm_threshold": null
+    "fbm_threshold": [
+        999.0
+    ]
 }
