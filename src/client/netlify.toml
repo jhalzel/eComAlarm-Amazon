@@ -15,4 +15,4 @@
   publish = "/src/client/build"
 
   # Default build command.
-  command = "echo 'default context'"
+  command = "echo npm run build"
