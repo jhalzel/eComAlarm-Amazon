@@ -1,3 +1,2 @@
 [build]
-  command = "npm run build"  # Replace with your build command
-  publish = "build"          # Replace with the build output directory
+  publish = "src/client/build"
