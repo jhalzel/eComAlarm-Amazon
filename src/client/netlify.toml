@@ -15,4 +15,4 @@
   publish = "/src/client/build"
 
   # Default build command.
-  command = "npm run build"
+  command = "CI=false npm run build"
