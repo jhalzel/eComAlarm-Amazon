@@ -12,7 +12,7 @@
   # This sample publishes the directory located at the absolute 
   # path "root/project/build-output"
 
-  publish = "/src/client/build"
+  publish = "build"
 
   # Default build command.
   command = "CI=false npm run build"
