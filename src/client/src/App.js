@@ -7,6 +7,7 @@ function App() {
   const [data, setData] = useState(null);
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
+  const [last_updated, setLast_updated] = useState(null);
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
 
