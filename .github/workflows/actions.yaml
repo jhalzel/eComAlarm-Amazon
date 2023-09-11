@@ -63,13 +63,25 @@ jobs:
           # Gmail credentials
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-          
-      - name: Display Runner IP
-        run: |
-          echo "Runner IP Address: $RUNNER_IP_ADDRESS"
-          # Find an available port and assign it to a variable
-          PORT=5000  # You can change this to any port you prefer
-          while ! nc -z localhost $PORT; do
-            PORT=$((PORT + 1))
-          done
-          echo "Flask App is running at http://localhost:$PORT/"
+
+        - name: Access Deployed Flask App
+      run: |
+        # Send an HTTP request to your deployed Flask app.
+        response=$(curl -s -o /dev/null -w "%{http_code}" https://amazon-ecom-alarm.onrender.com)
+
+        # Check the response code.
+        if [ "$response" == "200" ]; then
+          echo "Flask App is accessible."
+        else
+          echo "Flask App is not accessible. Response code: $response"
+          exit 1
+        fi     
+      # - name: Display Runner IP
+      #   run: |
+      #     echo "Runner IP Address: $RUNNER_IP_ADDRESS"
+      #     # Find an available port and assign it to a variable
+      #     PORT=5000  # You can change this to any port you prefer
+      #     while ! nc -z localhost $PORT; do
+      #       PORT=$((PORT + 1))
+      #     done
+      #     echo "Flask App is running at http://localhost:$PORT/"
