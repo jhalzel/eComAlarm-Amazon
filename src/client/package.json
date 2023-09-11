@@ -39,6 +39,7 @@
     ]
   },
   "devDependencies": {
-    "firebase-tools": "^12.5.2"
+    "firebase-tools": "^12.5.2",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.0-placeholder-for-preset-env.2"
   }
 }
