@@ -50,7 +50,7 @@ jobs:
           
       - name: execute py script # run main.py
         id: execute_script
-        run: python src/script.py
+        run: python src/trial.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
           # Amazon credentials
