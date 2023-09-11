@@ -1,6 +1,6 @@
 {
     "fba_sales": [
-        377.02
+        671.24
     ],
     "fbm_sales": [
         0
@@ -9,19 +9,19 @@
         6
     ],
     "order_pending_count": [
-        5
+        6
     ],
     "last_updated": [
-        "September 09, 23:58:25"
+        "September 11, 18:07:18"
     ],
     "shipped_order_count": [
-        1
+        0
     ],
     "total_sales": [
-        377.02
+        671.2399999999999
     ],
     "fba_pending_sales": [
-        369.65
+        671.24
     ],
     "fbm_pending_sales": [
         0
