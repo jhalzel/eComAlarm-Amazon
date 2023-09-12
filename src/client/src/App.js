@@ -76,7 +76,7 @@ useEffect(() => {
               // Update the state variables
               setData(rawData);
 
-              console.log("latest update: ", rawData[rawData.length - 2])
+              console.log('Last Updated', rawData.last_updated)
               
 
           setData(rawData);
