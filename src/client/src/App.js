@@ -71,8 +71,8 @@ useEffect(() => {
               // Parse the JSON data
               const rawData = response.data
               console.log(rawData);
-            
-          
+              setLast_updated(rawData[0].last_updated);
+              
           setData(rawData);
           console.log('Threshold: ', data[0].threshold)
           })
