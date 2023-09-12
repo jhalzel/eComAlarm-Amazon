@@ -76,12 +76,16 @@ useEffect(() => {
               // Update the state variables
               setData(rawData);
 
-              console.log('Last Updated', rawData.last_updated)
+              console.log('Last Updated', rawData.last_updated[0])
               
+              setLast_updated(rawData.last_updated[0])
 
-          setData(rawData);
-          console.log('Threshold: ', data[0].threshold)
-          })
+              console.log("last_updated", last_updated)
+
+              setData(rawData);
+
+              console.log('Threshold: ', data[0].threshold)
+            })
           .catch((err) => {
               console.log(err);
           });  
@@ -93,7 +97,7 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
-}, [setLast_updated, setData]);
+}, [last_updated, setLast_updated, data, setData]);
 
 
   return (
