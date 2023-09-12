@@ -422,7 +422,7 @@ def main():
     return {
         'fba_pending_sales': [round(fba_pending_sales,2)],
         'fbm_pending_sales': [round(fbm_pending_sales,2)],
-        'total_sales': [round(fbm_sales,2) + fba_sales], 
+        'total_sales': [round(fbm_sales,2) + round(fba_sales,2)], 
         'fbm_sales': [round(fbm_sales,2)],
         'fba_sales': [round(fba_sales,2)],
         'shipped_order_count': [shipped_order_count],

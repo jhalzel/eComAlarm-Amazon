@@ -87,7 +87,7 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
-}, []);
+}, [last_updated]);
 
 
   return (
@@ -100,7 +100,7 @@ useEffect(() => {
       </header>
     
       <div>
-        <h4 className='status-update'>Last Updated: {data ? last_updated : 'N/A'}</h4>
+        <h4 className='status-update'>Last Updated: {last_updated ? last_updated : 'N/A'}</h4>
       </div>
 
       <div className="sales-container">
