@@ -81,42 +81,47 @@ def set_json_data():
         try:
             with open(json_filename, 'r') as json_file:
                 existing_data = json.load(json_file)
+            
+            print(f'Existing data: {existing_data}')
+
+            # Check if there is data with the same date in the existing entries
+            date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+
+            print(f'Date to update: {date_to_update}')
+
+            parsed_data = [json.loads(entry) for entry in existing_data]
+
+            if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+                for entry in parsed_data:
+                    if entry['date'][0] == date_to_update[0]:
+                        # delete the entry
+                        existing_data.remove(json.dumps(entry))
+                # append the new entry to the end of the list
+                existing_data.append(data)
+
+            if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+                existing_data.append(data)
+            
+            # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+            if len(existing_data) > 90:
+                existing_data = existing_data[:90]
+
+            # Write JSON data to file
+            try: 
+                with open(json_filename, 'w') as json_file:
+                    json.dumps(existing_data, json_file, indent=4)
+
+            except FileNotFoundError:
+                return jsonify({'error': 'Data file not found'}), 404
+            
         except FileNotFoundError:
             existing_data = []
 
-        print(f'Existing data: {existing_data}')
-
-        # Check if there is data with the same date in the existing entries
-        date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
-
-        print(f'Date to update: {date_to_update}')
-
-        parsed_data = [json.loads(entry) for entry in existing_data]
-
-        if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
-            for entry in parsed_data:
-                if entry['date'][0] == date_to_update[0]:
-                    # delete the entry
-                    existing_data.remove(json.dumps(entry))
-            # append the new entry to the end of the list
-            existing_data.append(data)
-
-        if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
-            existing_data.append(data)
-        
-        # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-        if len(existing_data) > 90:
-            existing_data = existing_data[:90]
-
-        # Write JSON data to file
-        with open(json_filename, 'w') as json_file:
-            json.dump(existing_data, json_file, indent=4)
-
-        return jsonify({'message': 'Data updated successfully'})
-    
     except Exception as e: 
         print(str(e))
         return jsonify({'error': 'Internal Server Error'}), 500
+    
+    # return jsonify({'message': 'Data updated successfully'})
 
 
 # Route to retrieve the event.json file (GET)

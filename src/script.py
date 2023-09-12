@@ -365,11 +365,12 @@ def main():
     #make POST to set_data API
     # url = 'http://127.0.0.1:5000/set_data'
     url = 'https://amazon-ecom-alarm.onrender.com/set_data'
-    
+
     headers = {'Content-Type': 'application/json'}
 
     try:
         response = requests.post(url, json=data, headers=headers)
+        print(f'response: {response}')
         if response.status_code == 200:
             print('Data updated successfully')
         else:
