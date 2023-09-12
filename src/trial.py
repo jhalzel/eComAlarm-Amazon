@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, send_file
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from script import main
 from flask import request
 import os
@@ -99,6 +99,7 @@ def set_json_data():
 
 # Route to retrieve the event.json file (GET)
 @app.route('/get_event', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_event():
     try:
         with open(config_filename, 'r') as file:
@@ -121,7 +122,8 @@ def get_event():
         return jsonify({'error': 'Internal Server Error'}), 500
 
 # Members API Route
-@app.route('/members')
+@app.route('/members', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def members():
     status = main()  # Call the main function to execute the code
 
