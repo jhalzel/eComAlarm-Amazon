@@ -173,8 +173,9 @@ def members():
             json_file.write(json_data)
     except FileNotFoundError:
         return jsonify({'error': 'Event file not found'}), 404
-    
-    return jsonify(json_data)
+
+    # Return the JSON data
+    return jsonify(data_dict)
 
 if __name__ == '__main__':
     app.run()

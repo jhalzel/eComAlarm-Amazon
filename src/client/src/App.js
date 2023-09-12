@@ -78,12 +78,15 @@ useEffect(() => {
           .then((response) => {
               // Parse the JSON data
               const rawData = response.data
-              console.log(rawData);
+              // console.log(rawData);
+              // Update the state variables
+              setData(rawData);
 
               // Format the date string
               const formattedDate = formatDateString(rawData[0].last_updated);
-              console.log(formattedDate);
-              setLast_updated(formattedDate);
+              console.log("formattedDate: ", formattedDate);
+              // console.log(formattedDate);
+              // setLast_updated(formattedDate);
 
           setData(rawData);
           console.log('Threshold: ', data[0].threshold)
@@ -99,7 +102,7 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
-}, [last_updated]);
+}, [last_updated, setLast_updated, data, setData]);
 
 
   return (
