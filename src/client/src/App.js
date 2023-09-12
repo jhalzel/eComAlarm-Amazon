@@ -167,7 +167,7 @@ useEffect(() => {
       <div className="App-link">
         <div className="data-box">
           <div>Total Sales:</div>
-          <span className="App-link-values">${parseFloat(data.total_sales.toFixed(2))}</span>
+          <span className="App-link-values">${data.total_sales}</span>
         </div>
         <div className="data-box">
           <div>Total Order Count:</div>
