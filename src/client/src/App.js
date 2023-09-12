@@ -65,12 +65,6 @@ const handleEdit = () => {
 
 useEffect(() => {
   // Function to format the date string
-  const formatDateString = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-    const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
-    return formattedDate;
-  };
-
 
   // Function to fetch the data from the API
   const fetchData = async () => {
@@ -82,11 +76,8 @@ useEffect(() => {
               // Update the state variables
               setData(rawData);
 
-              // Format the date string
-              const formattedDate = formatDateString(rawData[rawData.length - 1].last_updated);
-              console.log("formattedDate: ", formattedDate);
-              // console.log(formattedDate);
-              // setLast_updated(formattedDate);
+              console.log("latest update: ", rawData[rawData.length - 1])
+              
 
           setData(rawData);
           console.log('Threshold: ', data[0].threshold)
@@ -102,7 +93,7 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
-}, [last_updated, setLast_updated, data, setData]);
+}, [setLast_updated, setData]);
 
 
   return (
