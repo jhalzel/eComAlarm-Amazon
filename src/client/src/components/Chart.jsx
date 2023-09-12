@@ -78,7 +78,7 @@ export const Chart = ({threshold}) => {
                 .then((response) => {
                     // Parse the JSON data
                     const rawData = response.data.map(JSON.parse);
-                    console.log(rawData);
+                    // console.log(rawData);
                     // Initialize an empty array to store the formatted data
                     const formattedData = [];
 

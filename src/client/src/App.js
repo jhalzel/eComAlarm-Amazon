@@ -72,11 +72,11 @@ useEffect(() => {
           .then((response) => {
               // Parse the JSON data
               const rawData = response.data
-              // console.log(rawData);
+              console.log(rawData);
               // Update the state variables
               setData(rawData);
 
-              console.log("latest update: ", rawData[rawData.length - 1])
+              console.log("latest update: ", rawData[rawData.length - 2])
               
 
           setData(rawData);
