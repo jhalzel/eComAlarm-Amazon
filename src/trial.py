@@ -8,7 +8,7 @@ import json
 app = Flask(__name__)
 
 # Enable CORS for all routes
-CORS(app, origins=["http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])
+CORS(app, origins=["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])
 
 # Store the fbm_threshold value
 fbm_threshold = None
@@ -72,46 +72,57 @@ def get_json_data():
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def set_json_data():
     json_filename = os.path.join(cur_dir, 'data.json')
-    data = request.json
+    
+    try: 
+        data = request.json
+        
+        data = jsonify(data)
 
-    try:
-        with open(json_filename, 'r') as json_file:
-            existing_data = json.load(json_file)
-    except FileNotFoundError:
-        existing_data = []
+        try:
+            with open(json_filename, 'r') as json_file:
+                existing_data = json.load(json_file)
+        except FileNotFoundError:
+            existing_data = []
 
-    # Check if there is data with the same date in the existing entries
-    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+        print(f'Existing data: {existing_data}')
 
-    for idx, entry in enumerate(existing_data):
-        if entry.get('date') == date_to_update:
-            # Update the existing entry with the new data
-            existing_data[idx] = data
-            break
+        # Check if there is data with the same date in the existing entries
+        date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
-    # Truncate the list if it exceeds a certain length (e.g., 90)
-    max_data_length = 90
-    if len(existing_data) > max_data_length:
-        existing_data = existing_data[-max_data_length:]
+        print(f'Date to update: {date_to_update}')
 
-    # Write the updated data back to the JSON file
-    with open(json_filename, 'w') as json_file:
-        json.dump(existing_data, json_file, indent=4)
+        parsed_data = [json.loads(entry) for entry in existing_data]
 
-    return jsonify({'message': 'Data updated successfully'})
+        if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+            for entry in parsed_data:
+                if entry['date'][0] == date_to_update[0]:
+                    # delete the entry
+                    existing_data.remove(json.dumps(entry))
+            # append the new entry to the end of the list
+            existing_data.append(data)
+
+        if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+            existing_data.append(data)
+        
+        # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+        if len(existing_data) > 90:
+            existing_data = existing_data[:90]
+
+        # Write JSON data to file
+        with open(json_filename, 'w') as json_file:
+            json.dump(existing_data, json_file, indent=4)
+
+        return jsonify({'message': 'Data updated successfully'})
+    
+    except Exception as e: 
+        print(str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
 # Route to retrieve the event.json file (GET)
 @app.route('/get_event', methods=['GET'])
 @cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_event():
-    try:
-        with open(config_filename, 'r') as file:
-            config = json.load(file)
-    except Exception as e:
-        print(str(e))  # Print the exception for debugging
-        return jsonify({'error': 'Internal Server Error'}), 500
-
     try:
         with open(event_filename, 'r') as json_file:
             event = json.load(json_file)

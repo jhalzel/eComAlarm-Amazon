@@ -333,7 +333,6 @@ def main():
             if 'fbm_threshold' in data:
                 threshold = float(data['fbm_threshold'])
                 print("fbm_threshold:", threshold)
-                print(type(threshold))
             else:
                 print("Error: 'fbm_threshold' not found in the API response")
                 threshold = 0
@@ -360,49 +359,64 @@ def main():
         'last_updated': [current_timestamp]
         }
 
-        
-    # Serialize data to JSON format
-    json_data = json.dumps(data)
 
-    json_filename = os.path.join(current_dir, 'data.json')
+    # json_data = json.dumps(data, indent=4)
 
-    # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
+    #make POST to set_data API
+    # url = 'http://127.0.0.1:5000/set_data'
+    url = 'https://amazon-ecom-alarm.onrender.com/set_data'
+    
+    headers = {'Content-Type': 'application/json'}
+
     try:
-        with open(json_filename, 'r') as json_file:
-            existing_data = json.load(json_file)
-    except FileNotFoundError:
-        existing_data = []
+        response = requests.post(url, json=data, headers=headers)
+        if response.status_code == 200:
+            print('Data updated successfully')
+        else:
+            print(f'Error updating data. Status code: {response.status_code}')
+    except Exception as e:
+        print(f'Error: {e}')
 
-    print(f'existing_data: {existing_data}')
 
-    # Check if there is data with the same date in the existing entries
-    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+    # json_filename = os.path.join(current_dir, 'data.json')
 
-    print(f'date_to_update: {date_to_update[0]}')
+    # # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
+    # try:
+    #     with open(json_filename, 'r') as json_file:
+    #         existing_data = json.load(json_file)
+    # except FileNotFoundError:
+    #     existing_data = []
 
-    parsed_data = [json.loads(entry) for entry in existing_data]
+    # print(f'existing_data: {existing_data}')
 
-    if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
-        for entry in parsed_data:
-            if entry['date'][0] == date_to_update[0]:
-                # delete the entry
-                existing_data.remove(json.dumps(entry))
-        # append the new entry to the end of the list
-        existing_data.append(json_data)
+    # # Check if there is data with the same date in the existing entries
+    # date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
-    if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
-        existing_data.append(json_data)
+    # print(f'date_to_update: {date_to_update[0]}')
+
+    # parsed_data = [json.loads(entry) for entry in existing_data]
+
+    # if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+    #     for entry in parsed_data:
+    #         if entry['date'][0] == date_to_update[0]:
+    #             # delete the entry
+    #             existing_data.remove(json.dumps(entry))
+    #     # append the new entry to the end of the list
+    #     existing_data.append(json_data)
+
+    # if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+    #     existing_data.append(json_data)
     
 
-    # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-    if len(existing_data) > 90:
-        existing_data = existing_data[:90]
+    # # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+    # if len(existing_data) > 90:
+    #     existing_data = existing_data[:90]
 
-    # Write JSON data to file
-    with open(json_filename, 'w') as json_file:
-        json.dump(existing_data, json_file, indent=4)
+    # # Write JSON data to file
+    # with open(json_filename, 'w') as json_file:
+    #     json.dump(existing_data, json_file, indent=4)
 
-    print(f"Response data has been saved to '{json_filename}'.")
+    # print(f"Response data has been saved to '{json_filename}'.")
         
     # print(f'threshold: {threshold}')
 
