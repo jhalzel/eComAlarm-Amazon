@@ -7,7 +7,7 @@ function App() {
   const [data, setData] = useState(null);
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
-  const [last_updated, setLast_updated] = useState(null);
+  const [last_updated, setLast_updated] = useState(Date.now() - 300000);
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
 
@@ -64,6 +64,14 @@ const handleEdit = () => {
 };
 
 useEffect(() => {
+  // Function to format the date string
+  const formatDateString = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
+    return formattedDate;
+  };
+
+
   // Function to fetch the data from the API
   const fetchData = async () => {
       axios.get(`${apiUrl}/get_event`)
@@ -71,7 +79,11 @@ useEffect(() => {
               // Parse the JSON data
               const rawData = response.data
               console.log(rawData);
-              setLast_updated(rawData[0].last_updated);
+
+              // Format the date string
+              const formattedDate = formatDateString(rawData[0].last_updated);
+              console.log(formattedDate);
+              setLast_updated(formattedDate);
 
           setData(rawData);
           console.log('Threshold: ', data[0].threshold)

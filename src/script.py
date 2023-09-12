@@ -280,14 +280,14 @@ def main():
     fbm_pending_sales = calculate_total_sales(fbm_asin_counter, fbm_asins, products_client)
 
     #calculate fba sales
-    fba_pending_sales = calculate_total_sales(fba_asin_counter,fba_asins, products_client)
+    fba_pending_sales = calculate_total_sales(fba_asin_counter, fba_asins, products_client)
 
     print(f'fbm_pending_sales: {fbm_pending_sales}')
     print(f'fba_pending_sales: {fba_pending_sales}')
 
     # add pending sales to total sales
-    fba_sales += fba_pending_sales
-    fbm_sales += fbm_pending_sales
+    # fba_sales += fba_pending_sales
+    # fbm_sales += fbm_pending_sales
 
     print(f'order_pending_count: {order_pending_count}')            
     print(f'total_sales: {fba_sales + fbm_sales}')
@@ -354,8 +354,8 @@ def main():
         'shipped_order_count': [shipped_order_count],
         'fba_pending_sales': [round(fba_pending_sales,2)],
         'fbm_pending_sales': [round(fbm_pending_sales,2)],
-        'total_sales': [round(fbm_sales,2) + round(fba_sales,2)],
-        'threshold': [round(threshold,2)],
+        'total_sales': [round(fbm_sales, 2) + round(fba_sales, 2)],
+        'threshold': [round(threshold, 2)],
         'date': [current_time.strftime("%m/%d/%Y")],
         'last_updated': [current_timestamp]
         }
@@ -392,15 +392,6 @@ def main():
 
     if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
         existing_data.append(json_data)
-
-        
-        # if entry.get('date') == date_to_update:
-        #     # Update the existing entry with the new data
-        #     existing_data[idx] = data
-        #     break
-        # else:
-        #     # Insert the new data at the end of the existing data
-        #     existing_data.append(json_data)
     
 
     # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
