@@ -72,7 +72,7 @@ useEffect(() => {
               const rawData = response.data
               console.log(rawData);
               setLast_updated(rawData[0].last_updated);
-              
+
           setData(rawData);
           console.log('Threshold: ', data[0].threshold)
           })
@@ -152,7 +152,7 @@ useEffect(() => {
       <div className="App-link">
         <div className="data-box">
           <div>Total Sales:</div>
-          <span className="App-link-values">${data.total_sales}</span>
+          <span className="App-link-values">${parseFloat(data.total_sales.toFixed(2))}</span>
         </div>
         <div className="data-box">
           <div>Total Order Count:</div>
