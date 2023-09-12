@@ -83,7 +83,7 @@ useEffect(() => {
               setData(rawData);
 
               // Format the date string
-              const formattedDate = formatDateString(rawData[length(rawData) - 1].last_updated);
+              const formattedDate = formatDateString(rawData[rawData.length - 1].last_updated);
               console.log("formattedDate: ", formattedDate);
               // console.log(formattedDate);
               // setLast_updated(formattedDate);

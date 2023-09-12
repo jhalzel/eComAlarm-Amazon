@@ -25,6 +25,7 @@ def home():
 
 # Set the fbm_threshold value
 @app.route('/set_threshold', methods=['POST'])
+@cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def set_threshold():
     data = request.json
     new_threshold = data.get('fbm_threshold')
@@ -39,6 +40,7 @@ def set_threshold():
     return jsonify({'message': f'Threshold updated to {new_threshold}'})
 
 @app.route('/get_threshold', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_threshold():
     try:
         with open(config_filename, 'r') as file:
@@ -51,6 +53,7 @@ def get_threshold():
     
 # Route to retrieve JSON data (GET)
 @app.route('/get_data', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_json_data():
     json_filename = os.path.join(cur_dir, 'data.json')
 
@@ -66,6 +69,7 @@ def get_json_data():
     
 # Route to update JSON data (POST)
 @app.route('/set_data', methods=['POST'])
+@cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def set_json_data():
     json_filename = os.path.join(cur_dir, 'data.json')
     data = request.json
@@ -139,18 +143,6 @@ def members():
     fbm_threshold = status['threshold']  # Extract the FBM threshold value from the dictionary
 
     print('threshold', fbm_threshold)
-    
-    # json_data = jsonify({'fba_sales': fba_sales, 
-    #                 'fbm_sales': fbm_sales, 
-    #                 'total_order_count': total_order_count, 
-    #                 'order_pending_count': order_pending_count, 
-    #                 'last_updated': last_updated, 
-    #                 'shipped_order_count': shipped_order_count, 
-    #                 'total_sales': total_sales,
-    #                 'fba_pending_sales': fba_pending_sales,
-    #                 'fbm_pending_sales': fbm_pending_sales,
-    #                 'fbm_threshold': fbm_threshold
-    #                 })
 
     # Create a dictionary containing the data
     data_dict = {
