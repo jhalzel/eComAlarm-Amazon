@@ -72,19 +72,19 @@ useEffect(() => {
           .then((response) => {
               // Parse the JSON data
               const rawData = response.data
-              console.log(rawData);
+              // console.log(rawData);
               // Update the state variables
               setData(rawData);
 
-              console.log('Last Updated', rawData.last_updated[0])
+              // console.log('Last Updated', rawData.last_updated[0])
               
               setLast_updated(rawData.last_updated[0])
 
-              console.log("last_updated", last_updated)
+              // console.log("last_updated", last_updated)
 
               setData(rawData);
 
-              console.log('Threshold: ', data[0].threshold)
+              // console.log('Threshold: ', data[0].threshold)
             })
           .catch((err) => {
               console.log(err);

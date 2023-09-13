@@ -48,6 +48,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
           
+      - name: Access Deployed Flask App
+        run: |
+          # Send an HTTP request to your deployed Flask app.
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://amazon-ecom-alarm.onrender.com)
+
+          # Check the response code.
+          if [ "$response" == "200" ]; then
+            echo "Flask App is accessible."
+          else
+            echo "Flask App is not accessible. Response code: $response"
+            exit 1
+          fi     
+          
       - name: execute py script # run main.py
         id: execute_script
         run: python src/script.py
@@ -64,18 +77,6 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
 
-      - name: Access Deployed Flask App
-        run: |
-          # Send an HTTP request to your deployed Flask app.
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://amazon-ecom-alarm.onrender.com)
-
-          # Check the response code.
-          if [ "$response" == "200" ]; then
-            echo "Flask App is accessible."
-          else
-            echo "Flask App is not accessible. Response code: $response"
-            exit 1
-          fi     
       # - name: Display Runner IP
       #   run: |
       #     echo "Runner IP Address: $RUNNER_IP_ADDRESS"
