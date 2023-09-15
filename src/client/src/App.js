@@ -7,7 +7,7 @@ function App() {
   const [data, setData] = useState(null);
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
-  const [last_updated, setLast_updated] = useState(Date.now() - 300000);
+  const [last_updated, setLast_updated] = useState(null);
 
   // const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
   const apiUrl = 'http://127.0.0.1:5000/';
@@ -65,30 +65,8 @@ const handleEdit = () => {
 };
 
 useEffect(() => {
-  // Function to format the date string
-
   // Function to fetch the data from the API
   const fetchData = async () => {
-<<<<<<< HEAD
-      axios.get(`${apiUrl}/get_event`)
-          .then((response) => {
-              // Parse the JSON data
-              const rawData = response.data
-              // console.log(rawData);
-              // Update the state variables
-              setData(rawData);
-
-              // console.log('Last Updated', rawData.last_updated[0])
-              
-              setLast_updated(rawData.last_updated[0])
-
-              // console.log("last_updated", last_updated)
-
-              setData(rawData);
-
-              // console.log('Threshold: ', data[0].threshold)
-            })
-=======
       axios.get(`${apiUrl}/members`)
           .then((response) => {
               // Parse the JSON data
@@ -120,7 +98,6 @@ useEffect(() => {
           setData(formattedData);
           })
 
->>>>>>> ffa7e3b (major changes)
           .catch((err) => {
               console.log(err);
           });  
@@ -132,11 +109,7 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
-<<<<<<< HEAD
-}, [last_updated, setLast_updated, data, setData]);
-=======
 }, [setLast_updated, last_updated, setData]);
->>>>>>> ffa7e3b (major changes)
 
 
   return (
@@ -149,7 +122,7 @@ useEffect(() => {
       </header>
     
       <div>
-        <h4 className='status-update'>Last Updated: {last_updated ? last_updated : 'N/A'}</h4>
+        <h4 className='status-update'>Last Updated: {data ? last_updated : 'N/A'}</h4>
       </div>
 
       <div className="sales-container">
@@ -201,35 +174,35 @@ useEffect(() => {
       <div className="App-link">
         <div className="data-box">
           <div>Total Sales:</div>
-          <span className="App-link-values">${data.total_sales}</span>
+          <span className="App-link-values">${data[0].total_sales}</span>
         </div>
         <div className="data-box">
           <div>Total Order Count:</div>
-          <span className="App-link-values">{data.total_order_count}</span>
+          <span className="App-link-values">{data[0].total_order_count}</span>
         </div>
         <div className="data-box">
           <div>FBM Sales:</div>
-          <span className="App-link-values">${data.fbm_sales}</span>
+          <span className="App-link-values">${data[0].fbm_sales}</span>
         </div>
         <div className="data-box">
           <div>FBA Sales:</div>
-          <span className="App-link-values">${data.fba_sales}</span>
+          <span className="App-link-values">${data[0].fba_sales}</span>
         </div>
         <div className="data-box">
           <div>FBA Pending Sales:</div>
-          <span className="App-link-values">${data.fba_pending_sales}</span>
+          <span className="App-link-values">${data[0].fba_pending_sales}</span>
         </div>
         <div className="data-box">
           <div>FBM Pending Sales:</div>
-          <span className="App-link-values">${data.fbm_pending_sales}</span>
+          <span className="App-link-values">${data[0].fbm_pending_sales}</span>
         </div>
         <div className="data-box">
           <div>Orders Pending:</div>
-          <span className="App-link-values">{data.order_pending_count}</span>
+          <span className="App-link-values">{data[0].order_pending_count}</span>
         </div>
         <div className="data-box">
           <div>Shipped Order Count:</div>
-          <span className="App-link-values">{data.shipped_order_count}</span>
+          <span className="App-link-values">{data[0].shipped_order_count}</span>
         </div>
       </div>
     ) : (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BarChart,LineChart, Line, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart,LineChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import '../App.css'
 
 
@@ -113,15 +113,11 @@ export const Chart = ({threshold}) => {
     
         fetchData(); // Initial fetch
 
-<<<<<<< HEAD
-    }, [threshold]);
-=======
         const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
 
         return () => clearInterval(interval); // Cleanup function to clear the interval
 
     }, []);
->>>>>>> ffa7e3b (major changes)
       
 
     return (
