@@ -94,7 +94,16 @@ def set_data():
         with open(json_filename, 'r') as json_file:
             existing_data = json.load(json_file)
     
-            print(f'Existing data: {existing_data}')
+            # Parse the JSON string into a Python list
+            data_list = json.loads(existing_data)
+
+            # Access the last element in the list
+            last_object = data_list[-1]
+
+            # Access the 'date' key's value in the last object
+            date_value = last_object['date']
+
+            print(f'Date value: {date_value}')
             
         # Check if there is data with the same date in the existing entries
         date_to_update = existing_data[len(existing_data) - 1].get('date')  # Assuming 'date' is a key in your JSON data
