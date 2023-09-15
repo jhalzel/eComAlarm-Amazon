@@ -99,46 +99,23 @@ def set_data():
             print(f'Entry dict: {entry_dict}')
 
             # Access the latest date value from the list
-            date_value = entry_dict[-1].get('date')
+            date_to_update = entry_dict[-1].get('date')[0]
 
             # print the date value
-            print(f'Date value: {date_value}')
-                
+            print(f'Date to update: {date_to_update}')
 
+            # print the loaded data date value
+            print(f'Loaded data date: {loaded_data.get("date")[0]}')
 
-            # Access the last element in the list
-            # last_object = data_list[-1]
-
-            # Access the 'date' key's value in the last object
-            # date_value = last_object['date']
-
-            # print(f'Date value: {date_value}')
-            
-        # Check if there is data with the same date in the existing entries
-        # date_to_update = existing_data[len(existing_data) - 1].get('date')  # Assuming 'date' is a key in your JSON data
-
-        # print(f'Date to update: {date_to_update}')
+            # If the date value is the same as the loaded data, remove the last entry from the list
+            # if date_to_update == loaded_data.get('date')[0]:
+            #     existing_data.pop()
+            #     print(f'Existing data: {existing_data}')
 
     except FileNotFoundError:
         existing_data = []
 
-    
-    
-    # parsed_data = [json.loads(entry) for entry in existing_data]
-
-    # print(f'Parsed data: {parsed_data}')
-
-    # # Use a list comprehension to filter entries by date condition
-    # filtered_data = [entry for entry in parsed_data if entry.get('date', [''])[0] != date_to_update[0]]
-
-    # print(f'Filtered data: {filtered_data}')
-
-    # # Convert the filtered entries to JSON format
-    # existing_data = [json.dumps(entry) for entry in filtered_data]
-
-    # # Append the new entry to the end of the list
-    # existing_data.append(json_data)
-
+    # Append the new entry to the end of the list
     existing_data.append(data)
         
     with open(json_filename, 'w') as json_file:
