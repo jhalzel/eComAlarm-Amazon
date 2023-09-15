@@ -98,7 +98,8 @@ def set_data():
     except FileNotFoundError:
         existing_data = []
 
-    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+    # extract the date from data
+    date_to_update = data.date
     print(f'Date to update: {date_to_update}')
     
     parsed_data = [json.loads(entry) for entry in existing_data]
