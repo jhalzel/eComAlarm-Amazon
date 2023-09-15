@@ -93,26 +93,17 @@ def set_data():
         with open(json_filename, 'r') as json_file:
             existing_data = json.load(json_file)
 
-            print(f'Existing data: {existing_data}')
 
-            # Get type of existing data
-            print(f'Type of existing data: {type(existing_data)}')
+            # Iterate through each string entry in the list
+            entry_dict = [json.loads(entry) for entry in existing_data]
+            print(f'Entry dict: {entry_dict}')
 
-            # parse through the existing data
-            try: 
-                for entry in existing_data:
-                    print(f'Entry: {entry}')
-                    print(f'Type of entry: {type(entry)}')
-            except Exception as e:
-                print(str(e))
+            # Access the 'date' key's value in the dictionary
+            # date_value = entry_dict[-1].get('date')
 
-    
-            # Parse the JSON string into a Python list
-            try: 
-                data_list = json.loads(existing_data)
-                print(f'Data list: {data_list}')
-            except Exception as e:
-                print(str(e))
+
+            # Now date_values contains all the 'date' values from the list
+            # print(f'Date values: {date_value}')
                 
 
 
