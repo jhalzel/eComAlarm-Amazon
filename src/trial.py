@@ -92,7 +92,7 @@ def set_data():
     try:
         # Load existing data from the file, if it exists
         with open(json_filename, 'r') as json_file:
-            existing_data = json.loads(json_file)
+            existing_data = json.load(json_file)
     
         print(f'Existing data: {existing_data}')
             
