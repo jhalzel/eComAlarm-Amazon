@@ -74,11 +74,14 @@ useEffect(() => {
               const rawData = response.data;
               console.log(rawData);
               // get date value
-              console.log(rawData[rawData.length - 1].last_updated);
+              console.log(rawData[rawData.length - 1]);
+              console.log(rawData[rawData.length - 1].last_updated[1])
+              console.log(rawData[rawData.length - 1].last_updated[0])
+
               // Initialize an empty array to store the formatted data
               const formattedData = [];
                 
-              setLast_updated(rawData.last_updated[0]);
+              setLast_updated(rawData[rawData.length - 1].last_updated);
 
               // Create a new object for each data point
               const dataPoint = {
@@ -89,7 +92,7 @@ useEffect(() => {
                   shipped_order_count: rawData.shipped_order_count[0],
                   fba_pending_sales: rawData.fba_pending_sales[0],
                   fbm_pending_sales: rawData.fbm_pending_sales[0],
-                  date: last_updated[0]
+                  // date: last_updated
               };
 
               // Push the data point into the formattedData array
