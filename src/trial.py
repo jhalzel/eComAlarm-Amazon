@@ -94,13 +94,17 @@ def set_data():
         with open(json_filename, 'r') as json_file:
             existing_data = json.load(json_file)
     
-        print(f'Existing data: {existing_data}')
+            print(f'Existing data: {existing_data}')
+
+            loaded_existing_data = json.loads(existing_data)
+
+            print(f'Loaded existing data: {loaded_existing_data}')
             
         # Check if there is data with the same date in the existing entries
-        date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+        date_to_update = loaded_existing_data.get('date')  # Assuming 'date' is a key in your JSON data
+
         print(f'Date to update: {date_to_update}')
 
-        # print(f'Date to update: {date_to_update}')
     except FileNotFoundError:
         existing_data = []
 
