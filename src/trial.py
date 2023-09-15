@@ -80,6 +80,13 @@ def set_data():
 
     print(f'Data: {data}')
 
+    print(f'Type of data: {type(data)}')
+
+    # print each value in the dictionary
+    for key, value in data.items():
+        print(f'{key}: {value}')
+
+
     # Get the path to the JSON file
     json_filename = os.path.join(cur_dir, 'data.json')
 
@@ -98,18 +105,16 @@ def set_data():
     except FileNotFoundError:
         existing_data = []
 
-    # extract the date from data
-    date_to_update = data['date'] 
-    print(f'Date to update: {date_to_update}')
     
-    parsed_data = [json.loads(entry) for entry in existing_data]
+    
+    # parsed_data = [json.loads(entry) for entry in existing_data]
 
-    print(f'Parsed data: {parsed_data}')
+    # print(f'Parsed data: {parsed_data}')
 
-    # Use a list comprehension to filter entries by date condition
-    filtered_data = [entry for entry in parsed_data if entry.get('date', [''])[0] != date_to_update[0]]
+    # # Use a list comprehension to filter entries by date condition
+    # filtered_data = [entry for entry in parsed_data if entry.get('date', [''])[0] != date_to_update[0]]
 
-    print(f'Filtered data: {filtered_data}')
+    # print(f'Filtered data: {filtered_data}')
 
     # # Convert the filtered entries to JSON format
     # existing_data = [json.dumps(entry) for entry in filtered_data]
