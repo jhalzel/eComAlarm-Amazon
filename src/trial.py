@@ -75,27 +75,29 @@ def get_json_data():
 @app.route('/set_data', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def set_data():
+    # Get the JSON data from the request
     data = request.json
 
+    # Get the path to the JSON file
     json_filename = os.path.join(cur_dir, 'data.json')
 
+    # try to load the existing data from the file
     try:
         # Load existing data from the file, if it exists
         with open(json_filename, 'r') as json_file:
             existing_data = json.load(json_file)
-    except FileNotFoundError:
-        existing_data = []
+    
 
-    # Append the new data as a new entry in the list
-    existing_data.append(data)
+        # Append the new data as a new entry in the list
+        existing_data.append(data)
 
-    # Write the updated list back to the file
-    try:
+        
         with open(json_filename, 'w') as json_file:
             json.dump(existing_data, json_file, indent=4)
 
     except FileNotFoundError:
-        return jsonify({'error': 'Data file not found'}), 404
+            existing_data = []
+
 
     return jsonify({'message': 'Data updated successfully'})
 
