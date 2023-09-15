@@ -98,12 +98,11 @@ def set_data():
             entry_dict = [json.loads(entry) for entry in existing_data]
             print(f'Entry dict: {entry_dict}')
 
-            # Access the 'date' key's value in the dictionary
-            # date_value = entry_dict[-1].get('date')
+            # Access the latest date value from the list
+            date_value = entry_dict[-1].get('date')
 
-
-            # Now date_values contains all the 'date' values from the list
-            # print(f'Date values: {date_value}')
+            # print the date value
+            print(f'Date value: {date_value}')
                 
 
 
