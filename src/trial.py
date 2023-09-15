@@ -75,33 +75,30 @@ def get_json_data():
 @app.route('/set_data', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def set_data():
-    # Get the JSON data from the request
-    data = request.json
-
-    loaded_data = json.loads(data)
-
-    print(f'Loaded data: {loaded_data}')
-
-    print(f'Type of loaded data: {type(loaded_data)}')
-
-    # print each value in the dictionary
-    for key, value in data.items():
-        print(f'{key}: {value}')
-
-
-    # Get the path to the JSON file
+     # Get the path to the JSON file
     json_filename = os.path.join(cur_dir, 'data.json')
 
+    # Get the JSON data from the request (String format)
+    data = request.json
+
+    # Convert the JSON data to a dictionary
+    loaded_data = json.loads(data)
+
+    # Print the loaded data
+    print(f'Loaded data: {loaded_data}')
+
+   
     # try to load the existing data from the file
     try:
         # Load existing data from the file, if it exists
         with open(json_filename, 'r') as json_file:
-            existing_data = json.load(json_file)
+            existing_data = json.loads(json_file)
     
         print(f'Existing data: {existing_data}')
             
         # Check if there is data with the same date in the existing entries
-        # date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+        date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+        print(f'Date to update: {date_to_update}')
 
         # print(f'Date to update: {date_to_update}')
     except FileNotFoundError:
