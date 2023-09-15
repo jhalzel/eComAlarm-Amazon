@@ -90,19 +90,20 @@ def set_data():
         print(f'Existing data: {existing_data}')
 
         # Check if there is data with the same date in the existing entries
-        date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+        # date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
-        print(f'Date to update: {date_to_update}')
-
-        # Append the new data as a new entry in the list
-        existing_data.append(data)
-
-        
-        with open(json_filename, 'a') as json_file:
-            json.dump(existing_data, json_file, indent=4)
+        # print(f'Date to update: {date_to_update}')
 
     except FileNotFoundError:
-            existing_data = []
+        existing_data = []
+        
+    try: 
+        with open(json_filename, 'a') as json_file:
+            json.dump(data, json_file, indent=4)
+    except FileNotFoundError:
+        return jsonify({'error': 'Data file not found'}), 404
+
+
 
 
     return jsonify({'message': 'Data updated successfully'})
