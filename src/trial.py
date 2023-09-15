@@ -108,9 +108,9 @@ def set_data():
             print(f'Loaded data date: {loaded_data.get("date")[0]}')
 
             # If the date value is the same as the loaded data, remove the last entry from the list
-            # if date_to_update == loaded_data.get('date')[0]:
-            #     existing_data.pop()
-            #     print(f'Existing data: {existing_data}')
+            if date_to_update == loaded_data.get('date')[0]:
+                existing_data.pop()
+                print(f'Existing data: {existing_data}')
 
     except FileNotFoundError:
         existing_data = []
