@@ -67,14 +67,14 @@ const handleEdit = () => {
 useEffect(() => {
   // Function to fetch the data from the API
   const fetchData = async () => {
-      axios.get(`${apiUrl}/members`)
+      axios.get(`${apiUrl}/get_data`)
           .then((response) => {
               // Parse the JSON data
               // const rawData = response.data.map(JSON.parse);
               const rawData = response.data;
               console.log(rawData);
               // get date value
-              console.log(rawData.last_updated[0]);
+              console.log(rawData[0].last_updated[0]);
               // Initialize an empty array to store the formatted data
               const formattedData = [];
                 
