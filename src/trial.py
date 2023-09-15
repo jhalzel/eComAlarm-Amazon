@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, send_file
 from flask_cors import CORS, cross_origin
-from flask_cors import CORS, cross_origin
 from script import main
 from flask import request
 import os
@@ -18,7 +17,7 @@ fbm_threshold = None
 cur_dir = os.path.dirname(__file__)
 config_filename = os.path.join(cur_dir, 'config.json')
 event_filename = os.path.join(cur_dir, 'event.json')
-event_filename = os.path.join(cur_dir, 'event.json')
+
 
 @app.route('/')
 # @cross_origin("*", methods=['GET'], headers=['Content-Type'])
@@ -93,22 +92,42 @@ def set_data():
         # Load existing data from the file, if it exists
         with open(json_filename, 'r') as json_file:
             existing_data = json.load(json_file)
+
+            print(f'Existing data: {existing_data}')
+
+            # Get type of existing data
+            print(f'Type of existing data: {type(existing_data)}')
+
+            # parse through the existing data
+            try: 
+                for entry in existing_data:
+                    print(f'Entry: {entry}')
+                    print(f'Type of entry: {type(entry)}')
+            except Exception as e:
+                print(str(e))
+
     
             # Parse the JSON string into a Python list
-            data_list = json.loads(existing_data)
+            try: 
+                data_list = json.loads(existing_data)
+                print(f'Data list: {data_list}')
+            except Exception as e:
+                print(str(e))
+                
+
 
             # Access the last element in the list
-            last_object = data_list[-1]
+            # last_object = data_list[-1]
 
             # Access the 'date' key's value in the last object
-            date_value = last_object['date']
+            # date_value = last_object['date']
 
-            print(f'Date value: {date_value}')
+            # print(f'Date value: {date_value}')
             
         # Check if there is data with the same date in the existing entries
-        date_to_update = existing_data[len(existing_data) - 1].get('date')  # Assuming 'date' is a key in your JSON data
+        # date_to_update = existing_data[len(existing_data) - 1].get('date')  # Assuming 'date' is a key in your JSON data
 
-        print(f'Date to update: {date_to_update}')
+        # print(f'Date to update: {date_to_update}')
 
     except FileNotFoundError:
         existing_data = []
