@@ -90,12 +90,11 @@ def set_data():
             existing_data = json.load(json_file)
     
         print(f'Existing data: {existing_data}')
-
+            
         # Check if there is data with the same date in the existing entries
         # date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
         # print(f'Date to update: {date_to_update}')
-
     except FileNotFoundError:
         existing_data = []
 
