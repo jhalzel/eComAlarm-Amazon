@@ -375,7 +375,7 @@ def main():
         response = requests.post(url, headers=headers, json=json_data)
         # Check the response status code
         if response.status_code == 200: 
-            print(f"Response data has been saved to '{json_filename}'.")
+            print("response:", response.json())
         else:
             print(f"Error: Received status code {response.status_code} from the API")
     except Exception as e:

@@ -99,16 +99,12 @@ def set_data():
     except FileNotFoundError:
         existing_data = []
 
-    jsonified_data = json.dumps(data)
+    # jsonified_data = json.dumps(data)
 
-    existing_data.append(jsonified_data)
+    existing_data.append(data)
         
-    try: 
-        with open(json_filename, 'a') as json_file:
-            json.dump(existing_data,json_file) 
-    except FileNotFoundError:
-        existing_data.append(jsonified_data)
-        print(f'Existing data: {existing_data}')
+    with open(json_filename, 'w') as json_file:
+            json.dump(existing_data, json_file) 
 
 
     return jsonify({'message': 'Data updated successfully'})
