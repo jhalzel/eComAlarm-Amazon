@@ -11,40 +11,5 @@
     "{\"fba_sales\": [0], \"fbm_sales\": [0], \"total_order_count\": [0], \"order_pending_count\": [0], \"shipped_order_count\": [0], \"fba_pending_sales\": [0], \"fbm_pending_sales\": [0], \"threshold\": [9893.0], \"date\": [\"08/24/2023\"]}",
     "{\"fba_sales\": [15.4], \"fbm_sales\": [0], \"total_order_count\": [1], \"order_pending_count\": [1], \"shipped_order_count\": [0], \"fba_pending_sales\": [15.4], \"fbm_pending_sales\": [0], \"threshold\": [999.0], \"date\": [\"09/01/2023\"], \"last_updated\": [\"September 01, 21:32:11\"]}",
     "{\"fba_sales\": [15.38], \"fbm_sales\": [0], \"total_order_count\": [1], \"order_pending_count\": [1], \"shipped_order_count\": [0], \"fba_pending_sales\": [15.38], \"fbm_pending_sales\": [0], \"threshold\": [999.0], \"date\": [\"09/03/2023\"], \"last_updated\": [\"September 03, 19:47:10\"]}",
-    "{\"fba_sales\": [0], \"fbm_sales\": [0], \"total_order_count\": [0], \"order_pending_count\": [0], \"shipped_order_count\": [0], \"fba_pending_sales\": [0], \"fbm_pending_sales\": [0], \"total_sales\": [0], \"threshold\": [999.0], \"date\": [\"09/14/2023\"], \"last_updated\": [\"September 14, 21:25:45\"]}",
-    {
-        "fba_sales": [
-            0
-        ],
-        "fbm_sales": [
-            0
-        ],
-        "total_order_count": [
-            0
-        ],
-        "order_pending_count": [
-            0
-        ],
-        "shipped_order_count": [
-            0
-        ],
-        "fba_pending_sales": [
-            0
-        ],
-        "fbm_pending_sales": [
-            0
-        ],
-        "total_sales": [
-            0
-        ],
-        "threshold": [
-            1001.0
-        ],
-        "date": [
-            "09/15/2023"
-        ],
-        "last_updated": [
-            "September 15, 07:00:29"
-        ]
-    }
+    "{\"fba_sales\": [0], \"fbm_sales\": [0], \"total_order_count\": [0], \"order_pending_count\": [0], \"shipped_order_count\": [0], \"fba_pending_sales\": [0], \"fbm_pending_sales\": [0], \"total_sales\": [0], \"threshold\": [999.0], \"date\": [\"09/14/2023\"], \"last_updated\": [\"September 14, 21:25:45\"]}"
 ]

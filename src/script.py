@@ -359,7 +359,7 @@ def main():
         }
 
 
-    # json_data = json.dumps(data, indent=4)
+    json_data = json.dumps(data)
 
     #make POST to set_data API
     # url = 'http://127.0.0.1:5000/set_data'
@@ -371,7 +371,7 @@ def main():
 
     # Make the POST request
     try:
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=json_data)
         # Check the response status code
         if response.status_code == 200:
             print("Data has been saved successfully")
