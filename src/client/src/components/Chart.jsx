@@ -8,8 +8,8 @@ export const Chart = ({threshold}) => {
     const [json_data, setJson_data] = useState([]);
     const [originalData, setOriginalData] = useState([]);
 
-    // const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
-    const apiUrl = 'http://127.0.0.1:5000/';
+    const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
+    // const apiUrl = 'http://127.0.0.1:5000/';
 
 
     const filter_dates = (e, data) => {

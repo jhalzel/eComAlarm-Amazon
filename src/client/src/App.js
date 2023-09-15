@@ -9,8 +9,8 @@ function App() {
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [last_updated, setLast_updated] = useState(null);
 
-  // const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
-  const apiUrl = 'http://127.0.0.1:5000/';
+  const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
+  // const apiUrl = 'http://127.0.0.1:5000/';
 
 
 // Function to Post the data to the API
