@@ -314,6 +314,7 @@ def main():
     # Get the current directory of the script file for threshold
     # config_file_path = os.path.join(current_dir, 'config.json')
 
+<<<<<<< HEAD
     # with open(config_file_path, 'r') as file:
     #         config = json.load(file)
     #         threshold = config.get('fbm_threshold', 0)
@@ -343,6 +344,13 @@ def main():
         print(f'Error: {e}')
         threshold = 0
 
+=======
+    with open(config_file_path, 'r') as file:
+            config = json.load(file)
+            threshold = config.get('fbm_threshold', 0)
+
+    threshold = float(threshold)
+>>>>>>> ffa7e3b (major changes)
 
     # collect data into a dataframe for the day
     data = {
@@ -390,10 +398,25 @@ def main():
 
     # print(f'existing_data: {existing_data}')
 
+<<<<<<< HEAD
     # # Check if there is data with the same date in the existing entries
     # date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
     # print(f'date_to_update: {date_to_update[0]}')
+=======
+    print(f'parsed_data: {parsed_data}')
+
+    # if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+    #     for entry in parsed_data:
+    #         if entry['date'][0] == date_to_update[0]:
+    #             # delete the entry
+    #             existing_data.remove(json.dumps(entry))
+    #     # append the new entry to the end of the list
+    #     existing_data.append(json_data)
+
+    # if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+    #     existing_data.append(json_data)
+>>>>>>> ffa7e3b (major changes)
 
     # parsed_data = [json.loads(entry) for entry in existing_data]
 

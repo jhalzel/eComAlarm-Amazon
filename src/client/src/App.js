@@ -9,7 +9,8 @@ function App() {
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [last_updated, setLast_updated] = useState(Date.now() - 300000);
 
-  const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
+  // const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
+  const apiUrl = 'http://127.0.0.1:5000/';
 
 
 // Function to Post the data to the API
@@ -68,6 +69,7 @@ useEffect(() => {
 
   // Function to fetch the data from the API
   const fetchData = async () => {
+<<<<<<< HEAD
       axios.get(`${apiUrl}/get_event`)
           .then((response) => {
               // Parse the JSON data
@@ -86,6 +88,39 @@ useEffect(() => {
 
               // console.log('Threshold: ', data[0].threshold)
             })
+=======
+      axios.get(`${apiUrl}/members`)
+          .then((response) => {
+              // Parse the JSON data
+              // const rawData = response.data.map(JSON.parse);
+              const rawData = response.data;
+              console.log(rawData);
+              // get date value
+              console.log(rawData.last_updated[0]);
+              // Initialize an empty array to store the formatted data
+              const formattedData = [];
+                
+              setLast_updated(rawData.last_updated[0]);
+
+              // Create a new object for each data point
+              const dataPoint = {
+                  fba_sales: rawData.fba_sales[0],
+                  fbm_sales: rawData.fbm_sales[0],
+                  total_order_count: rawData.total_order_count[0],
+                  order_pending_count: rawData.order_pending_count[0],
+                  shipped_order_count: rawData.shipped_order_count[0],
+                  fba_pending_sales: rawData.fba_pending_sales[0],
+                  fbm_pending_sales: rawData.fbm_pending_sales[0],
+                  date: last_updated[0]
+              };
+
+              // Push the data point into the formattedData array
+              formattedData.push(dataPoint);
+          
+          setData(formattedData);
+          })
+
+>>>>>>> ffa7e3b (major changes)
           .catch((err) => {
               console.log(err);
           });  
@@ -97,7 +132,11 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
+<<<<<<< HEAD
 }, [last_updated, setLast_updated, data, setData]);
+=======
+}, [setLast_updated, last_updated, setData]);
+>>>>>>> ffa7e3b (major changes)
 
 
   return (
