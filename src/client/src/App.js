@@ -74,7 +74,7 @@ useEffect(() => {
               const rawData = response.data;
               console.log(rawData);
               // get date value
-              console.log(rawData[rawData.length - 1].last_updated[0]);
+              console.log(rawData[rawData.length - 1].last_updated);
               // Initialize an empty array to store the formatted data
               const formattedData = [];
                 
