@@ -6,15 +6,6 @@
         0
     ],
     "total_order_count": [
-<<<<<<< HEAD
-        8
-    ],
-    "order_pending_count": [
-        8
-    ],
-    "last_updated": [
-        "September 11, 23:44:30"
-=======
         0
     ],
     "order_pending_count": [
@@ -22,7 +13,6 @@
     ],
     "last_updated": [
         "September 14, 23:17:35"
->>>>>>> ffa7e3b (major changes)
     ],
     "shipped_order_count": [
         0
@@ -31,20 +21,12 @@
         0
     ],
     "fba_pending_sales": [
-<<<<<<< HEAD
         1006.92
-=======
-        0
->>>>>>> ffa7e3b (major changes)
     ],
     "fbm_pending_sales": [
         0
     ],
-<<<<<<< HEAD
     "fbm_threshold": [
         999.0
     ]
-=======
-    "fbm_threshold": 1001.0
->>>>>>> ffa7e3b (major changes)
 }

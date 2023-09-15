@@ -151,13 +151,7 @@ def set_json_data():
     except Exception as e: 
         print(str(e))
         return jsonify({'error': 'Internal Server Error'}), 500
-    
-    # return jsonify({'message': 'Data updated successfully'})
-            except FileNotFoundError:
-                return jsonify({'error': 'Data file not found'}), 404
-            
-        except FileNotFoundError:
-            existing_data = []
+
 
     except Exception as e: 
         print(str(e))
