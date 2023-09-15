@@ -98,7 +98,23 @@ def set_data():
     except FileNotFoundError:
         existing_data = []
 
-    # jsonified_data = json.dumps(data)
+    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+    print(f'Date to update: {date_to_update}')
+    
+    parsed_data = [json.loads(entry) for entry in existing_data]
+
+    print(f'Parsed data: {parsed_data}')
+
+    # Use a list comprehension to filter entries by date condition
+    filtered_data = [entry for entry in parsed_data if entry.get('date', [''])[0] != date_to_update[0]]
+
+    print(f'Filtered data: {filtered_data}')
+
+    # # Convert the filtered entries to JSON format
+    # existing_data = [json.dumps(entry) for entry in filtered_data]
+
+    # # Append the new entry to the end of the list
+    # existing_data.append(json_data)
 
     existing_data.append(data)
         
