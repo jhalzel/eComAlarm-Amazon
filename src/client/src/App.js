@@ -82,16 +82,18 @@ useEffect(() => {
                 
               setLast_updated(rawData[rawData.length - 1].last_updated);
 
+              newest_dataPoint = rawData[rawData.length - 1];
+
               // Create a new object for each data point
               const dataPoint = {
-                  fba_sales: rawData.fba_sales[0],
-                  fbm_sales: rawData.fbm_sales[0],
-                  total_order_count: rawData.total_order_count[0],
-                  order_pending_count: rawData.order_pending_count[0],
-                  shipped_order_count: rawData.shipped_order_count[0],
-                  fba_pending_sales: rawData.fba_pending_sales[0],
-                  fbm_pending_sales: rawData.fbm_pending_sales[0],
-                  // date: last_updated
+                  fba_sales: newest_dataPoint.fba_sales[0],
+                  fbm_sales: newest_dataPoint.fbm_sales[0],
+                  total_order_count: newest_dataPoint.total_order_count[0],
+                  order_pending_count: newest_dataPoint.order_pending_count[0],
+                  shipped_order_count: newest_dataPoint.shipped_order_count[0],
+                  fba_pending_sales: newest_dataPoint.fba_pending_sales[0],
+                  fbm_pending_sales: newest_dataPoint.fbm_pending_sales[0],
+                  date: last_updated
               };
 
               // Push the data point into the formattedData array
