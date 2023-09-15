@@ -98,7 +98,7 @@ def set_data():
         existing_data.append(data)
 
         
-        with open(json_filename, 'w') as json_file:
+        with open(json_filename, 'a') as json_file:
             json.dump(existing_data, json_file, indent=4)
 
     except FileNotFoundError:
