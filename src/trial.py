@@ -78,9 +78,11 @@ def set_data():
     # Get the JSON data from the request
     data = request.json
 
-    print(f'Data: {data}')
+    loaded_data = json.loads(data)
 
-    print(f'Type of data: {type(data)}')
+    print(f'Loaded data: {loaded_data}')
+
+    print(f'Type of loaded data: {type(loaded_data)}')
 
     # print each value in the dictionary
     for key, value in data.items():
