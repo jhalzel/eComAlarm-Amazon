@@ -99,9 +99,10 @@ def set_data():
         
     try: 
         with open(json_filename, 'a') as json_file:
-            json.dump(data, json_file, indent=4)
+            json.dump(jsonify(data), json_filename) 
     except FileNotFoundError:
-        return jsonify({'error': 'Data file not found'}), 404
+        existing_data.append(jsonify(data))
+        print(f'Existing data: {existing_data}')
 
 
 
