@@ -77,13 +77,16 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
 
+      
       - name: Save data.json to Cache
-        # Cache the 'data.json' file across workflow runs
         run: |
-          # Replace 'path/to/your/data.json' with the actual path to your data file
           cp src/data.json ${{ runner.workspace }}/data.json
-        - name: Cache data.json
-          uses: actions/cache@v2
-          with:
-            path: ${{ runner.workspace }}/data.json
+        
+      # Cache the 'data.json' file across workflow runs
+      - name: Cache data.json
+        uses: actions/cache@v2
+        with:
+          path: ${{ runner.workspace }}/data.json
           key: data-json-${{ runner.os }}
+
+          
