@@ -78,6 +78,8 @@ def set_data():
     # Get the JSON data from the request
     data = request.json
 
+    print(f'Data: {data}')
+
     # Get the path to the JSON file
     json_filename = os.path.join(cur_dir, 'data.json')
 
@@ -97,16 +99,16 @@ def set_data():
     except FileNotFoundError:
         existing_data = []
 
-    existing_data.append(data)
+    jsonified_data = json.dumps(data)
+
+    existing_data.append(jsonified_data)
         
     try: 
         with open(json_filename, 'a') as json_file:
             json.dump(existing_data,json_file) 
     except FileNotFoundError:
-        existing_data.append(data)
+        existing_data.append(jsonified_data)
         print(f'Existing data: {existing_data}')
-
-
 
 
     return jsonify({'message': 'Data updated successfully'})
