@@ -99,7 +99,7 @@ def set_data():
         existing_data = []
 
     # extract the date from data
-    date_to_update = data['date'][0]
+    date_to_update = data['date'] 
     print(f'Date to update: {date_to_update}')
     
     parsed_data = [json.loads(entry) for entry in existing_data]
