@@ -96,10 +96,12 @@ def set_data():
 
     except FileNotFoundError:
         existing_data = []
+
+    existing_data.append(data)
         
     try: 
         with open(json_filename, 'a') as json_file:
-            json.dump(data, json_filename) 
+            json.dump(existing_data,json_file) 
     except FileNotFoundError:
         existing_data.append(data)
         print(f'Existing data: {existing_data}')
