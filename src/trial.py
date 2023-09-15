@@ -20,8 +20,8 @@ config_filename = os.path.join(cur_dir, 'config.json')
 event_filename = os.path.join(cur_dir, 'event.json')
 event_filename = os.path.join(cur_dir, 'event.json')
 
-@app.route('/' , methods=['GET'])
-@cross_origin("*", methods=['GET'], headers=['Content-Type'])
+@app.route('/')
+# @cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def home():
     # Your code to render the home page or return some content
     return "Welcome to My App"
@@ -74,56 +74,80 @@ def get_json_data():
 # Route to update JSON data (POST)
 @app.route('/set_data', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
-def set_json_data():
+def set_data():
+    data = request.json
+
     json_filename = os.path.join(cur_dir, 'data.json')
+
+    print(f'Data: {data}')
     
-    try: 
-        data = request.json
+    # Write JSON data to file
+    try:
+        with open(json_filename, 'w') as json_file:
+            json.dump(data, json_file, indent=4)
+        return jsonify({'message': 'Data updated successfully'})    
+    
+    except FileNotFoundError:   
+        return jsonify({'error': 'Data file not found'}), 404
         
-        data = jsonify(data)
 
-        try:
-            with open(json_filename, 'r') as json_file:
-                existing_data = json.load(json_file)
+
+    # try:
+    #     # data = request.json
+
+    #     with open(json_filename, 'r') as json_file:
+    #         existing_data = json.load(json_file)
+
+    #     print(f'Existing data: {existing_data}')
+
+    #     return jsonify({'message': 'Data updated successfully'})
+    
+    # except Exception as e: 
+    #     print(str(e))
+    #     return jsonify({'error': 'Internal Server Error'}), 500
+
+    #     # try:
+        #     with open(json_filename, 'r') as json_file:
+        #         existing_data = json.load(json_file)
             
-            print(f'Existing data: {existing_data}')
+        #     print(f'Existing data: {existing_data}')
 
-            # Check if there is data with the same date in the existing entries
-            date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+        #     # Check if there is data with the same date in the existing entries
+        #     date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
-            print(f'Date to update: {date_to_update}')
+        #     print(f'Date to update: {date_to_update}')
 
-            parsed_data = [json.loads(entry) for entry in existing_data]
+        #     parsed_data = [json.loads(entry) for entry in existing_data]
 
-            if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
-                for entry in parsed_data:
-                    if entry['date'][0] == date_to_update[0]:
-                        # delete the entry
-                        existing_data.remove(json.dumps(entry))
-                # append the new entry to the end of the list
-                existing_data.append(data)
+        #     if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+        #         for entry in parsed_data:
+        #             if entry['date'][0] == date_to_update[0]:
+        #                 # delete the entry
+        #                 existing_data.remove(json.dumps(entry))
+        #         # append the new entry to the end of the list
+        #         existing_data.append(data)
 
-            if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
-                existing_data.append(data)
+        #     if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+        #         existing_data.append(data)
             
-            # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-            if len(existing_data) > 90:
-                existing_data = existing_data[:90]
+        #     # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+        #     if len(existing_data) > 90:
+        #         existing_data = existing_data[:90]
 
-            # Write JSON data to file
-            try: 
-                with open(json_filename, 'w') as json_file:
-                    json.dumps(existing_data, json_file, indent=4)
+        #     # Write JSON data to file
+        #     try: 
+        #         with open(json_filename, 'w') as json_file:
+        #             json.dumps(existing_data, json_file, indent=4)
 
-            except FileNotFoundError:
-                return jsonify({'error': 'Data file not found'}), 404
+        #     except FileNotFoundError:
+        #         return jsonify({'error': 'Data file not found'}), 404
             
-        except FileNotFoundError:
-            existing_data = []
+        # except FileNotFoundError:
+        #     existing_data = []
 
-    except Exception as e: 
-        print(str(e))
-        return jsonify({'error': 'Internal Server Error'}), 500
+    # except Exception as e: 
+    #     print(str(e))
+    #     return jsonify({'error': 'Internal Server Error'}), 500
     
     # return jsonify({'message': 'Data updated successfully'})
 

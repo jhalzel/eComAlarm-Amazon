@@ -321,10 +321,8 @@ def main():
     url = 'https://amazon-ecom-alarm.onrender.com/get_threshold'
     
     # Get the threshold value from the API
-   
     try:
         tresponse = requests.get(url)
-
         # Check the response status code
         if tresponse.status_code == 200:
             data = tresponse.json()
@@ -369,61 +367,64 @@ def main():
 
     headers = {'Content-Type': 'application/json'}
 
+    # data = json.jsonify(data)
+
+    print(f'data: {data}')
+
+    # Make the POST request
     try:
-        response = requests.post(url, json=data, headers=headers)
-        print(f'response: {response}')
+        response = requests.post(url, headers=headers, json=data)
+        # Check the response status code
         if response.status_code == 200:
-            print('Data updated successfully')
+            print("Data has been saved successfully")
         else:
-            print(f'Error updating data. Status code: {response.status_code}')
+            print(f"Error: Received status code {response.status_code} from the API")
     except Exception as e:
         print(f'Error: {e}')
-
-
-    json_filename = os.path.join(current_dir, 'data.json')
+        
 
     # Read existing JSON data from the file, or initialize an empty list if the file doesn't exist
-    try:
-        with open(json_filename, 'r') as json_file:
-            existing_data = json.load(json_file)
-    except FileNotFoundError:
-        existing_data = []
+    # try:
+    #     with open(json_filename, 'r') as json_file:
+    #         existing_data = json.load(json_file)
+    # except FileNotFoundError:
+    #     existing_data = []
 
-    print(f'existing_data: {existing_data}')
+    # print(f'existing_data: {existing_data}')
 
-    # # Check if there is data with the same date in the existing entries
-    date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
+    # # # Check if there is data with the same date in the existing entries
+    # date_to_update = data.get('date')  # Assuming 'date' is a key in your JSON data
 
-    print(f'date_to_update: {date_to_update[0]}')
+    # print(f'date_to_update: {date_to_update[0]}')
 
-    parsed_data = [json.loads(entry) for entry in existing_data]
+    # parsed_data = [json.loads(entry) for entry in existing_data]
 
-    print(f'parsed_data: {parsed_data}')
+    # print(f'parsed_data: {parsed_data}')
 
-    if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
-        for entry in parsed_data:
-            if entry['date'][0] == date_to_update[0]:
-                # delete the entry
-                existing_data.remove(json.dumps(entry))
-        # append the new entry to the end of the list
-        existing_data.append(data)
+    # if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+    #     for entry in parsed_data:
+    #         if entry['date'][0] == date_to_update[0]:
+    #             # delete the entry
+    #             existing_data.remove(json.dumps(entry))
+    #     # append the new entry to the end of the list
+    #     existing_data.append(data)
 
-    if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
-        existing_data.append(data)
+    # if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+    #     existing_data.append(data)
     
-    # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-    if len(existing_data) > 90:
-        existing_data = existing_data[:90]
+    # # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+    # if len(existing_data) > 90:
+    #     existing_data = existing_data[:90]
 
-    # Write JSON data to file
-    with open(json_filename, 'w') as json_file:
-        json.dump(existing_data, json_file, indent=4)
+    # # Write JSON data to file
+    # with open(json_filename, 'w') as json_file:
+    #     json.dump(existing_data, json_file, indent=4)
 
-    print(f"Response data has been saved to '{json_filename}'.")
+    # print(f"Response data has been saved to '{json_filename}'.")
         
-    print(f'threshold: {threshold}')
+    # print(f'threshold: {threshold}')
 
-    threshold = float(threshold)
+    # threshold = float(threshold)
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
