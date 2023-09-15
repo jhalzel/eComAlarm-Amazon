@@ -78,17 +78,30 @@ def set_data():
     data = request.json
 
     json_filename = os.path.join(cur_dir, 'data.json')
-
-    print(f'Data: {data}')
+    
     
     # Write JSON data to file
     try:
-        with open(json_filename, 'w') as json_file:
+        with open(json_filename, 'a') as json_file:
             json.dump(data, json_file, indent=4)
-        return jsonify({'message': 'Data updated successfully'})    
+
     
     except FileNotFoundError:   
         return jsonify({'error': 'Data file not found'}), 404
+    
+    try:
+        data = request.json
+
+        with open(json_filename, 'r') as json_file:
+            existing_data = json.load(json_file)
+
+        print(f'Existing data: {existing_data}')
+
+    except FileNotFoundError:
+        existing_data = []
+
+
+    
         
 
 

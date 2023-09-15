@@ -367,9 +367,7 @@ def main():
 
     headers = {'Content-Type': 'application/json'}
 
-    # data = json.jsonify(data)
 
-    print(f'data: {data}')
 
     # Make the POST request
     try:
