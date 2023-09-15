@@ -116,7 +116,6 @@ def set_data():
             if len(existing_data) > 90:
                 existing_data = existing_data[:90]
                 
-
     except FileNotFoundError:
         existing_data = []
 

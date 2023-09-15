@@ -86,6 +86,7 @@ useEffect(() => {
 
               // Create a new object for each data point
               const dataPoint = {
+                  total_sales: newest_dataPoint.total_sales[0],
                   fba_sales: newest_dataPoint.fba_sales[0],
                   fbm_sales: newest_dataPoint.fbm_sales[0],
                   total_order_count: newest_dataPoint.total_order_count[0],
