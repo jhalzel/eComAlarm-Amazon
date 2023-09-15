@@ -400,38 +400,30 @@ def main():
 
     print(f'parsed_data: {parsed_data}')
 
-    # if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
-    #     for entry in parsed_data:
-    #         if entry['date'][0] == date_to_update[0]:
-    #             # delete the entry
-    #             existing_data.remove(json.dumps(entry))
-    #     # append the new entry to the end of the list
-    #     existing_data.append(json_data)
+    if date_to_update[0] in [entry['date'][0] for entry in parsed_data]:
+        for entry in parsed_data:
+            if entry['date'][0] == date_to_update[0]:
+                # delete the entry
+                existing_data.remove(json.dumps(entry))
+        # append the new entry to the end of the list
+        existing_data.append(data)
 
-    # if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
-    #     existing_data.append(json_data)
-
-        
-        # if entry.get('date') == date_to_update:
-        #     # Update the existing entry with the new data
-        #     existing_data[idx] = data
-        #     break
-        # else:
-        #     # Insert the new data at the end of the existing data
-        #     existing_data.append(json_data)
+    if date_to_update[0] not in [entry['date'][0] for entry in parsed_data]:
+        existing_data.append(data)
     
+    # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
+    if len(existing_data) > 90:
+        existing_data = existing_data[:90]
 
-    # # If file is greater than 90 lines, remove the oldest lines to maintain 90 days of data
-    # if len(existing_data) > 90:
-    #     existing_data = existing_data[:90]
+    # Write JSON data to file
+    with open(json_filename, 'w') as json_file:
+        json.dump(existing_data, json_file, indent=4)
 
-    # # Write JSON data to file
-    # with open(json_filename, 'w') as json_file:
-    #     json.dump(existing_data, json_file, indent=4)
-
-    # print(f"Response data has been saved to '{json_filename}'.")
+    print(f"Response data has been saved to '{json_filename}'.")
         
-    # print(f'threshold: {threshold}')
+    print(f'threshold: {threshold}')
+
+    threshold = float(threshold)
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
