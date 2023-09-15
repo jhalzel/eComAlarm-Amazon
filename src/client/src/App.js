@@ -82,7 +82,7 @@ useEffect(() => {
                 
               setLast_updated(rawData[rawData.length - 1].last_updated);
 
-              newest_dataPoint = rawData[rawData.length - 1];
+              var newest_dataPoint = rawData[rawData.length - 1];
 
               // Create a new object for each data point
               const dataPoint = {
