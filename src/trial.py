@@ -64,7 +64,6 @@ def get_json_data():
         with open(json_filename, 'r') as json_file:
             data = json.load(json_file)
         return jsonify(data)
-    
 
     except FileNotFoundError:
         return jsonify({'message': 'Data not found'}), 404

@@ -77,7 +77,14 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
 
-      
+      - name: Commit and Push data.json
+        run: |
+          git config --local user.email "jeremy123jeremy@gmail.com"
+          git config --local user.name "jhalzel"
+          git add src/data.json
+          git commit -m "Update data.json"
+          git push origin rainbow-branch
+
       - name: Save data.json to Cache
         run: |
           cp src/data.json ${{ runner.workspace }}/data.json
