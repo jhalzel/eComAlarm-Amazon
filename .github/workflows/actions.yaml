@@ -77,6 +77,12 @@ jobs:
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
 
+      - name: Fetch updated data.json from server
+        run: |
+          # Replacing the local file with the file on the server where data.json is updated
+          curl -o src/data.json https://amazon-ecom-alarm.onrender.com/get_data
+
+
       - name: Commit and Push data.json
         run: |
           git config --local user.email "jeremy123jeremy@gmail.com"
