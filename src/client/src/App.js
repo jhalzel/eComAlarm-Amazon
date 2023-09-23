@@ -125,6 +125,10 @@ useEffect(() => {
             <h6>Amazon FBM Revenue Tracker</h6>
           </a>
       </header>
+
+      <subheader>
+        <p>Revenue data of the last 12 hour period on Amazon:</p>
+      </subheader>
     
       <div>
         <h4 className='status-update'>Last Updated: {data ? last_updated : 'N/A'}</h4>

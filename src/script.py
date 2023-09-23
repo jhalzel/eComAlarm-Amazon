@@ -26,8 +26,8 @@ import pytz
 import json 
 
 
-def calculate_total_sales(asin_counter, asins_list, client):
-    price_total = 0
+# Function to calculate total sales and price of each asin
+def calculate_pending_sales(asin_counter, asins_list, client):
     total_sales = 0
     qty = 0
 
@@ -37,18 +37,25 @@ def calculate_total_sales(asin_counter, asins_list, client):
         for asin_data in pricing_response.payload:
             # print the asin data
             print(f'asin_data: {json.dumps(asin_data, indent=4)}')
-            
+
+            #print separator
+            print('===============================')
+
             # Item is available for sale in my account
             if 'Offers'in asin_data['Product']:
                 # extract price
                 price = asin_data['Product']['Offers'][0]['BuyingPrice']['LandedPrice']['Amount']
+                print(f'price: {price}')
+                
+                #print separator
+                print('===============================')
+            
                 # extract quantity
-                # print quantity of each asin
-                # print(f'quantity of {asin_data["ASIN"]}: {qty}')
+                print(f'quantity of {asin_data["ASIN"]}: {asin_counter[asin_data["ASIN"]]}')
                 # calculate total price
-                price_total += (price * asin_counter[asin_data['ASIN']])
+                total_sales += (price * asin_counter[asin_data['ASIN']])
                 # print total price
-                print(f'price_total: {price_total}')
+                print(f'total pending sales: {total_sales}')
 
             # Item is no longer available for sale on my account
             else:
@@ -60,21 +67,24 @@ def calculate_total_sales(asin_counter, asins_list, client):
                     # print(f'newest_offers: {json.dumps(newest_offer, indent=4)}')
                     buy_box_price = newest_offer['Summary']['BuyBoxPrices'][0]['LandedPrice']['Amount']
                     print(f'buy_box_price: {buy_box_price}')
-                    price_total += (buy_box_price * asin_counter[asin_data['ASIN']])
-                    print(f'price_total: {price_total}')
+                    total_sales += (buy_box_price * asin_counter[asin_data['ASIN']])
+                    print(f'total unavailable on account: {total_sales}')
                 except Exception as e:
                     print(f'Offers not found: {e}')
                     continue
                 
+                #print separator
+                print('===============================')
 
-            total_sales += price_total
 
         return total_sales
     else:
         return 0
+    
+    
 
 
-
+# Function that creates and asin counter object
 def get_asin_counter(order_ids, orders_client):
     asin_counter = Counter()
 
@@ -90,8 +100,9 @@ def get_asin_counter(order_ids, orders_client):
     return asin_counter
 
 
-# Define the function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
+# Function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
 def check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold):
+    # type check for error handling
     if type(threshold) not in [float, int]:
         threshold = 0
     
@@ -113,11 +124,13 @@ def main():
     # Access the global variable inside the main function
     global pause_flag
 
+    # Load the environment variables (secret keys set in .env file)
     load_dotenv()
 
     # Get the current script's directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
+    # Set up the logger for the script
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     logger_file_handler = logging.handlers.RotatingFileHandler(
@@ -128,10 +141,10 @@ def main():
         encoding="utf8",
     )
 
+    # Set the logging format
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     logger_file_handler.setFormatter(formatter)
     logger.addHandler(logger_file_handler)
-
 
 
     # Access credentials from the dictionary
@@ -144,11 +157,13 @@ def main():
         "role_arn": os.environ.get("SP_API_ROLE_ARN")
     }
 
+    # Access gmail credentials from the dictionary
     gmail_credentials = {
         "gmail_username": os.environ.get("GMAIL_USERNAME"),
         "gmail_password": os.environ.get("GMAIL_PASSWORD")
     }
 
+    # Test the credentials with a sample secret
     try:
         SOME_SECRET = os.environ["SOME_SECRET"]
     except KeyError:
@@ -156,14 +171,12 @@ def main():
         #logger.info("Token not available!")
         #raise
 
-    
-
     # Print the token value
     logger.info(f"Token value: {SOME_SECRET}")
+
     # Set up the Sales API client
     orders_client = Orders(credentials=credentials, marketplace=Marketplaces.US)
 
-            
     # Get the current time in the Eastern timezone (US/Eastern)
     eastern_timezone = pytz.timezone("US/Eastern")
     current_time = datetime.now(eastern_timezone)
@@ -182,21 +195,23 @@ def main():
     adjusted_date = current_time - timedelta(minutes=3)
     end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
 
-   # Set start date to June 1st, 2023
+    # TO SET UP FOR 1 MONTH OF DATA
+    # =============================
+    # Set start date to June 1st, 2023
     # start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
     # Subtract 3 minutes from current time
     # adjusted_date = current_time - timedelta(minutes=3)
     # Set end date to July 31st, 2023
     # end_date = datetime(2023, 7, 31).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
         
-    # Use the modified values in the API call
+    # Use the modified date values in the API call
     response = orders_client.get_orders(
         CreatedAfter=start_date,
         CreatedBefore=end_date,
         MarketplaceIds=["ATVPDKIKX0DER"]
     )
 
-
+    # Initialize order data variables
     fba_order_ids = []
     fbm_order_ids = []
     order_count = 0
@@ -205,35 +220,49 @@ def main():
     fba_sales = 0
     fbm_sales = 0
 
-
-    
+    # Initialize the phone number to send the text message to
     number = '7742396843'
-    # Initialize the URL shortener
+
+    # Initialize the URL shortener for the text message
     link_url = 'https://apps.apple.com/us/app/amazon-seller/id794141485'
     link_text = "Visit Amazon Seller App"
-    # Create the HTML code for the anchor tag
-    # anchor_tag = f'<a href="{link_url}">{link_text}</a>'
 
     # message = f'Total sales has met the threshold of ${threshold}. Please check your Amazon Seller Central account: {anchor_tag}'
     message = ''
     provider = 'Verizon'
     sender_credentials = (gmail_credentials['gmail_username'], gmail_credentials['gmail_password'])
 
+    # Initialize the order lists
     fbm_order_list = []
     fba_order_list = []
 
     # Iterate over the orders and extract the order IDs
     for order in response.payload['Orders']:
-        
-        # print the order data
-        print(f'order: {json.dumps(order, indent=4)}')
-        
-         # item is not pending, cancelled, or unfulfillable
+    
+        # print the important details from the order data response
+        # print order id
+        print(f'Order id: {order["AmazonOrderId"]}')
+        # print order status
+        print(f'Order status: {order["OrderStatus"]}')
+        # print fulfillment channel
+        print(f'Fulfillment channel: {order["FulfillmentChannel"]}')
+        # print order total
+        if 'OrderTotal' in order:
+            print(f'Order total: {order["OrderTotal"]}')
+        else:
+            print('Order total: None')
+
+        # print separator
+        print('===============================')
+
+
+         # item is not pending, cancelled, or unfulfillable, means it's shipped
         if 'OrderTotal' in order:
             shipped_order_count += 1
             order_count += 1
-        # Orders are either fulfilled by Amazon (FBA) or fulfilled by Merchant (FBM)
-            
+        
+        # Orders are either fulfilled by Amazon (AFN) or fulfilled by Merchant (MFN)            
+
             #extract FBA orders (AFN)
             if order['FulfillmentChannel'] == 'AFN' and 'OrderTotal' in order:
                 fba_sales += float(order['OrderTotal']['Amount'])
@@ -244,6 +273,10 @@ def main():
             elif order['FulfillmentChannel'] == 'MFN' and 'OrderTotal' in order:
                 fbm_sales += float(order['OrderTotal']['Amount'])
                 fbm_order_list.append(order)
+
+             # print separator
+            print('===============================')
+
 
         # get pending orders' ids
         elif order['OrderStatus'] == 'Pending':
@@ -259,37 +292,35 @@ def main():
         else:
             continue
 
-    # get counter object of asins
-    fbm_asin_counter = get_asin_counter(fbm_order_ids, orders_client)
-    fba_asin_counter = get_asin_counter(fba_order_ids, orders_client)
+         # print separator
+        print('===============================')
+
+
+    # get counter object of pending order asins
+    fbm_pending_counter = get_asin_counter(fbm_order_ids, orders_client)
+    fba_pending_counter = get_asin_counter(fba_order_ids, orders_client)
      
     # print the asin counter
-    print(f'fba_asin_counter: {fba_asin_counter}')
-    print(f'fbm_asin_counter: {fbm_asin_counter}')
+    print(f'fba_pending_counter: {fba_pending_counter}')
+    print(f'fbm_pending_counter: {fbm_pending_counter}')
 
     # get asins list
-    fba_asins = list(fba_asin_counter.keys())
-    fbm_asins = list(fbm_asin_counter.keys())
+    fba_asins = list(fba_pending_counter.keys())
+    fbm_asins = list(fbm_pending_counter.keys())
     # print the asins list
-    # print(f'asins: {asins}') 
 
     # grab products pricing information for pending orders
     products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
 
-    #calculate fbm sales
-    fbm_pending_sales = calculate_total_sales(fbm_asin_counter, fbm_asins, products_client)
+    # get total sales of pending orders
+    fba_pending_sales = calculate_pending_sales(fba_pending_counter, fba_asins, products_client)
 
-    #calculate fba sales
-    fba_pending_sales = calculate_total_sales(fba_asin_counter, fba_asins, products_client)
+    fbm_pending_sales = calculate_pending_sales(fbm_pending_counter, fbm_asins, products_client) 
 
-    print(f'fbm_pending_sales: {fbm_pending_sales}')
+
+    print(f'order_pending_count: {order_pending_count}')   
     print(f'fba_pending_sales: {fba_pending_sales}')
-
-    # add pending sales to total sales
-    # fba_sales += fba_pending_sales
-    # fbm_sales += fbm_pending_sales
-
-    print(f'order_pending_count: {order_pending_count}')            
+    print(f'fbm_pending_sales: {fbm_pending_sales}')         
     print(f'total_sales: {fba_sales + fbm_sales}')
     print(f'fba_sales: {fba_sales}')
     print(f'fbm_sales: {fbm_sales}')
@@ -350,7 +381,6 @@ def main():
         'total_order_count': [order_count],
         'order_pending_count': [order_pending_count],
         'shipped_order_count': [shipped_order_count],
-        'fba_pending_sales': [round(fba_pending_sales,2)],
         'fbm_pending_sales': [round(fbm_pending_sales,2)],
         'total_sales': [round(fbm_sales, 2) + round(fba_sales, 2)],
         'threshold': [round(threshold, 2)],
@@ -393,7 +423,6 @@ def main():
 
     # Exit the function to pause the program
     return {
-        'fba_pending_sales': [round(fba_pending_sales,2)],
         'fbm_pending_sales': [round(fbm_pending_sales,2)],
         'total_sales': [round(fbm_sales,2) + round(fba_sales,2)], 
         'fbm_sales': [round(fbm_sales,2)],

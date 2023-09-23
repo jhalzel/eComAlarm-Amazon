@@ -125,7 +125,7 @@ export const Chart = ({threshold}) => {
         <div className='options-section'>
         <h3>Chart View:</h3>
         <select className='chart-button' onChange={e => filter_dates(e, originalData)}>
-            <option value="">Choose Range</option>
+            <option value="Weekly View">Choose Range</option>
             <option value="Weekly View">Weekly View</option>
             <option value="Monthly View">Monthly View</option>
             <option value="90 Day View">90 Day View</option>
@@ -159,7 +159,7 @@ export const Chart = ({threshold}) => {
             <div className='chart-container'>
             <h1>Order Data</h1>
             <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={originalData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <BarChart data={json_data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                 {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="date" tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                 <YAxis  tick={{ fontSize: 15, fill:'#61dafb' }} />
