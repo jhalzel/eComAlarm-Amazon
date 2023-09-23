@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '0,15,30,45 * * * *' # run exactly every 15 minutes
+    - cron: '*/10 * * * *' # run every 10 minutes
   push:
     paths:
       - 'src/trial.py'
