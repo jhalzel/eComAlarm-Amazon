@@ -25,7 +25,6 @@ import pytz
 # JSON Handling 
 import json 
 
-
 # Function to calculate total sales and price of each asin
 def calculate_pending_sales(asin_counter, asins_list, client):
     total_sales = 0
@@ -76,7 +75,6 @@ def calculate_pending_sales(asin_counter, asins_list, client):
                 #print separator
                 print('===============================')
 
-
         return total_sales
     else:
         return 0
@@ -84,6 +82,7 @@ def calculate_pending_sales(asin_counter, asins_list, client):
 
 # Function that creates and asin counter object
 def get_asin_counter(order_ids, orders_client):
+    # Initialize counter object
     asin_counter = Counter()
 
     for order in order_ids:
@@ -310,12 +309,13 @@ def main():
     # grab products pricing information for pending orders
     products_client = Products(credentials=credentials, marketplace=Marketplaces.US)
 
-    # get total sales of pending orders
+    # get total sales of FBA pending orders
     fba_pending_sales = calculate_pending_sales(fba_pending_counter, fba_asins, products_client)
 
+    # get total sales of FBM pending orders
     fbm_pending_sales = calculate_pending_sales(fbm_pending_counter, fbm_asins, products_client) 
 
-
+    # print all the data
     print(f'order_pending_count: {order_pending_count}')   
     print(f'fba_pending_sales: {fba_pending_sales}')
     print(f'fbm_pending_sales: {fbm_pending_sales}')         
