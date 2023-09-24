@@ -8,6 +8,7 @@ on:
       - 'src/trial.py'
       - 'src/data.json' # this file changes when data is updated
       - 'src/config.json' # this file changes when config is updated
+      - 'src/script.py' # this file changes when script is updated
   repository_dispatch:
     types: [resume_schedule]
 
