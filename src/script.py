@@ -416,9 +416,11 @@ def main():
 
     # print(f"Response data has been saved to '{json_filename}'.")
         
-    # print(f'threshold: {threshold}')
+    # print separator
+    print('===============================')
+    print(f'threshold: {threshold}')
 
-    # threshold = float(threshold)
+    threshold = float(threshold)
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
