@@ -26,7 +26,7 @@ json_filename = os.path.join(cur_dir, 'config.json')
 try:
     with open(json_filename, 'r') as json_file:
         config = json.load(json_file)
-        threshold = int(config.get('fbm_threshold', 0))  # Default to 0 if not found
+        threshold = float(config.get('fbm_threshold', 0))  # Default to 0 if not found
 except FileNotFoundError:
     existing_data = []
 
