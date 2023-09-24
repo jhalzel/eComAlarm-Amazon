@@ -81,8 +81,6 @@ def calculate_pending_sales(asin_counter, asins_list, client):
     else:
         return 0
     
-    
-
 
 # Function that creates and asin counter object
 def get_asin_counter(order_ids, orders_client):
