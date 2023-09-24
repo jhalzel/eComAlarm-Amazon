@@ -370,6 +370,7 @@ def main():
         print(f'Error: {e}')
         threshold = 0
 
+    # Check if threshold is a float
     threshold = float(threshold)
 
     # collect data into a dataframe for the day
@@ -387,15 +388,17 @@ def main():
         'last_updated': [current_timestamp]
         }
 
-
+    # convert data to json
     json_data = json.dumps(data)
 
     #make POST to set_data API
     # url = 'http://127.0.0.1:5000/set_data'
     url = 'https://amazon-ecom-alarm.onrender.com/set_data'
 
+    # Set the headers
     headers = {'Content-Type': 'application/json'}
 
+    # Set the filename for the JSON data
     json_filename = os.path.join(current_dir, 'data.json')
 
     # Make the POST request
