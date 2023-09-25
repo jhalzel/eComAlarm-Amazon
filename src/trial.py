@@ -159,7 +159,7 @@ def members():
                     'order_pending_count': order_pending_count, 
                     'last_updated': last_updated, 
                     'shipped_order_count': shipped_order_count, 
-                    'total_sales': total_sales,
+                    'total_sales': round(total_sales, 2),
                     'fba_pending_sales': fba_pending_sales,
                     'fbm_pending_sales': fbm_pending_sales,
                     'fbm_threshold': fbm_threshold
