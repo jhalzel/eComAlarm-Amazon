@@ -71,17 +71,17 @@ useEffect(() => {
           .then((response) => {
               // Parse the JSON data
               const rawData = response.data.map(JSON.parse);
-              // const rawData = response.data;
-              console.log(rawData);
-              // get date value
-              console.log(rawData[rawData.length - 1]);
-              console.log(rawData[rawData.length - 1].last_updated)
 
+              // Log the raw data to the console
+              console.log(rawData);
+              
               // Initialize an empty array to store the formatted data
               const formattedData = [];
                 
+              // Set the last_updated state to the last updated value in the data
               setLast_updated(rawData[rawData.length - 1].last_updated);
 
+              // Set the newest data point to the last data point in the array
               var newest_dataPoint = rawData[rawData.length - 1];
 
               // Create a new object for each data point
@@ -114,7 +114,7 @@ useEffect(() => {
 
   return () => clearInterval(interval); // Cleanup function to clear the interval
 
-}, [setLast_updated, last_updated, setData]);
+}, []);
 
 
   return (
