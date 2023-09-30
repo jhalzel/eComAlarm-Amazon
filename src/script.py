@@ -4,6 +4,7 @@ import logging.handlers
 import os 
 import requests
 from dotenv import load_dotenv 
+
  
 # Amazon Seller API 
 from sp_api.base import Marketplaces 
@@ -24,6 +25,7 @@ import pytz
  
 # JSON Handling 
 import json 
+
 
 # Function to calculate total sales and price of each asin
 def calculate_pending_sales(asin_counter, asins_list, client):
@@ -349,7 +351,7 @@ def main():
 
     url = 'https://amazon-ecom-alarm.onrender.com/get_threshold'
     
-    # Get the threshold value from the API
+    # Get the threshold value from the server 
     try:
         tresponse = requests.get(url)
         # Check the response status code
@@ -391,6 +393,21 @@ def main():
     # convert data to json
     json_data = json.dumps(data)
 
+    # call /update_firebase to update the database
+    flask_url = 'https://amazon-ecom-alarm.onrender.com/update_firebase'
+    
+    # make post request to update_firebase API
+    try:
+        response = requests.post(flask_url, json=json_data)
+        # Check the response status code
+        if response.status_code == 200:
+            print("response:", response.json())
+        else:
+            print(f"Error: Received status code {response.status_code} from the API")
+    except Exception as e:
+        print(f'Error: {e}')
+
+
     #make POST to set_data API
     # url = 'http://127.0.0.1:5000/set_data'
     url = 'https://amazon-ecom-alarm.onrender.com/set_data'
@@ -413,6 +430,35 @@ def main():
     except Exception as e:
         print(f'Error: {e}')
         
+            
+    # # Specify the path to your JSON file
+    # file_path = 'data.json'
+
+    # # Read the JSON data from the file
+    # with open(file_path, 'r') as json_file:
+    #     json_data = json.load(json_file)
+    #     print('json_data: ', json_data)
+
+    # # Now you can use the 'config_data' in your Firebase reference
+    # ref = db.reference()
+
+    # # Loop through each JSON string in the list and parse it
+    # for json_str in json_data:
+
+    #     # Parse the JSON string into a Python dictionary
+    #     data = json.loads(json_str)
+
+    #     # Write the parsed data to the database under a unique key
+    #     new_ref = ref.push()  # Generates a new unique key
+    #     new_ref.set(data)
+
+
+    # # To read it back from Firebase
+    # # Retrieve the keys (names) of the data
+    # data_keys = data.keys()
+    # # Print the keys (names) of the data
+    # for key in data_keys:
+    #     print('Data Name:', key) 
 
     # print(f"Response data has been saved to '{json_filename}'.")
         

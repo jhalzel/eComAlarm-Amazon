@@ -1,11 +1,24 @@
 from flask import Flask, jsonify, send_file
 from flask_cors import CORS, cross_origin
 from script import main
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
 from flask import request
 import os
 import json
 
 app = Flask(__name__)
+
+# Initialize Firebase using default credentials
+cred = credentials.ApplicationDefault()
+
+# Authenticate with admin privileges using a service account
+service_account_cred = credentials.Certificate('serviceAccountKey.json')
+firebase_admin.initialize_app(service_account_cred, {
+    'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
+})
+
 
 # Enable CORS for all routes
 CORS(app, origins=["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])
@@ -68,6 +81,33 @@ def get_json_data():
     except FileNotFoundError:
         return jsonify({'message': 'Data not found'}), 404
     
+# Route to update the data.json file to firebase database
+@app.route('/update_data', methods=['POST'])
+@cross_origin("*", methods=['POST'], headers=['Content-Type'])
+def update_firebase():
+    # get the data from the data variable in script.py
+    data = request.json
+
+    # convert the data to a string
+    json_data = json.dumps(data)
+
+    # print the data
+    print('json_data: ', json_data)
+
+    # open database
+    ref = db.reference()
+
+    # update data
+    ref.update({'data': json_data})
+
+    # read the data from the database
+    data = ref.get()
+    
+    # print the data 
+    print('data: ', data)
+
+        
+
     
 # Route to update JSON data (POST)
 @app.route('/set_data', methods=['POST'])
@@ -166,4 +206,4 @@ def members():
                     })
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

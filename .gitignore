@@ -143,9 +143,8 @@ __azurite_db*__.json
 .python_packages
 
 
-
 #Sensitive data
-
+src/serviceAccountKey.json
 src/config.py
 src/twilio_config.py
 src/const.py
