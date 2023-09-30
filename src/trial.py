@@ -84,7 +84,7 @@ def get_json_data():
         return jsonify({'message': 'Data not found'}), 404
     
 # Route to update the data.json file to firebase database
-@app.route('/update_data', methods=['POST'])
+@app.route('/update_firebase', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def update_firebase():
     # get the data from the data variable in script.py
