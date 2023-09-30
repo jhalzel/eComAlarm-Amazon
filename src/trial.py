@@ -14,7 +14,7 @@ app = Flask(__name__)
 cred = credentials.ApplicationDefault()
 
 # Initialize the app with a service account, granting admin privileges
-serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firbase_admin_key')
+serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key')
 
 # Authenticate with admin privileges using a service account
 service_account_cred = credentials.Certificate(serviceAccount_filepath)
