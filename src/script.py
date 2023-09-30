@@ -395,10 +395,13 @@ def main():
 
     # call /update_firebase to update the database
     flask_url = 'https://amazon-ecom-alarm.onrender.com/update_firebase'
+
+    # Set the headers
+    headers = {'Content-Type': 'application/json'}
     
     # make post request to update_firebase API
     try:
-        response = requests.post(flask_url, json=json_data)
+        response = requests.post(flask_url, headers=headers, json=json_data)
         # Check the response status code
         if response.status_code == 200:
             print("response:", response.json())
@@ -412,8 +415,6 @@ def main():
     # url = 'http://127.0.0.1:5000/set_data'
     url = 'https://amazon-ecom-alarm.onrender.com/set_data'
 
-    # Set the headers
-    headers = {'Content-Type': 'application/json'}
 
     # Set the filename for the JSON data
     json_filename = os.path.join(current_dir, 'data.json')
