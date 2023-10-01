@@ -148,4 +148,7 @@ src/serviceAccountKey.json
 src/config.py
 src/twilio_config.py
 src/const.py
+etc/secrets/firebase_admin_key.json
+etc/secrets
+etc/
 # src/credentials.py
