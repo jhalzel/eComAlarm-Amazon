@@ -403,7 +403,7 @@ def main():
     print('json_data: ', json_data)
 
     # Specify the path to your JSON file
-    file_path = os.path.join(cur_dir, 'data.json')
+    file_path = os.path.join(current_dir, 'data.json')
 
     # Read the JSON data from the file
     with open(file_path, 'r') as json_file:
