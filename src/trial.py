@@ -150,7 +150,7 @@ def set_data():
 @cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_firebase_data():
     # Get a database reference to our blog.
-    ref = db.reference('data')
+    ref = db.reference()
 
     # Read the data at the posts reference (this is a blocking operation)
     data = ref.get()

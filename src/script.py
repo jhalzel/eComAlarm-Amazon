@@ -31,6 +31,8 @@ import pytz
 import json 
 
 
+firebase_app = app.config.get_current_object()
+
 
 # Function to calculate total sales and price of each asin
 def calculate_pending_sales(asin_counter, asins_list, client):
