@@ -4,11 +4,6 @@ import logging.handlers
 import os 
 import requests
 from dotenv import load_dotenv 
-
-# Firebase Setup
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import db
  
 # Amazon Seller API 
 from sp_api.base import Marketplaces 
@@ -20,7 +15,12 @@ from collections import Counter
 from datetime import datetime, timedelta 
 import pandas as pd
 
- 
+# Flask Setup
+from flask import current_app as app
+
+# Firebase Setup
+from firebase_admin import db
+
 # Communication and Notification 
 from sms import send_sms_via_email 
 
@@ -30,18 +30,7 @@ import pytz
 # JSON Handling 
 import json 
 
-# Initialize Firebase using default credentials
-cred = credentials.ApplicationDefault()
 
-# Initialize the app with a service account, granting admin privileges
-serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
-
-# Authenticate with admin privileges using a service account
-service_account_cred = credentials.Certificate(serviceAccount_filepath)
-
-firebase_admin.initialize_app(service_account_cred, {
-    'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
-})
 
 # Function to calculate total sales and price of each asin
 def calculate_pending_sales(asin_counter, asins_list, client):
@@ -423,6 +412,8 @@ def main():
 
     # create a reference to the database
     ref = db.reference()
+
+    print("reference to database: ", ref)
 
     # Loop through each JSON string in the list and parse it
     for json_str in json_data:

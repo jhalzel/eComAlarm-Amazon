@@ -10,17 +10,18 @@ import json
 
 app = Flask(__name__)
 
+# Initialize Firebase using default credentials
+cred = credentials.ApplicationDefault()
 
-# # Initialize the app with a service account, granting admin privileges
-# serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '../etc/secrets/firebase_admin_key')
+# Initialize the app with a service account, granting admin privileges
+serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
 
-# # Authenticate with admin privileges using a service account
-# service_account_cred = credentials.Certificate(serviceAccount_filepath)
+# Authenticate with admin privileges using a service account
+service_account_cred = credentials.Certificate(serviceAccount_filepath)
 
-# firebase_admin.initialize_app(service_account_cred, {
-#     'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
-# })
-
+firebase_admin.initialize_app(service_account_cred, {
+    'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
+})
 
 # Enable CORS for all routes
 CORS(app, origins=["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])
@@ -144,17 +145,17 @@ def set_data():
     return jsonify({'message': 'Data updated successfully'})
 
 
-# # Route to retrieve the data from the firebase database (GET)
-# @app.route('/get_firebase_data', methods=['GET'])
-# @cross_origin("*", methods=['GET'], headers=['Content-Type'])
-# def get_firebase_data():
-#     # Get a database reference to our blog.
-#     ref = db.reference('data')
+# Route to retrieve the data from the firebase database (GET)
+@app.route('/get_firebase_data', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
+def get_firebase_data():
+    # Get a database reference to our blog.
+    ref = db.reference('data')
 
-#     # Read the data at the posts reference (this is a blocking operation)
-#     data = ref.get()
+    # Read the data at the posts reference (this is a blocking operation)
+    data = ref.get()
 
-#     return jsonify(data)
+    return jsonify(data)
 
 
 
