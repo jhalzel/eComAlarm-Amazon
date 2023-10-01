@@ -27,6 +27,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9' # install the python version needed
+      
+      - name: Set Firebase Admin Key as Environment Variable
+        run: |
+          echo "$FIREBASE_ADMIN_KEY" > firebase_admin_key.json
+        env:
+          FIREBASE_ADMIN_KEY: ${{ secrets.FIREBASE_ADMIN_KEY }}
 
       - name: Restore cache
         uses: actions/cache@v2
@@ -77,6 +83,8 @@ jobs:
           # Gmail credentials
           GMAIL_USERNAME: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          # Firebase credentials
+          FIREBASE_ADMIN_KEY: ${{ secrets.FIREBASE_ADMIN_KEY }}
 
       - name: Fetch updated data.json from server
         run: |

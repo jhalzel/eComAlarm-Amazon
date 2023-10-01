@@ -12,11 +12,14 @@ app = Flask(__name__)
 # Initialize Firebase using default credentials
 cred = credentials.ApplicationDefault()
 
-# Initialize the app with a service account, granting admin privileges
-serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
+# Get the JSON string from the environment variable
+firebase_admin_key_json = os.environ.get('FIREBASE_ADMIN_KEY')
 
-# Authenticate with admin privileges using a service account
-service_account_cred = credentials.Certificate(serviceAccount_filepath)
+# Parse the JSON string to create a dictionary
+firebase_admin_key_dict = json.loads(firebase_admin_key_json)
+
+# Initialize Firebase with the parsed dictionary
+service_account_cred = credentials.Certificate(firebase_admin_key_dict)
 
 firebase_admin.initialize_app(service_account_cred, {
     'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
