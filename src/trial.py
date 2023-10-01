@@ -144,6 +144,19 @@ def set_data():
     return jsonify({'message': 'Data updated successfully'})
 
 
+# Route to retrieve the data from the firebase database (GET)
+@app.route('/get_firebase_data', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
+def get_firebase_data():
+    # Get a database reference to our blog.
+    ref = db.reference('data')
+
+    # Read the data at the posts reference (this is a blocking operation)
+    data = ref.get()
+
+    return jsonify(data)
+
+
 
 # Members API Route
 @app.route('/members', methods=['GET'])
