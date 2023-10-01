@@ -14,7 +14,7 @@ app = Flask(__name__)
 cred = credentials.ApplicationDefault()
 
 # Initialize the app with a service account, granting admin privileges
-serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '../etc/secrets/firebase_admin_key.json')
+serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
 
 # Authenticate with admin privileges using a service account
 service_account_cred = credentials.Certificate(serviceAccount_filepath)
@@ -83,7 +83,7 @@ def get_json_data():
     except FileNotFoundError:
         return jsonify({'message': 'Data not found'}), 404
     
-    
+
 # Route to update the data.json file to firebase database
 @app.route('/update_firebase', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
