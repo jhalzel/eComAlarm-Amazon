@@ -30,12 +30,14 @@ import pytz
 # JSON Handling 
 import json 
 
+# Initialize Firebase using default credentials
+cred = credentials.ApplicationDefault()
 
 # Initialize the app with a service account, granting admin privileges
 serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
 
 # Authenticate with admin privileges using a service account
-service_account_cred = credentials.Certificate(os.path.join(os.path.dirname(__file__), serviceAccount_filepath))
+service_account_cred = credentials.Certificate(serviceAccount_filepath)
 
 firebase_admin.initialize_app(service_account_cred, {
     'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
@@ -419,7 +421,7 @@ def main():
         json_data = json.load(json_file)
         print('json_data: ', json_data)
 
-    # get the database reference
+    # create a reference to the database
     ref = db.reference()
 
     # Loop through each JSON string in the list and parse it
