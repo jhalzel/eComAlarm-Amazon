@@ -35,14 +35,14 @@ import json
 cred = credentials.ApplicationDefault()
 
 # Initialize the app with a service account, granting admin privileges
-# serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
+serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
 
 # Authenticate with admin privileges using a service account
-service_account_cred = credentials.Certificate('../etc/secrets/firebase_admin_key.json')
+service_account_cred = credentials.Certificate(os.path.join(os.path.dirname(__file__), serviceAccount_filepath))
+
 firebase_admin.initialize_app(service_account_cred, {
     'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
 })
-
 
 # Function to calculate total sales and price of each asin
 def calculate_pending_sales(asin_counter, asins_list, client):

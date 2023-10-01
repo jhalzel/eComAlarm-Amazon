@@ -18,6 +18,7 @@ serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/
 
 # Authenticate with admin privileges using a service account
 service_account_cred = credentials.Certificate(serviceAccount_filepath)
+
 firebase_admin.initialize_app(service_account_cred, {
     'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
 })
