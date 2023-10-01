@@ -91,7 +91,7 @@ def update_firebase():
     data = request.json
 
     # convert the data to a string
-    json_data = json.dumps(data)
+    json_data = json.loads(data)
 
     # retrieve the date value from the data
     date = data.get('date')[0]
