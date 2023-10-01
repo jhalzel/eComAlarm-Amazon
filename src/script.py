@@ -5,6 +5,10 @@ import os
 import requests
 from dotenv import load_dotenv 
 
+# Firebase Setup
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
  
 # Amazon Seller API 
 from sp_api.base import Marketplaces 
@@ -25,6 +29,19 @@ import pytz
  
 # JSON Handling 
 import json 
+
+
+# Initialize Firebase using default credentials
+cred = credentials.ApplicationDefault()
+
+# Initialize the app with a service account, granting admin privileges
+# serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
+
+# Authenticate with admin privileges using a service account
+service_account_cred = credentials.Certificate('../etc/secrets/firebase_admin_key.json')
+firebase_admin.initialize_app(service_account_cred, {
+    'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
+})
 
 
 # Function to calculate total sales and price of each asin
@@ -393,33 +410,50 @@ def main():
     # convert data to json
     json_data = json.dumps(data)
 
-    # call /update_firebase to update the database
-    flask_url = 'https://amazon-ecom-alarm.onrender.com/update_firebase'
+    print('type of data to be saved: ', type(json_data))
 
-    # Set the headers
-    headers = {'Content-Type': 'application/json'}
-    
-    print('Post request from script.py to update_firebase API')
-    # line spacer
+    print('json_data: ', json_data)
+
+    # Specify the path to your JSON file
+    file_path = 'data.json'
+
+    # Read the JSON data from the file
+    with open(file_path, 'r') as json_file:
+        json_data = json.load(json_file)
+        print('json_data: ', json_data)
+
+    # get the database reference
+    ref = db.reference()
+
+    # Loop through each JSON string in the list and parse it
+    for json_str in json_data:
+
+        # Parse the JSON string into a Python dictionary
+        data = json.loads(json_str)
+
+        # Write the parsed data to the database under a unique key
+        new_ref = ref.push()  # Generates a new unique key
+        new_ref.set(data)
+
+
+    # To read it back from Firebase
+    print('Reading data from Firebase')
+    # spacers
     print('===============================')
-    # make post request to update_firebase API
-    try:
-        # label this request
-        
-        response = requests.post(flask_url, headers=headers, json=json_data)
-        # Check the response status code
-        if response.status_code == 200:
-            print("response:", response.json())
-        else:
-            print(f"Error: Received status code {response.status_code} from the API")
-    except Exception as e:
-        print(f'Error: {e}')
+    # Retrieve the keys (names) of the data
+    data_keys = data.keys()
+    # Print the keys (names) of the data
+    for key in data_keys:
+        print('Data Name:', key) 
 
+    # print(f"Response data has been saved to '{json_filename}'.")
 
     #make POST to set_data API
     # url = 'http://127.0.0.1:5000/set_data'
     url = 'https://amazon-ecom-alarm.onrender.com/set_data'
 
+    # Set the headers
+    headers = {'Content-type': 'application/json'}
 
     # Set the filename for the JSON data
     json_filename = os.path.join(current_dir, 'data.json')
@@ -428,10 +462,10 @@ def main():
     try:
         # label this request
         print('Post request from script.py to set_data API')
-        # line spacer
+          # line spacer
         print('===============================')
         # Make the POST request
-        response = requests.post(url, headers=headers, json=json_data)
+        response = requests.post(url, json=json_data)
         print("response:", response.json())
         # Check the response status code
         if response.status_code == 200: 
@@ -442,36 +476,6 @@ def main():
         print(f'Error: {e}')
         
             
-    # # Specify the path to your JSON file
-    # file_path = 'data.json'
-
-    # # Read the JSON data from the file
-    # with open(file_path, 'r') as json_file:
-    #     json_data = json.load(json_file)
-    #     print('json_data: ', json_data)
-
-    # # Now you can use the 'config_data' in your Firebase reference
-    # ref = db.reference()
-
-    # # Loop through each JSON string in the list and parse it
-    # for json_str in json_data:
-
-    #     # Parse the JSON string into a Python dictionary
-    #     data = json.loads(json_str)
-
-    #     # Write the parsed data to the database under a unique key
-    #     new_ref = ref.push()  # Generates a new unique key
-    #     new_ref.set(data)
-
-
-    # # To read it back from Firebase
-    # # Retrieve the keys (names) of the data
-    # data_keys = data.keys()
-    # # Print the keys (names) of the data
-    # for key in data_keys:
-    #     print('Data Name:', key) 
-
-    # print(f"Response data has been saved to '{json_filename}'.")
         
     # print separator
     print('===============================')

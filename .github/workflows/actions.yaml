@@ -84,13 +84,13 @@ jobs:
           curl -o src/data.json https://amazon-ecom-alarm.onrender.com/get_data
 
 
-      - name: Commit and Push data.json
-        run: |
-          git config --local user.email "jeremy123jeremy@gmail.com"
-          git config --local user.name "jhalzel"
-          git add src/data.json
-          git commit -m "Update data.json"
-          git push origin rainbow-branch
+      # - name: Commit and Push data.json
+      #   run: |
+      #     git config --local user.email "jeremy123jeremy@gmail.com"
+      #     git config --local user.name "jhalzel"
+      #     git add src/data.json
+      #     git commit -m "Update data.json"
+      #     git push origin rainbow-branch
 
       - name: Save data.json to Cache
         run: |

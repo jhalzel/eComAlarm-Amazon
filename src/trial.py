@@ -84,50 +84,6 @@ def get_json_data():
         return jsonify({'message': 'Data not found'}), 404
     
 
-# Route to update the data.json file to firebase database
-@app.route('/update_firebase', methods=['POST'])
-@cross_origin("*", methods=['POST'], headers=['Content-Type'])
-def update_firebase():
-    # Get the JSON data from the request (String format)
-    data = request.json
-
-    # Convert the JSON data to a dictionary
-    loaded_data = json.loads(data)
-
-    # Print the loaded data
-    print(f'Loaded data: {loaded_data}')
-
-    # # convert the data to a string
-    # json_data = json.loads(data)
-
-    # # retrieve the date value from the data
-    # date = data.get('date')[0]
-
-    # # print the date
-    # print('date: ', date)
-
-
-    # # print the data
-    # print('json_data: ', json_data)
-
-    # # open database
-    # ref = db.reference()    
-
-    # # check length of data
-    # if len(data) > 90:
-    #     # remove the oldest entry from the list
-    #     data.pop(0)
-
-    # # loop through the data and update the database
-    # for key, value in data.items():
-    #     ref.update({key: value})
-
-    # # read the data from the database
-    # data = ref.get()
-    
-    # # print the data 
-    # print('data: ', data)
-
         
 # Route to update JSON data (POST)
 @app.route('/set_data', methods=['POST'])
