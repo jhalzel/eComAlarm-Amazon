@@ -10,9 +10,6 @@ import json
 
 app = Flask(__name__)
 
-# Initialize Firebase using default credentials
-cred = credentials.ApplicationDefault()
-
 # Initialize the app with a service account, granting admin privileges
 serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key.json')
 
