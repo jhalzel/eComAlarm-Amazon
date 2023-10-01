@@ -399,8 +399,13 @@ def main():
     # Set the headers
     headers = {'Content-Type': 'application/json'}
     
+    print('Post request from script.py to update_firebase API')
+    # line spacer
+    print('===============================')
     # make post request to update_firebase API
     try:
+        # label this request
+        
         response = requests.post(flask_url, headers=headers, json=json_data)
         # Check the response status code
         if response.status_code == 200:
@@ -421,6 +426,10 @@ def main():
 
     # Make the POST request
     try:
+        # label this request
+        print('Post request from script.py to set_data API')
+        # line spacer
+        print('===============================')
         # Make the POST request
         response = requests.post(url, headers=headers, json=json_data)
         print("response:", response.json())

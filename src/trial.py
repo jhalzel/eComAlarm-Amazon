@@ -14,7 +14,7 @@ app = Flask(__name__)
 cred = credentials.ApplicationDefault()
 
 # Initialize the app with a service account, granting admin privileges
-serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '/etc/secrets/firebase_admin_key')
+serviceAccount_filepath = os.path.join(os.path.dirname(__file__), '../etc/secrets/firebase_admin_key.json')
 
 # Authenticate with admin privileges using a service account
 service_account_cred = credentials.Certificate(serviceAccount_filepath)
@@ -83,50 +83,57 @@ def get_json_data():
     except FileNotFoundError:
         return jsonify({'message': 'Data not found'}), 404
     
+    
 # Route to update the data.json file to firebase database
 @app.route('/update_firebase', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def update_firebase():
-    # get the data from the data variable in script.py
+    # Get the JSON data from the request (String format)
     data = request.json
 
-    # convert the data to a string
-    json_data = json.loads(data)
+    # Convert the JSON data to a dictionary
+    loaded_data = json.loads(data)
 
-    # retrieve the date value from the data
-    date = data.get('date')[0]
+    # Print the loaded data
+    print(f'Loaded data: {loaded_data}')
 
-    # print the date
-    print('date: ', date)
+    # # convert the data to a string
+    # json_data = json.loads(data)
+
+    # # retrieve the date value from the data
+    # date = data.get('date')[0]
+
+    # # print the date
+    # print('date: ', date)
 
 
-    # print the data
-    print('json_data: ', json_data)
+    # # print the data
+    # print('json_data: ', json_data)
 
-    # open database
-    ref = db.reference()    
+    # # open database
+    # ref = db.reference()    
 
-    # check length of data
-    if len(data) > 90:
-        # remove the oldest entry from the list
-        data.pop(0)
+    # # check length of data
+    # if len(data) > 90:
+    #     # remove the oldest entry from the list
+    #     data.pop(0)
 
-    # loop through the data and update the database
-    for key, value in data.items():
-        ref.update({key: value})
+    # # loop through the data and update the database
+    # for key, value in data.items():
+    #     ref.update({key: value})
 
-    # read the data from the database
-    data = ref.get()
+    # # read the data from the database
+    # data = ref.get()
     
-    # print the data 
-    print('data: ', data)
+    # # print the data 
+    # print('data: ', data)
 
         
 # Route to update JSON data (POST)
 @app.route('/set_data', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])
 def set_data():
-     # Get the path to the JSON file
+    # Get the path to the JSON file
     json_filename = os.path.join(cur_dir, 'data.json')
 
     # Get the JSON data from the request (String format)
