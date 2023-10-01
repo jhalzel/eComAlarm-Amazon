@@ -93,14 +93,27 @@ def update_firebase():
     # convert the data to a string
     json_data = json.dumps(data)
 
+    # retrieve the date value from the data
+    date = data.get('date')[0]
+
+    # print the date
+    print('date: ', date)
+    
+
     # print the data
     print('json_data: ', json_data)
 
     # open database
-    ref = db.reference()
+    ref = db.reference()    
 
-    # update data
-    ref.update({'data': json_data})
+    # check length of data
+    if len(data) > 90:
+        # remove the oldest entry from the list
+        data.pop(0)
+
+    # loop through the data and update the database
+    for key, value in data.items():
+        ref.update({key: value})
 
     # read the data from the database
     data = ref.get()
