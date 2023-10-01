@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, send_file
 from flask_cors import CORS, cross_origin
-from script import main
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
@@ -22,6 +21,10 @@ service_account_cred = credentials.Certificate(serviceAccount_filepath)
 firebase_admin.initialize_app(service_account_cred, {
     'databaseURL': 'https://notifier-6d1a0-default-rtdb.firebaseio.com'
 })
+
+# Store the Firebase app instance in the Flask app's configuration
+firebase_config = app.config['firebase_app'] = firebase_admin.get_app()
+
 
 # Enable CORS for all routes
 CORS(app, origins=["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])

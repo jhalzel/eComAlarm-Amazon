@@ -20,6 +20,7 @@ from flask import current_app as app
 
 # Firebase Setup
 from firebase_admin import db
+from trial import firebase_config
 
 # Communication and Notification 
 from sms import send_sms_via_email 
@@ -31,7 +32,8 @@ import pytz
 import json 
 
 
-firebase_app = app.config.get_current_object()
+# call reference to firebase config in trial.py
+firebase_config
 
 
 # Function to calculate total sales and price of each asin
