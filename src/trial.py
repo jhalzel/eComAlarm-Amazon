@@ -98,7 +98,7 @@ def update_firebase():
 
     # print the date
     print('date: ', date)
-    
+
 
     # print the data
     print('json_data: ', json_data)
@@ -122,8 +122,6 @@ def update_firebase():
     print('data: ', data)
 
         
-
-    
 # Route to update JSON data (POST)
 @app.route('/set_data', methods=['POST'])
 @cross_origin("*", methods=['POST'], headers=['Content-Type'])

@@ -423,6 +423,7 @@ def main():
     try:
         # Make the POST request
         response = requests.post(url, headers=headers, json=json_data)
+        print("response:", response.json())
         # Check the response status code
         if response.status_code == 200: 
             print("response:", response.json())
