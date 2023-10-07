@@ -8,6 +8,8 @@ function App() {
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [last_updated, setLast_updated] = useState(null);
+  const [firebase_array, setFirebase_array] = useState([]);
+
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
   // const apiUrl = 'http://127.0.0.1:5000/';
@@ -59,46 +61,92 @@ const handleClick = () => {
   setFbm_threshold(temp_threshold);
 };
 
+// Function to handle the 'edit' button click
 const handleEdit = () => {
   // Update the value of the text box when the button is clicked
   setFbm_threshold(null);
 };
 
+
+// useEffect(() => {
+//   // Function to fetch the data from the API
+//   const fetchData = async () => {
+//       axios.get(`${apiUrl}/get_data`)
+//           .then((response) => {
+//               // Parse the JSON data
+//               const rawData = response.data.map(JSON.parse);
+
+//               // Log the raw data to the console
+//               console.log(rawData);
+              
+//               // Initialize an empty array to store the formatted data
+//               const formattedData = [];
+                
+//               // Set the last_updated state to the last updated value in the data
+//               setLast_updated(rawData[rawData.length - 1].last_updated);
+
+//               // Set the newest data point to the last data point in the array
+//               var newest_dataPoint = rawData[rawData.length - 1];
+
+//               // Create a new object for each data point
+//               const dataPoint = {
+//                   total_sales: newest_dataPoint.total_sales[0],
+//                   fba_sales: newest_dataPoint.fba_sales[0],
+//                   fbm_sales: newest_dataPoint.fbm_sales[0],
+//                   total_order_count: newest_dataPoint.total_order_count[0],
+//                   order_pending_count: newest_dataPoint.order_pending_count[0],
+//                   shipped_order_count: newest_dataPoint.shipped_order_count[0],
+//                   fba_pending_sales: newest_dataPoint.fba_pending_sales[0],
+//                   fbm_pending_sales: newest_dataPoint.fbm_pending_sales[0],
+//                   date: last_updated
+//               };
+
+//               // Push the data point into the formattedData array
+//               formattedData.push(dataPoint);
+          
+//           setData(formattedData);
+//           })
+
+//           .catch((err) => {
+//               console.log(err);
+//           });  
+//       };
+  
+//   fetchData(); // Initial fetch
+
+//   const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
+
+//   return () => clearInterval(interval); // Cleanup function to clear the interval
+
+// }, []);
+
 useEffect(() => {
   // Function to fetch the data from the API
   const fetchData = async () => {
-      axios.get(`${apiUrl}/get_data`)
+      axios.get(`${apiUrl}/get_firebase_data`)
           .then((response) => {
               // Parse the JSON data
-              const rawData = response.data.map(JSON.parse);
-
-              // Log the raw data to the console
-              console.log(rawData);
+              const rawData = response.data
               
               // Initialize an empty array to store the formatted data
               const formattedData = [];
-                
-              // Set the last_updated state to the last updated value in the data
-              setLast_updated(rawData[rawData.length - 1].last_updated);
 
-              // Set the newest data point to the last data point in the array
-              var newest_dataPoint = rawData[rawData.length - 1];
-
-              // Create a new object for each data point
-              const dataPoint = {
-                  total_sales: newest_dataPoint.total_sales[0],
-                  fba_sales: newest_dataPoint.fba_sales[0],
-                  fbm_sales: newest_dataPoint.fbm_sales[0],
-                  total_order_count: newest_dataPoint.total_order_count[0],
-                  order_pending_count: newest_dataPoint.order_pending_count[0],
-                  shipped_order_count: newest_dataPoint.shipped_order_count[0],
-                  fba_pending_sales: newest_dataPoint.fba_pending_sales[0],
-                  fbm_pending_sales: newest_dataPoint.fbm_pending_sales[0],
-                  date: last_updated
-              };
-
+              var dataPoint = {};
+              var count = 0;
+              Object.keys(rawData).forEach(key => {
+                // Create a new object for each data point
+                dataPoint = rawData[key];
+                count++;
+                // Print the data point to the console
+                console.log('dataPoint: ', dataPoint);
+              });
+              // print the count
+              console.log('count: ', count);
               // Push the data point into the formattedData array
-              formattedData.push(dataPoint);
+              formattedData.push(dataPoint)
+              console.log(
+                "formattedData: ", formattedData,
+              );
           
           setData(formattedData);
           })
@@ -126,10 +174,12 @@ useEffect(() => {
           </a>
       </header>
 
-      <subheader>
+      <div>
+
         <p>Revenue data of the last 12 hour period on Amazon:</p>
-      </subheader>
-    
+
+      </div>
+
       <div>
         <h4 className='status-update'>Last Updated: {data ? last_updated : 'N/A'}</h4>
       </div>
@@ -221,6 +271,17 @@ useEffect(() => {
     <section>
       <div className="chart">
         <Chart threshold={fbm_threshold} />
+      </div>
+    </section>
+
+    <section>
+      <div className="chart">
+        <div>FIREBASE ARRAY</div>
+        <section>
+          <div className="chart">
+            <div>{}</div>
+        </div>  
+        </section>
       </div>
     </section>
   </div>

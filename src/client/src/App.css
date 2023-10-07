@@ -35,6 +35,8 @@ body::-webkit-scrollbar {
 header {
   background-color: #282c34;
   display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 17vh;
@@ -52,6 +54,12 @@ header h6 {
 header h6:hover {
   color: #61dafb;
   position: relative; /* Ensure relative positioning for the tooltip */
+}
+
+header p {
+  padding: 0%;
+  margin: 0%;
+  color: #61dafb;
 }
 
 

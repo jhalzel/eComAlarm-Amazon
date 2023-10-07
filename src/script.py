@@ -405,29 +405,69 @@ def main():
     print('type of data to be saved: ', type(json_data))
 
     print('json_data: ', json_data)
-
-    # Specify the path to your JSON file
-    file_path = os.path.join(current_dir, 'data.json')
-
-    # Read the JSON data from the file
-    with open(file_path, 'r') as json_file:
-        json_data = json.load(json_file)
-        print('json_data: ', json_data)
+    
+    cur_date = data['date']
+    print('cur_date: ', cur_date)
 
     # create a reference to the database
     ref = db.reference()
 
-    print("reference to database: ", ref)
+    # print("reference to database: ", ref)
 
-    # Loop through each JSON string in the list and parse it
-    for json_str in json_data:
+    # Make an array of the existing data in the Firebase database
+    firebase_db = ref.get()
+    
+    # if existing data is not None
+    if firebase_db is not None:
+        existing_data = [d for d in  firebase_db.values()]
+        print('existing_data: ', existing_data)
 
-        # Parse the JSON string into a Python dictionary
-        data = json.loads(json_str)
+        
+        # Loop through each JSON string in the list and parse it
+        for object in existing_data:
+            # Parse the JSON string into a Python dictionary
+            print("Type of data is: ", type(object))
+            print("object: ", object)
 
-        # Write the parsed data to the database under a unique key
-        new_ref = ref.push()  # Generates a new unique key
-        new_ref.set(data)
+            for key, value in object.items():
+                if key == 'date':
+                    print(f'{key}: {value}')
+                    print(type(value[0]))
+                    if value[0] == cur_date:
+                        print('date matches')
+                        # update the data
+                        ref.update(object)
+            # spacers
+            print('===============================')
+
+    else:
+        # append the data from the data.json file
+            # Specify the path to your JSON file
+        file_path = os.path.join(current_dir, 'data.json')
+
+        # Read the JSON data from the file
+        with open(file_path, 'r') as json_file:
+            json_data = json.load(json_file)
+            print('json_data: ', json_data)
+
+        for item in json_data:
+            item = json.loads(item)
+            print('item: ', item)
+            
+            # append the data to the database
+            ref.push(item)    
+            
+     
+    dates = [d['date'] for d in existing_data]
+    print('dates: ', dates)
+
+    if cur_date not in dates:
+        # append json_data to firebase
+        ref.push(data)
+              
+        # # Write the parsed data to the database under a unique key
+        # new_ref = ref.push()  # Generates a new unique key
+        # new_ref.set(data)
 
 
     # To read it back from Firebase
@@ -469,13 +509,12 @@ def main():
     except Exception as e:
         print(f'Error: {e}')
         
-            
         
     # print separator
     print('===============================')
     print(f'threshold: {threshold}')
 
-    threshold = float(threshold)
+    threshold = float(round(threshold, 2))
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
     check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)

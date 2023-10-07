@@ -4,19 +4,27 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 from flask import request
+from dotenv import load_dotenv
+import base64
 import os
 import json
 
 app = Flask(__name__)
 
+# get the .env file path
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+
+# load the .env file
+load_dotenv(dotenv_path)
+
 # Initialize Firebase using default credentials
 cred = credentials.ApplicationDefault()
 
 # Get the JSON string from the environment variable
-firebase_admin_key_json = os.environ.get('FIREBASE_ADMIN_KEY')
+firebase_admin_key_json = os.getenv('FIREBASE_ADMIN_KEY')
 
-# Parse the JSON string to create a dictionary
-firebase_admin_key_dict = json.loads(firebase_admin_key_json)
+# Parse the JSON string into a dictionary
+firebase_admin_key_dict = json.loads(base64.b64decode(firebase_admin_key_json).decode('utf-8'))
 
 # Initialize Firebase with the parsed dictionary
 service_account_cred = credentials.Certificate(firebase_admin_key_dict)
@@ -157,49 +165,61 @@ def set_data():
 def get_firebase_data():
     # Get a database reference to our blog.
     ref = db.reference()
-
+    
     # Read the data at the posts reference (this is a blocking operation)
     data = ref.get()
 
     return jsonify(data)
 
+# Route to delete the data from the firebase database (DELETE)
+@app.route('/delete_firebase_data', methods=['DELETE'])
+@cross_origin("*", methods=['DELETE'], headers=['Content-Type'])
+def delete_firebase_data():
+    # Get a database reference to our blog.
+    ref = db.reference()
+
+    for child in ref.get().values():
+        ref.child(child).delete()
+        
+    return jsonify({'message': 'Data deleted successfully'})
 
 
-# Members API Route
-@app.route('/members', methods=['GET'])
-@cross_origin("*", methods=['GET'], headers=['Content-Type'])
-def members():
-    status = main()  # Call the main function to execute the code
+
+# # Members API Route
+# @app.route('/members', methods=['GET'])
+# @cross_origin("*", methods=['GET'], headers=['Content-Type'])
+# def members():
+#     status = main()  # Call the main function to execute the code
     
-    # get the fbm_threshold value from the config.json file
-    try:
-        with open(config_filename, 'r') as file:
-            config = json.load(file)
-            fbm_threshold = config['fbm_threshold']
-            print('fbm_threshold: ', fbm_threshold)
-    except FileNotFoundError:
-        fbm_threshold = None
+#     # get the fbm_threshold value from the config.json file
+#     try:
+#         with open(config_filename, 'r') as file:
+#             config = json.load(file)
+#             fbm_threshold = config['fbm_threshold']
+#             print('fbm_threshold: ', fbm_threshold)
+#     except FileNotFoundError:
+#         fbm_threshold = None
 
-    fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
-    fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary
-    total_sales = status['total_sales']  # Extract the total sales value from the dictionary
-    fba_sales = status['fba_sales']  # Extract the total FBA sales value from the dictionary
-    fbm_sales = status['fbm_sales']  # Extract the total FBM sales value from the dictionary
-    order_pending_count = status['order_pending_count']  # Extract the order pending count value from the dictionary
-    shipped_order_count = status['shipped_order_count']  # Extract the shipped order count value from the dictionary
-    total_order_count = status['total_order_count']  # Extract the order count value from the dictionary
-    last_updated = status['last_updated']  # Extract the last updated timestamp value from the dictionary
-    return jsonify({'fba_sales': fba_sales, 
-                    'fbm_sales': fbm_sales, 
-                    'total_order_count': total_order_count, 
-                    'order_pending_count': order_pending_count, 
-                    'last_updated': last_updated, 
-                    'shipped_order_count': shipped_order_count, 
-                    'total_sales': round(total_sales, 2),
-                    'fba_pending_sales': fba_pending_sales,
-                    'fbm_pending_sales': fbm_pending_sales,
-                    'fbm_threshold': fbm_threshold
-                    })
+#     fba_pending_sales = status['fba_pending_sales']  # Extract the total FBA pending sales value from the dictionary
+#     fbm_pending_sales = status['fbm_pending_sales']  # Extract the total FBM pending sales value from the dictionary
+#     total_sales = status['total_sales']  # Extract the total sales value from the dictionary
+#     fba_sales = status['fba_sales']  # Extract the total FBA sales value from the dictionary
+#     fbm_sales = status['fbm_sales']  # Extract the total FBM sales value from the dictionary
+#     order_pending_count = status['order_pending_count']  # Extract the order pending count value from the dictionary
+#     shipped_order_count = status['shipped_order_count']  # Extract the shipped order count value from the dictionary
+#     total_order_count = status['total_order_count']  # Extract the order count value from the dictionary
+#     last_updated = status['last_updated']  # Extract the last updated timestamp value from the dictionary
+#     return jsonify({'fba_sales': fba_sales, 
+#                     'fbm_sales': fbm_sales, 
+#                     'total_order_count': total_order_count, 
+#                     'order_pending_count': order_pending_count, 
+#                     'last_updated': last_updated, 
+#                     'shipped_order_count': shipped_order_count, 
+#                     'total_sales': round(total_sales, 2),
+#                     'fba_pending_sales': fba_pending_sales,
+#                     'fbm_pending_sales': fbm_pending_sales,
+#                     'fbm_threshold': fbm_threshold
+#                     })
 
 if __name__ == '__main__':
     app.run(debug=True)
