@@ -6,8 +6,6 @@ import '../App.css'
 
 export const Chart = ({threshold}) => {
     const [json_data, setJson_data] = useState([]);
-    const [originalData, setOriginalData] = useState([]);
-    const [legendLabels, setLegendLabels] = useState({});
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
     // const apiUrl = 'http://127.0.0.1:5000/';
@@ -109,9 +107,8 @@ export const Chart = ({threshold}) => {
                         console.log('formattedData: ', formattedData)
                     });
 
-                // Set both json_data and originalData
+                // Set json_data
                 setJson_data(formattedData);
-                setOriginalData(formattedData);
 
                 })
                 .catch((err) => {
