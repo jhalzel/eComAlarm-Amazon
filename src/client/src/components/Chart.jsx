@@ -7,12 +7,17 @@ import '../App.css'
 export const Chart = ({threshold}) => {
     const [json_data, setJson_data] = useState([]);
     const [originalData, setOriginalData] = useState([]);
+    const [legendLabels, setLegendLabels] = useState({});
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
     // const apiUrl = 'http://127.0.0.1:5000/';
 
 
     const filter_dates = (e, data) => {
+        // print e and data to console
+        console.log('e: ', e);
+        console.log('data: ', data);
+
         // Get current date
         const today = new Date();
 
@@ -74,31 +79,34 @@ export const Chart = ({threshold}) => {
     useEffect(() => {
         // Function to fetch the data from the API
         const fetchData = async () => {
-            axios.get(`${apiUrl}/get_data`)
+            axios.get(`${apiUrl}/get_firebase_data`)
                 .then((response) => {
+                    console.log("response: ", response.data)
                     // Parse the JSON data
-                    const rawData = response.data.map(JSON.parse);
-                    // console.log(rawData);
+                    const rawData = response.data;
+                    
+                    console.log(rawData);
                     // Initialize an empty array to store the formatted data
                     const formattedData = [];
 
                     // Loop through the rawData
-                    rawData.forEach(item => {
-                        // Create a new object for each data point
+                    Object.keys(rawData).forEach((key) => {
                         const dataPoint = {
-                        fba_sales: item.fba_sales[0],
-                        fbm_sales: item.fbm_sales[0],
-                        total_order_count: item.total_order_count[0],
-                        order_pending_count: item.order_pending_count[0],
-                        shipped_order_count: item.shipped_order_count[0],
-                        fba_pending_sales: item.fba_pending_sales[0],
-                        fbm_pending_sales: item.fbm_pending_sales[0],
-                        threshold: threshold, // Set the threshold value
-                        date: item.date
-                        };
+                            date: rawData[key].date,
+                            fba_sales: [rawData[key].fba_sales],
+                            fbm_sales: [rawData[key].fbm_sales],
+                            fba_pending_sales: [rawData[key].fba_pending_sales],
+                            total_order_count: [rawData[key].total_order_count],
+                            order_pending_count: [rawData[key].order_pending_count],
+                            shipped_order_count: [rawData[key].shipped_order_count],
+                            threshold: [rawData[key].threshold]
+                        };      
+
+                        console.log('dataPoint: ', dataPoint)
 
                         // Push the data point into the formattedData array
                         formattedData.push(dataPoint);
+                        console.log('formattedData: ', formattedData)
                     });
 
                 // Set both json_data and originalData
@@ -118,17 +126,19 @@ export const Chart = ({threshold}) => {
         return () => clearInterval(interval); // Cleanup function to clear the interval
 
     }, []);
-      
+
+
 
     return (
         <>
         <div className='options-section'>
         <h3>Chart View:</h3>
-        <select className='chart-button' onChange={e => filter_dates(e, originalData)}>
+        <select className='chart-button' onChange={e => filter_dates(e, json_data)}>
             <option value="Weekly View">Choose Range</option>
             <option value="Weekly View">Weekly View</option>
             <option value="Monthly View">Monthly View</option>
             <option value="90 Day View">90 Day View</option>
+            {/* default to weekly */}
         </select>
         </div>
        
@@ -137,13 +147,14 @@ export const Chart = ({threshold}) => {
             <div className='chart-container'>
             <h1>Sales Data</h1>
             <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={json_data}>
+                <LineChart data={json_data}> 
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis dataKey="date"  tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                     <YAxis tick={{ fontSize: 15, fill:'#61dafb' }} tickFormatter={(value) => `$${value}`} />
-                    <Tooltip contentStyle={{ backgroundColor: '#282c34' }}/>
-                    <Legend  />
-                    <Line type="monotone" dataKey="fba_sales" stroke="#8884d8" />
+                    <Tooltip contentStyle={{ backgroundColor: '#282c34' }} formatter={(value, name) => [value, `${name}`]}/>
+                    <Legend />
+      
+                    <Line type="monotone"  dataKey="fba_sales" stroke="#8884d8" />
                     <Line type="monotone" dataKey="fbm_sales" stroke="#82ca9d" />
                     <Line type="monotone" dataKey="fba_pending_sales" stroke="#065535" />
                     <Line
@@ -163,7 +174,7 @@ export const Chart = ({threshold}) => {
                 {/* <CartesianGrid strokeDasharray="3 3" /> */}
                 <XAxis dataKey="date" tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                 <YAxis  tick={{ fontSize: 15, fill:'#61dafb' }} />
-                <Tooltip contentStyle={{ backgroundColor: '#282c34' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#282c34' }} formatter={(value, name) => [value, `${name}`]}/>
                 <Legend />
                 <Bar dataKey="total_order_count" stackId="b" fill="#ffc658" />
                 <Bar dataKey="order_pending_count" stackId="b" fill="#ffe4e1" />
