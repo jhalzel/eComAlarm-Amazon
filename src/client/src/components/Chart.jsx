@@ -6,15 +6,15 @@ import '../App.css'
 
 export const Chart = ({threshold}) => {
     const [json_data, setJson_data] = useState([]);
+    const [original_data, setOriginal_data] = useState([]);
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
     // const apiUrl = 'http://127.0.0.1:5000/';
 
 
     const filter_dates = (e, data) => {
-        // print e and data to console
-        console.log('e: ', e);
-        console.log('data: ', data);
+        console.log(e.target.value);
+        // Set the selectedView state
 
         // Get current date
         const today = new Date();
@@ -26,12 +26,11 @@ export const Chart = ({threshold}) => {
         // Get the last 90 days
         const last90Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 90);
 
-        console.log('event: ', e.target.innerText);
+        console.log("event-value: ", e.target.value);   
 
          // Create a variable to store the filtered data
         let filteredData = [];
 
-        console.log('data: ', data);
         // case and switch statement to filter data based on button clicked
         switch (e.target.value) {
             case 'Weekly View':
@@ -63,7 +62,7 @@ export const Chart = ({threshold}) => {
                 // Filter data to only show the last 7 days
                 filteredData = data.filter((item) => {
                     const itemDate = new Date(item.date);
-                    return itemDate >= last7Days;
+                    return itemDate >= last90Days;
                 });
         }
         
@@ -71,8 +70,6 @@ export const Chart = ({threshold}) => {
         setJson_data(filteredData);
     };
 
- 
-      
 
     useEffect(() => {
         // Function to fetch the data from the API
@@ -109,6 +106,7 @@ export const Chart = ({threshold}) => {
 
                 // Set json_data
                 setJson_data(formattedData);
+                setOriginal_data(formattedData);
 
                 })
                 .catch((err) => {
@@ -130,8 +128,8 @@ export const Chart = ({threshold}) => {
         <>
         <div className='options-section'>
         <h3>Chart View:</h3>
-        <select className='chart-button' onChange={e => filter_dates(e, json_data)}>
-            <option value="Weekly View">Choose Range</option>
+        <select className='chart-button' onChangeCapture={e => filter_dates(e, original_data)}>
+            <option value="default" selected>Choose Range</option>
             <option value="Weekly View">Weekly View</option>
             <option value="Monthly View">Monthly View</option>
             <option value="90 Day View">90 Day View</option>
