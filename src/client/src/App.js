@@ -7,8 +7,7 @@ function App() {
   const [data, setData] = useState(null);
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
-  const [last_updated, setLast_updated] = useState(null);
-  const [firebase_array, setFirebase_array] = useState([]);
+  const [last_updated, setLast_updated] = useState("");
 
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
@@ -120,6 +119,26 @@ const handleEdit = () => {
 
 // }, []);
 
+const retrieveLastUpdated = () => {
+  axios.get(`${apiUrl}/get_firebase_data`)
+  .then((response) => {
+    // Parse the Object  
+    const keys = Object.keys(response.data);
+    // Get the last key in the object
+    const lastKey = keys[keys.length - 1];
+    // Get the value of the last key in the object
+    const lastValue = response.data[lastKey];
+    // Get the last updated date's value
+    const last_updated = lastValue.last_updated[0];
+    // Set the last_updated state to the last updated value in the data
+    setLast_updated(last_updated);
+  })
+
+  .catch((err) => {
+      console.log(err);
+  });  
+}
+
 useEffect(() => {
   // Function to fetch the data from the API
   const fetchData = async () => {
@@ -147,14 +166,19 @@ useEffect(() => {
           setData(formattedData);
                 
           // Get the last value in data array
-          var last = data[data.length - 1];          
-          setLast_updated(last.last_updated[0]);  
-          })
+          // var last = data[data.length - 1];          
+          // setLast_updated(last.last_updated[0]);  
 
-          .catch((err) => {
-              console.log(err);
-          });  
+          
+        })
+        
+        .catch((err) => {
+          console.log(err);
+        });  
       };
+      
+  // call function to retrieve last updated value
+  retrieveLastUpdated();
   
   fetchData(); // Initial fetch
 
