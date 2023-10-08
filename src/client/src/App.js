@@ -298,16 +298,6 @@ useEffect(() => {
       </div>
     </section>
 
-    <section>
-      <div className="chart">
-        <div>FIREBASE ARRAY</div>
-        <section>
-          <div className="chart">
-            <div>{}</div>
-        </div>  
-        </section>
-      </div>
-    </section>
   </div>
   );
 }
