@@ -128,20 +128,16 @@ useEffect(() => {
               // Parse the JSON data
               const rawData = response.data
               
-              // Initialize an empty array to store the formatted data
+            // Initialize an empty array to store the formatted data
               const formattedData = [];
 
               var dataPoint = {};
-              var count = 0;
               Object.keys(rawData).forEach(key => {
                 // Create a new object for each data point
                 dataPoint = rawData[key];
-                count++;
                 // Print the data point to the console
                 console.log('dataPoint: ', dataPoint);
               });
-              // print the count
-              console.log('count: ', count);
               // Push the data point into the formattedData array
               formattedData.push(dataPoint)
               console.log(
@@ -149,6 +145,10 @@ useEffect(() => {
               );
           
           setData(formattedData);
+                
+          // Get the last value in data array
+          var last = data[data.length - 1];          
+          setLast_updated(last.last_updated[0]);  
           })
 
           .catch((err) => {
