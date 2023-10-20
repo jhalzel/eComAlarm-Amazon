@@ -55,18 +55,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r src/requirements.txt
           
-      - name: Access Deployed Flask App
-        run: |
-          # Send an HTTP request to your deployed Flask app.
-          response=$(curl -s -o /dev/null -w "%{http_code}" https://amazon-ecom-alarm.onrender.com)
+      # - name: Access Deployed Flask App
+      #   run: |
+      #     # Send an HTTP request to your deployed Flask app.
+      #     response=$(curl -s -o /dev/null -w "%{http_code}" https://amazon-ecom-alarm.onrender.com)
 
-          # Check the response code.
-          if [ "$response" == "200" ]; then
-            echo "Flask App is accessible."
-          else
-            echo "Flask App is not accessible. Response code: $response"
-            exit 1
-          fi     
+      #     # Check the response code.
+      #     if [ "$response" == "200" ]; then
+      #       echo "Flask App is accessible."
+      #     else
+      #       echo "Flask App is not accessible. Response code: $response"
+      #       exit 1
+      #     fi     
           
       - name: execute py script # run main.py
         id: execute_script
@@ -86,10 +86,10 @@ jobs:
           # Firebase credentials
           FIREBASE_ADMIN_KEY: ${{ secrets.FIREBASE_ADMIN_KEY }}
 
-      - name: Fetch updated data.json from server
-        run: |
-          # Replacing the local file with the file on the server where data.json is updated
-          curl -o src/data.json https://amazon-ecom-alarm.onrender.com/get_data
+      # - name: Fetch updated data.json from server
+      #   run: |
+      #     # Replacing the local file with the file on the server where data.json is updated
+      #     curl -o src/data.json https://amazon-ecom-alarm.onrender.com/get_data
 
 
       # - name: Commit and Push data.json
@@ -100,15 +100,15 @@ jobs:
       #     git commit -m "Update data.json"
       #     git push origin rainbow-branch
 
-      - name: Save data.json to Cache
-        run: |
-          cp src/data.json ${{ runner.workspace }}/data.json
+      # - name: Save data.json to Cache
+      #   run: |
+      #     cp src/data.json ${{ runner.workspace }}/data.json
         
       # Cache the 'data.json' file across workflow runs
-      - name: Cache data.json
-        uses: actions/cache@v2
-        with:
-          path: ${{ runner.workspace }}/data.json
-          key: data-json-${{ runner.os }}
+      # - name: Cache data.json
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ${{ runner.workspace }}/data.json
+      #     key: data-json-${{ runner.os }}
 
           
