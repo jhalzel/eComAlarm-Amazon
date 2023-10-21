@@ -16,6 +16,11 @@ function App() {
 
 // Function to Post the data to the API
 const setThreshold = async (newThreshold) => {
+  localStorage.setItem('fbm_threshold', newThreshold);
+  //  print the data and type of data we are sending
+  console.log("newThreshold", newThreshold);
+  console.log(typeof newThreshold);
+  
   try {
     const response = await fetch(`${apiUrl}/set_firebase_data`, {
       method: 'POST',
@@ -24,7 +29,7 @@ const setThreshold = async (newThreshold) => {
         'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({ fbm_threshold: newThreshold }),
-      mode: 'no-cors',
+      // mode: 'no-cors',
     });
 
     if (response.ok) {
