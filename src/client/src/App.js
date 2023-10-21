@@ -14,40 +14,21 @@ function App() {
   // const apiUrl = 'http://127.0.0.1:5000/';
 
 
-// Function to Post the data to the API
-const setThreshold = async (newThreshold) => {
-  localStorage.setItem('fbm_threshold', newThreshold);
-  //  print the data and type of data we are sending
-  console.log("newThreshold", newThreshold);
-  console.log(typeof newThreshold);
-  
-  try {
-    const response = await fetch(`${apiUrl}/set_firebase_data`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({ fbm_threshold: newThreshold }),
-      // mode: 'no-cors',
-    });
-
-    if (response.ok) {
-      console.log("newThreshold", newThreshold);
+const updateFirebaseThreshold = (newThreshold) => {
+  axios.post(`${apiUrl}/set_firebase_data`, { fbm_threshold: newThreshold })
+    .then((response) => {
+      // Handle the response if needed
       console.log('Threshold updated successfully');
-    } else {
-      console.error('Failed to update threshold. Response status:', response.status);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};  
-
+    })
+    .catch((error) => {
+      // Handle errors
+      console.error('Failed to update threshold:', error);
+    });
+};
 
 // Function to handle changes in the input field
  const handleThresholdChange = (e) => {
   setTemp_threshold(e.target.value);
-  setThreshold(e.target.value);
 };
 
 // Function to handle the "Enter" key press
@@ -55,15 +36,15 @@ const handleKeyPress = (e) => {
   if (e.key === 'Enter') {
     // Update the value of the text box when "Enter" key is pressed
     setFbm_threshold(e.target.value);
-    setThreshold(e.target.value)
+    updateFirebaseThreshold(e.target.value); // Call the function to update the Firebase database
   }
 };
-
 
 // Function to handle the button click
 const handleClick = () => {
   // Update the value of the text box when the button is clicked
   setFbm_threshold(temp_threshold);
+  updateFirebaseThreshold(temp_threshold); // Call the function to update the Firebase database
 };
 
 // Function to handle the 'edit' button click
@@ -72,58 +53,6 @@ const handleEdit = () => {
   setFbm_threshold(null);
 };
 
-
-// useEffect(() => {
-//   // Function to fetch the data from the API
-//   const fetchData = async () => {
-//       axios.get(`${apiUrl}/get_data`)
-//           .then((response) => {
-//               // Parse the JSON data
-//               const rawData = response.data.map(JSON.parse);
-
-//               // Log the raw data to the console
-//               console.log(rawData);
-              
-//               // Initialize an empty array to store the formatted data
-//               const formattedData = [];
-                
-//               // Set the last_updated state to the last updated value in the data
-//               setLast_updated(rawData[rawData.length - 1].last_updated);
-
-//               // Set the newest data point to the last data point in the array
-//               var newest_dataPoint = rawData[rawData.length - 1];
-
-//               // Create a new object for each data point
-//               const dataPoint = {
-//                   total_sales: newest_dataPoint.total_sales[0],
-//                   fba_sales: newest_dataPoint.fba_sales[0],
-//                   fbm_sales: newest_dataPoint.fbm_sales[0],
-//                   total_order_count: newest_dataPoint.total_order_count[0],
-//                   order_pending_count: newest_dataPoint.order_pending_count[0],
-//                   shipped_order_count: newest_dataPoint.shipped_order_count[0],
-//                   fba_pending_sales: newest_dataPoint.fba_pending_sales[0],
-//                   fbm_pending_sales: newest_dataPoint.fbm_pending_sales[0],
-//                   date: last_updated
-//               };
-
-//               // Push the data point into the formattedData array
-//               formattedData.push(dataPoint);
-          
-//           setData(formattedData);
-//           })
-
-//           .catch((err) => {
-//               console.log(err);
-//           });  
-//       };
-  
-//   fetchData(); // Initial fetch
-
-//   const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
-
-//   return () => clearInterval(interval); // Cleanup function to clear the interval
-
-// }, []);
 
 const retrieveLastUpdated = () => {
   axios.get(`${apiUrl}/get_firebase_data`)
@@ -144,6 +73,8 @@ const retrieveLastUpdated = () => {
       console.log(err);
   });  
 }
+
+
 
 useEffect(() => {
   // Function to fetch the data from the API
