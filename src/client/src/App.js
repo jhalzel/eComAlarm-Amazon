@@ -21,6 +21,7 @@ const setThreshold = async (newThreshold) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({ fbm_threshold: newThreshold }),
     });

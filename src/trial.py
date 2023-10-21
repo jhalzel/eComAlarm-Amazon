@@ -136,6 +136,9 @@ def set_firebase_data():
 
     print(f'Last entry: {last_entry}')
 
+    return jsonify({'message': 'Data updated successfully'})
+
+
     # # update the last entries threshold value
     # last_entry['fbm_threshold'] = ref.update({'fbm_threshold': new_threshold})
 
