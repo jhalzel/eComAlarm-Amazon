@@ -16,3 +16,8 @@
 
   # Default build command.
   command = "CI=false npm run build"
+
+  [[headers]]
+   for = "/*"
+   [headers.values]
+      Access-Control-Allow-Origin = "*"
