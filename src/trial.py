@@ -118,8 +118,12 @@ def get_firebase_data():
 @app.route('/set_firebase_data', methods=['POST'])
 @cross_origin("https://ecom-alarm.netlify.app", methods=['POST'])
 def set_firebase_data():
+    print(f'Request JSON: {request.json}')
+
     # Get new threshold
     new_threshold = request.json.get('fbm_threshold')
+
+    print(f'New threshold: {new_threshold}')
 
     if new_threshold is None:
         return jsonify({'error': 'fbm_threshold not found'}), 400
@@ -129,15 +133,18 @@ def set_firebase_data():
     # Get a database reference
     ref = db.reference()
 
-    # Convert the JSON data to a dictionary
-    loaded_data = ref.get()
+    # check what ref is
+    print(f'ref: {ref}')
 
-    # Get the last entry from the list
-    last_entry = loaded_data[-1]
+    # # Convert the JSON data to a dictionary
+    # loaded_data = ref.get()
 
-    print(f'Last entry: {last_entry}')
+    # # Get the last entry from the list
+    # last_entry = loaded_data[-1]
 
-    return jsonify({'message': 'Data updated successfully'})
+    # print(f'Last entry: {last_entry}')
+
+    # return jsonify({'message': 'Data updated successfully'})
 
 
     # # update the last entries threshold value
