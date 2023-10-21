@@ -24,6 +24,7 @@ const setThreshold = async (newThreshold) => {
         'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({ fbm_threshold: newThreshold }),
+      mode: 'no-cors',
     });
 
     if (response.ok) {
