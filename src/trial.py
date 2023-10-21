@@ -123,6 +123,10 @@ def set_firebase_data():
 
     print('request from client: ', data)
 
+    fbm_threshold = int(data.get('fbm_threshold'))
+
+    print('fbm_threshold: ', fbm_threshold)
+
     return jsonify({'message': 'Data received'})
 
 
