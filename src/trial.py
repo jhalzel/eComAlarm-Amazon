@@ -120,6 +120,9 @@ def set_firebase_data():
     # Get new threshold
     new_threshold = request.json.get('fbm_threshold')
 
+    if new_threshold is None:
+        return jsonify({'error': 'fbm_threshold not found'}), 400
+
     print(f'New threshold: {new_threshold}')
 
     # Get a database reference

@@ -17,7 +17,6 @@ function App() {
 // Function to Post the data to the API
 const setThreshold = async (newThreshold) => {
   try {
-    console.log("newThreshold: ", newThreshold);
     const response = await fetch(`${apiUrl}/set_firebase_data`, {
       method: 'POST',
       headers: {
@@ -27,8 +26,8 @@ const setThreshold = async (newThreshold) => {
     });
 
     if (response.ok) {
+      console.log("newThreshold", newThreshold);
       console.log('Threshold updated successfully');
-      localStorage.setItem('fbm_threshold', newThreshold);
     } else {
       console.error('Failed to update threshold. Response status:', response.status);
     }
