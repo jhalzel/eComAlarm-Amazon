@@ -17,8 +17,8 @@ function App() {
 // Function to Post the data to the API
 const setThreshold = async (newThreshold) => {
   try {
-    console.log(newThreshold)
-    const response = await fetch(`${apiUrl}/set_threshold`, {
+    console.log("newThreshold: ", newThreshold);
+    const response = await fetch(`${apiUrl}/set_firebase_data`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

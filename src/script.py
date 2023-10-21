@@ -414,7 +414,7 @@ def main():
 
     # print("reference to database: ", ref)
 
-    # Make an array of the existing data in the Firebase database
+    # Retrieve existing data in the Firebase database
     firebase_db = ref.get()
     
     # if existing data is not None
@@ -422,7 +422,6 @@ def main():
         existing_data = [(key, value) for key, value in firebase_db.items()]
         print('existing_data: ', existing_data)
 
-        
         # Loop through each JSON string in the list and parse it
         for object in existing_data:
             # Parse the JSON string into a Python dictionary
@@ -464,12 +463,13 @@ def main():
     print('dates: ', dates)
 
     if cur_date not in dates:
+        print("current date not in list of dates")
         # append json_data to firebase
         ref.push(data)
               
         # Write the parsed data to the database under a unique key
-        new_ref = ref.push()  # Generates a new unique key
-        new_ref.set(data)
+        ref.push()  # Generates a new unique key
+        
 
 
     # To read it back from Firebase
