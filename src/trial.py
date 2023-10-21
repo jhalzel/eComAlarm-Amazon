@@ -119,11 +119,11 @@ def get_firebase_data():
 @cross_origin("https://ecom-alarm.netlify.app", methods=['POST'])
 def set_firebase_data():
     # Access the data sent in the request body
-    request = request.json
+    data = request.json
 
-    print('request from client: ', request)
+    print('request from client: ', data)
 
-    return 
+    return jsonify({'message': 'Data received'})
 
 
 if __name__ == '__main__':
