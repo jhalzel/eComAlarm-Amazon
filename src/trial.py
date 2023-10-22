@@ -136,12 +136,12 @@ def set_firebase_data():
 
     print('database_data: ', database_data)
 
-    # find the last entry in the database    
+    # find the last entry in the database       
+    last_entry = database_data[len(database_data) - 1]
 
-    # Update the data at the posts reference (this is a blocking operation)
-    ref.update({
-        'threshold': fbm_threshold
-    })
+    print('last_entry: ', last_entry)
+
+    print('last_entry["threshold"]: ', last_entry['threshold'])
 
     return jsonify({'message': 'Data received'})
 
