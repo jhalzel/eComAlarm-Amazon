@@ -144,7 +144,12 @@ def set_firebase_data():
         print("Last entry:", last_entry)
         threshold = last_entry.get('threshold')
         print('threshold: ', threshold)
+        
+        # Update the threshold value in the last entry
+        last_entry['threshold'] = fbm_threshold
 
+        # Update the value in Firebase for the specific child object (last entry)
+        ref.child(last_key).set(last_entry)
 
     return jsonify({'message': 'Data received'})
 
