@@ -136,12 +136,15 @@ def set_firebase_data():
 
     print('database_data: ', database_data)
 
-    # find the last entry in the database       
-    last_entry = database_data[len(database_data) - 1]
+    data_keys = list(database_data.keys())
 
-    print('last_entry: ', last_entry)
+    if data_keys:
+        last_key = data_keys[-1]  # Access the key of the last object
+        last_entry = database_data[last_key]  # Access the last object using the key
+        print("Last entry:", last_entry)
+        threshold = last_entry.get('threshold')
+        print('threshold: ', threshold)
 
-    print('last_entry["threshold"]: ', last_entry['threshold'])
 
     return jsonify({'message': 'Data received'})
 
