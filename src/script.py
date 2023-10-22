@@ -466,11 +466,7 @@ def main():
         print("current date not in list of dates")
         # append json_data to firebase
         ref.push(data)
-              
-        # Write the parsed data to the database under a unique key
-        ref.push()  # Generates a new unique key
         
-
 
     # To read it back from Firebase
     print('Reading data from Firebase')

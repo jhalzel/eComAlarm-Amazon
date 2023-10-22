@@ -114,6 +114,8 @@ def get_firebase_data():
 
     return jsonify(data)
 
+
+
 # Route to update the data in the firebase database (POST)
 @app.route('/set_firebase_data', methods=['POST'])
 @cross_origin("https://ecom-alarm.netlify.app", methods=['POST'])
@@ -126,6 +128,20 @@ def set_firebase_data():
     fbm_threshold = int(data.get('fbm_threshold'))
 
     print('fbm_threshold: ', fbm_threshold)
+
+    # Get a database reference
+    ref = db.reference()
+
+    database_data = ref.get() 
+
+    print('database_data: ', database_data)
+
+    # find the last entry in the database    
+
+    # Update the data at the posts reference (this is a blocking operation)
+    ref.update({
+        'threshold': fbm_threshold
+    })
 
     return jsonify({'message': 'Data received'})
 
