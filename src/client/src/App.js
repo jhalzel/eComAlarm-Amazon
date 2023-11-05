@@ -35,8 +35,12 @@ const updateFirebaseThreshold = (newThreshold) => {
 const handleKeyPress = (e) => {
   if (e.key === 'Enter') {
     // Update the value of the text box when "Enter" key is pressed
+    console.log('temp_threshold: ', e.target.value);
     setFbm_threshold(e.target.value);
+    console.log('fbm_threshold: ', fbm_threshold)
     updateFirebaseThreshold(e.target.value); // Call the function to update the Firebase database
+    console.log('Enter key pressed');
+    updateFirebaseThreshold(fbm_threshold);
   }
 };
 
@@ -75,16 +79,20 @@ const retrieveLastUpdated = () => {
 }
 
 
-
 useEffect(() => {
   // Function to fetch the data from the API
   const fetchData = async () => {
+    // Check current threshold value
+    if (fbm_threshold) {
+      console.log('fbm_threshold: ', fbm_threshold);
+    }
+      // Make a GET request to the API
       axios.get(`${apiUrl}/get_firebase_data`)
           .then((response) => {
               // Parse the JSON data
               const rawData = response.data
               
-            // Initialize an empty array to store the formatted data
+              // Initialize an empty array to store the formatted data
               const formattedData = [];
 
               var dataPoint = {};
@@ -92,7 +100,7 @@ useEffect(() => {
                 // Create a new object for each data point
                 dataPoint = rawData[key];
                 // Print the data point to the console
-                console.log('dataPoint: ', dataPoint);
+                // console.log('dataPoint: ', dataPoint);
               });
               // Push the data point into the formattedData array
               formattedData.push(dataPoint)
@@ -102,17 +110,13 @@ useEffect(() => {
           
           setData(formattedData);
                 
-          // Get the last value in data array
-          // var last = data[data.length - 1];          
-          // setLast_updated(last.last_updated[0]);  
-
-          
         })
         
         .catch((err) => {
           console.log(err);
         });  
       };
+
       
   // call function to retrieve last updated value
   retrieveLastUpdated();
@@ -121,9 +125,12 @@ useEffect(() => {
 
   const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
 
-  return () => clearInterval(interval); // Cleanup function to clear the interval
+  updateFirebaseThreshold(fbm_threshold);
+  localStorage.setItem('fbm_threshold', fbm_threshold);
 
-}, []);
+  return () => clearInterval(interval); // Cleanup function to clear the interval
+  // Call the function to update the Firebase database
+}, [fbm_threshold]);
 
 
   return (

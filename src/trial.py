@@ -73,6 +73,8 @@ def set_threshold():
 
     return jsonify({'message': f'Threshold updated to {new_threshold}'})
 
+
+
 @app.route('/get_threshold', methods=['GET'])
 @cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_threshold():
@@ -114,18 +116,27 @@ def get_firebase_data():
 
     return jsonify(data)
 
+# # Simple route to print the received value
+# @app.route('/set_firebase_data', methods=['POST'])
+# @cross_origin("*", methods=['POST'], headers=['Content-Type'])
+# def set_firebase_data():
+#     data = request.json  # Access the data sent in the request body
+#     print('Received value:', data)
+#     return 'Value received'
 
+# if __name__ == '__main__':
+#     app.run()
 
 # Route to update the data in the firebase database (POST)
 @app.route('/set_firebase_data', methods=['POST'])
-@cross_origin("https://ecom-alarm.netlify.app", methods=['POST'])
+@cross_origin("*", methods=['POST'])
 def set_firebase_data():
     # Access the data sent in the request body
     data = request.json
 
     print('request from client: ', data)
 
-    fbm_threshold = int(data.get('fbm_threshold'))
+    fbm_threshold = data.get('fbm_threshold')
 
     print('fbm_threshold: ', fbm_threshold)
 
