@@ -359,27 +359,19 @@ def main():
     #         threshold = config.get('fbm_threshold', 0)
 
     url = 'https://amazon-ecom-alarm.onrender.com/get_threshold'
+    # url = 'http://127.0.0.1:5000/get_threshold'
     
     # Get the threshold value from the server 
     try:
         tresponse = requests.get(url)
+        threshold = tresponse.json()['threshold']
         # Check the response status code
-        if tresponse.status_code == 200:
-            data = tresponse.json()
-
-            # Check if 'fbm_threshold' exists in the response
-            if 'fbm_threshold' in data:
-                threshold = float(data['fbm_threshold'])
-                print("fbm_threshold:", threshold)
-            else:
-                print("Error: 'fbm_threshold' not found in the API response")
-                threshold = 0
-        else:
-            print(f"Error: Received status code {tresponse.status_code} from the API")
-            threshold = 0
+        print('data tresponse: ', tresponse)
+        print('threshold: ', threshold)
+     
     except Exception as e:
         print(f'Error: {e}')
-        threshold = 0
+
 
     # Check if threshold is a float
     threshold = float(threshold)
@@ -411,8 +403,6 @@ def main():
 
     # create a reference to the database
     ref = db.reference()
-
-    # print("reference to database: ", ref)
 
     # Retrieve existing data in the Firebase database
     firebase_db = ref.get()
@@ -473,41 +463,8 @@ def main():
     # spacers
     print('===============================')
     # Retrieve the keys (names) of the data
-    data_keys = data.keys()
-    # Print the keys (names) of the data
-    for key in data_keys:
-        print('Data Name:', key) 
+    data_keys = data.keys() 
 
-    # print(f"Response data has been saved to '{json_filename}'.")
-
-    #make POST to set_data API
-    # url = 'http://127.0.0.1:5000/set_data'
-    url = 'https://amazon-ecom-alarm.onrender.com/set_data'
-
-    # Set the headers
-    headers = {'Content-type': 'application/json'}
-
-    # Set the filename for the JSON data
-    json_filename = os.path.join(current_dir, 'data.json')
-
-    # Make the POST request
-    try:
-        # label this request
-        print('Post request from script.py to set_data API')
-          # line spacer
-        print('===============================')
-        # Make the POST request
-        response = requests.post(url, json=json_data)
-        print("response:", response.json())
-        # Check the response status code
-        if response.status_code == 200: 
-            print("response:", response.json())
-        else:
-            print(f"Error: Received status code {response.status_code} from the API")
-    except Exception as e:
-        print(f'Error: {e}')
-        
-        
     # print separator
     print('===============================')
     print(f'threshold: {threshold}')

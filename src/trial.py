@@ -78,13 +78,25 @@ def set_threshold():
 @app.route('/get_threshold', methods=['GET'])
 @cross_origin("*", methods=['GET'], headers=['Content-Type'])
 def get_threshold():
-    try:
-        with open(config_filename, 'r') as file:
-            config = json.load(file)
-            fbm_threshold = config.get('fbm_threshold')
-            return jsonify({'fbm_threshold': fbm_threshold})
-    except FileNotFoundError:
-        return jsonify({'error': 'Config file not found'})
+    # Get a database reference
+    ref = db.reference()
+    
+    # Read the data at the posts reference (this is a blocking operation)
+    data = ref.get()
+
+    # Access the key of the last object
+    data_keys = list(data.keys())
+    
+    if data_keys:
+        last_key = data_keys[-1]
+        last_entry = data.get(last_key)
+        
+        if last_entry and 'threshold' in last_entry:
+            threshold = last_entry['threshold']
+            print('threshold: ', threshold)
+            return jsonify({'threshold': threshold})
+    
+    return jsonify({'message': 'Threshold not found'})
     
     
 # Route to retrieve JSON data (GET)
@@ -116,16 +128,7 @@ def get_firebase_data():
 
     return jsonify(data)
 
-# # Simple route to print the received value
-# @app.route('/set_firebase_data', methods=['POST'])
-# @cross_origin("*", methods=['POST'], headers=['Content-Type'])
-# def set_firebase_data():
-#     data = request.json  # Access the data sent in the request body
-#     print('Received value:', data)
-#     return 'Value received'
 
-# if __name__ == '__main__':
-#     app.run()
 
 # Route to update the data in the firebase database (POST)
 @app.route('/set_firebase_data', methods=['POST'])
