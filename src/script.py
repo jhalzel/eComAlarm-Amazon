@@ -374,7 +374,7 @@ def main():
 
 
     # Check if threshold is a float
-    threshold = float(threshold)
+    threshold = float(threshold[0])
 
     # collect data into a dataframe for the day
     data = {
