@@ -1,16 +1,15 @@
-<!-- eComAlarm Dashboard -->
+<!-- eComAlarm-Amazon Dashboard-->
+
 # Amazon SP-API Dashboard
 
 ## Overview
 
 This project comprises a dashboard connected to Amazon's SP-API for seller accounts, providing real-time insights into sales data. The goal is to offer a convenient way for users, particularly sellers, to monitor their sales status and track sales patterns over time through visually informative graphs.
 
-Here's the URL to the running site: https://rainbow-branch--ecom-alarm.netlify.app/
-
 ## Features
 
 - **Real-time Sales Data:** The dashboard is linked to your Amazon seller account, allowing you to view the current status of your sales at any given moment.
-  
+
 - **Data Visualization:** Visual representation of sales data over time through graphs and charts to facilitate a better understanding of sales patterns.
 
 - **Threshold Notifications (Under Construction):** Work in progress feature that enables users to set sales thresholds and receive notifications when a predefined dollar amount is reached from a specific subset of sales.
@@ -22,6 +21,20 @@ Here's the URL to the running site: https://rainbow-branch--ecom-alarm.netlify.a
 - **`script.py`:** Retrieves data from the Amazon SP-API. This script serves as the main data-fetching component.
 
 - **`trial.py`:** A Flask application responsible for forwarding data between the frontend and backend. It calls the main function in `script.py`.
+
+### React Frontend
+
+- **`client/`:** Folder containing the React frontend files.
+  
+  - **`src/`:** React source files including components, styles, and utilities.
+
+    - **`Chart.jsx`:** React component for the visual display of graph data.
+
+    - **Other React files:** Add descriptions for other React files as necessary.
+
+  - **`npm dependencies`:** Dependencies for the React project managed by npm. Install dependencies using `npm install`.
+
+  - **`styles.css`:** CSS file for styling the React components.
 
 ### Cron Schedule
 
@@ -42,6 +55,8 @@ The application is hosted on Render to prevent it from spinning down every 15 mi
 2. **Install Dependencies:**
     ```bash
     pip install -r requirements.txt
+    cd client
+    npm install
     ```
 
 3. **Configure Secrets:**
@@ -55,6 +70,9 @@ The application is hosted on Render to prevent it from spinning down every 15 mi
 5. **Access the Dashboard:**
     Open your web browser and navigate to [http://localhost:5000](http://localhost:5000).
 
+## Contributing
+
+Contributions are not advised at this time. 
 
 ## License
 
@@ -62,4 +80,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Feel free to modify this template according to your project's specific details and needs.
+Feel free to further customize this template according to your specific project structure and details.
