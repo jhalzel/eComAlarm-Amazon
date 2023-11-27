@@ -8,7 +8,7 @@ function App() {
   const [fbm_threshold, setFbm_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('fbm_threshold') || 999.99);
   const [last_updated, setLast_updated] = useState("");
-
+  const [fbm_sales, setFbm_sales] = useState(null);
 
   const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
   // const apiUrl = 'http://127.0.0.1:5000/';
@@ -89,28 +89,32 @@ useEffect(() => {
       // Make a GET request to the API
       axios.get(`${apiUrl}/get_firebase_data`)
           .then((response) => {
-              // Parse the JSON data
-              const rawData = response.data
-              
-              // Initialize an empty array to store the formatted data
-              const formattedData = [];
+            // Parse the JSON data
+            const rawData = response.data;
+            
+            // Initialize an empty array to store the formatted data
+            const formattedData = [];
 
-              var dataPoint = {};
-              Object.keys(rawData).forEach(key => {
-                // Create a new object for each data point
-                dataPoint = rawData[key];
-                // Print the data point to the console
-                // console.log('dataPoint: ', dataPoint);
-              });
-              // Push the data point into the formattedData array
-              formattedData.push(dataPoint)
-              console.log(
-                "formattedData: ", formattedData,
-              );
-          
-          setData(formattedData);
-                
-        })
+            var dataPoint = {};
+            Object.keys(rawData).forEach(key => {
+              // Create a new object for each data point
+              dataPoint = rawData[key];
+              // Print the data point to the console
+              // console.log('dataPoint: ', dataPoint);
+            });
+            // Push the data point into the formattedData array
+            formattedData.push(dataPoint);
+            console.log("formattedData: ", formattedData);
+
+            // Find the last entry in formattedData
+            const lastEntry = formattedData[formattedData.length - 1];
+            // Print the value in 'fbm_sales'[0]
+            console.log("fbm_sales[0]: ", lastEntry.fbm_sales[0]);
+            // Set the fbm_sales state to the value in 'fbm_sales'[0]
+            setFbm_sales(lastEntry.fbm_sales[0]);
+
+            setData(formattedData);
+          })
         
         .catch((err) => {
           console.log(err);
@@ -179,10 +183,10 @@ useEffect(() => {
         }
       
       {
-        data && data.fbm_sales > fbm_threshold ? (
+        data && fbm_sales > fbm_threshold ? (
           <>
           <div className="alert">
-            <div className="alert-message" >FBM Sales have exceeded the threshold of <span style={{ color: 'rgb(255, 71, 47)' }}>${fbm_threshold}!</span> </div>
+            <div style={{color:'red'}} className="alert-message" >FBM Sales have exceeded the threshold of <span style={{ color: 'rgb(255, 71, 47)' }}>${fbm_threshold}!</span> </div>
           </div>
           </>
         ) : (

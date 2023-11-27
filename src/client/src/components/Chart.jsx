@@ -72,6 +72,7 @@ export const Chart = ({threshold}) => {
 
 
     useEffect(() => {
+        console.log('useEffect is running...');
         // Function to fetch the data from the API
         const fetchData = async () => {
             axios.get(`${apiUrl}/get_firebase_data`)
@@ -116,7 +117,7 @@ export const Chart = ({threshold}) => {
     
         fetchData(); // Initial fetch
 
-        const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
+        const interval = setInterval(fetchData, 30000); // Fetch every 5 minutes (adjust as needed)
 
         return () => clearInterval(interval); // Cleanup function to clear the interval
 
