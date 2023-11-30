@@ -366,15 +366,16 @@ def main():
         tresponse = requests.get(url)
         threshold = tresponse.json()['threshold']
         # Check the response status code
+        # Check if threshold is a float
+        threshold = float(threshold[0])
+
         print('data tresponse: ', tresponse)
         print('threshold: ', threshold)
      
     except Exception as e:
         print(f'Error: {e}')
+        threshold = 999
 
-
-    # Check if threshold is a float
-    threshold = float(threshold[0])
 
     # collect data into a dataframe for the day
     data = {
