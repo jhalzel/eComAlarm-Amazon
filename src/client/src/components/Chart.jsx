@@ -7,6 +7,7 @@ import '../App.css'
 export const Chart = ({threshold}) => {
     const [json_data, setJson_data] = useState([]);
     const [original_data, setOriginal_data] = useState([]);
+    const [temp, setTemp] = useState([]);
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
     // const apiUrl = 'http://127.0.0.1:5000/';
@@ -70,7 +71,7 @@ export const Chart = ({threshold}) => {
         setJson_data(filteredData);
     };
 
-
+    // Fetch the data from the API
     useEffect(() => {
         console.log('useEffect is running...');
         // Function to fetch the data from the API
@@ -106,7 +107,7 @@ export const Chart = ({threshold}) => {
                     });
 
                 // Set json_data
-                setJson_data(formattedData);
+                setTemp(filter_dates({target: {value: 'Weekly View'}}, formattedData));
                 setOriginal_data(formattedData);
 
                 })
@@ -117,7 +118,7 @@ export const Chart = ({threshold}) => {
     
         fetchData(); // Initial fetch
 
-        const interval = setInterval(fetchData, 30000); // Fetch every 5 minutes (adjust as needed)
+        const interval = setInterval(fetchData, 300000); // Fetch every 5 minutes (adjust as needed)
 
         return () => clearInterval(interval); // Cleanup function to clear the interval
 
@@ -143,7 +144,7 @@ export const Chart = ({threshold}) => {
             <div className='chart-container'>
             <h1>Sales Data</h1>
             <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={json_data}> 
+                <LineChart data={json_data ? json_data : temp}> 
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis dataKey="date"  tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                     <YAxis tick={{ fontSize: 15, fill:'#61dafb' }} tickFormatter={(value) => `$${value}`} />

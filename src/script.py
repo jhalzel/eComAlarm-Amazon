@@ -3,6 +3,7 @@ import logging
 import logging.handlers 
 import os 
 import requests
+from requests.exceptions import RequestException
 from dotenv import load_dotenv 
  
 # Amazon Seller API 
@@ -109,13 +110,21 @@ def get_asin_counter(order_ids, orders_client):
 
 
 # Function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
-def check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold):
+def check_and_send_notifications(pause_flag, fbm_sales, number, message, provider, sender_credentials, threshold):
+    # print('Check and Send Notifications')
+
+    # print(f'pause_flag: {pause_flag}')
+
+    # print(f'fbm_sales: {fbm_sales}')
+
     # type check for error handling
     if type(threshold) not in [float, int]:
         threshold = 0
+        print('threshold is not a float or int')
     
     # If total_sales reaches threshold, send text message
-    if fba_sales > threshold and not pause_flag:
+    if fbm_sales < threshold and not pause_flag:
+        print('Total sales has met the threshold!')
         try:
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
@@ -123,6 +132,7 @@ def check_and_send_notifications(pause_flag, fba_sales, number, message, provide
         # Set pause_flag to True to prevent subsequent notifications
         pause_flag = True
 
+    print(f'pause_flag: {pause_flag}')
 
 # Initialize the global variables
 pause_flag = False
@@ -183,7 +193,10 @@ def main():
     logger.info(f"Token value: {SOME_SECRET}")
 
     # Set up the Sales API client
-    orders_client = Orders(credentials=credentials, marketplace=Marketplaces.US)
+    try:
+        orders_client = Orders(credentials=credentials, marketplace=Marketplaces.US, timeout=10)
+    except Exception as e:
+        print(f'Error: {e}')
 
     # Get the current time in the Eastern timezone (US/Eastern)
     eastern_timezone = pytz.timezone("US/Eastern")
@@ -365,9 +378,11 @@ def main():
     try:
         tresponse = requests.get(url)
         threshold = tresponse.json()['threshold']
+        print('threshold: ', threshold)
+        print("type of threshold: ", type(threshold))
         # Check the response status code
         # Check if threshold is a float
-        threshold = float(threshold[0])
+        threshold = int(threshold[0])
 
         print('data tresponse: ', tresponse)
         print('threshold: ', threshold)
@@ -411,26 +426,26 @@ def main():
     # if existing data is not None
     if firebase_db is not None:
         existing_data = [(key, value) for key, value in firebase_db.items()]
-        print('existing_data: ', existing_data)
+        # print('existing_data: ', existing_data)
 
         # Loop through each JSON string in the list and parse it
         for object in existing_data:
             # Parse the JSON string into a Python dictionary
-            print("Type of data is: ", type(object))
-            print('id: ', id)
-            print("object: ", object)
+            # print("Type of data is: ", type(object))
+            # print('id: ', id)
+            # print("object: ", object)
 
             for key, value in object[1].items():
                 if key == 'date':
-                    print(f'{key}: {value}')
-                    print(type(value[0]))
+                    # print(f'{key}: {value}')
+                    # print(type(value[0]))
                     if value[0] == cur_date[0]:
-                        print('date matches')
+                        # print('date matches')
                         # update the data of the key with the new data
                         ref.child(object[0]).update(data)
     
             # spacers
-            print('===============================')
+            # print('===============================')
 
     else:
         # append the data from the data.json file
@@ -473,20 +488,10 @@ def main():
     threshold = float(round(threshold, 2))
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
-    check_and_send_notifications(pause_flag, fba_sales, number, message, provider, sender_credentials, threshold)
+    check_and_send_notifications(pause_flag, fbm_sales, number, message, provider, sender_credentials, threshold)
 
     # Exit the function to pause the program
-    return {
-        'fbm_pending_sales': [round(fbm_pending_sales,2)],
-        'total_sales': [round(fbm_sales,2) + round(fba_sales,2)], 
-        'fbm_sales': [round(fbm_sales,2)],
-        'fba_sales': [round(fba_sales,2)],
-        'shipped_order_count': [shipped_order_count],
-        'order_pending_count': [order_pending_count],
-        'total_order_count': [order_count],
-        'last_updated': [current_timestamp],
-        'threshold': [round(threshold,2)]
-    }
+    return data
 
 
 if __name__ == '__main__':

@@ -50,13 +50,13 @@ def send_sms_via_email(
     sender_email, email_password = sender_credentials
     receiver_email = f"{number}@{PROVIDERS.get(provider).get('sms')}"
 
-    # email_message = f"Subject: {subject}\nTo:{receiver_email}\n{message}"
+    email_message = f"Subject: {subject}\nTo:{receiver_email}\n{message}"
 
-    # with smtplib.SMTP_SSL(
-    #     smtp_server, smtp_port, context=ssl.create_default_context()
-    # ) as email:
-    #     email.login(sender_email, email_password)
-    #     email.sendmail(sender_email, receiver_email, email_message)
+    with smtplib.SMTP_SSL(
+        smtp_server, smtp_port, context=ssl.create_default_context()
+    ) as email:
+        email.login(sender_email, email_password)
+        email.sendmail(sender_email, receiver_email, email_message)
 
     message = 'https://apps.apple.com/us/app/amazon-seller/id794141485'
 

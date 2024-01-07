@@ -65,7 +65,7 @@ def set_threshold():
     new_threshold = data.get('fbm_threshold')
     
     # Create a dictionary with the new threshold
-    data_to_write = {"fbm_threshold": new_threshold}
+    data_to_write = {"fbm_threshold": [new_threshold]}
     
     # Write the new threshold to the config.json file
     with open(config_filename, 'w') as file:
@@ -92,6 +92,7 @@ def get_threshold():
         last_entry = data.get(last_key)
         
         if last_entry and 'threshold' in last_entry:
+            print("Last entry:", json.dumps(last_entry, indent=4))
             threshold = last_entry['threshold']
             print('threshold: ', threshold)
             return jsonify({'threshold': threshold})
@@ -160,7 +161,7 @@ def set_firebase_data():
         print('threshold: ', threshold)
         
         # Update the threshold value in the last entry
-        last_entry['threshold'] = fbm_threshold
+        last_entry['threshold'] = [fbm_threshold]
 
         # Update the value in Firebase for the specific child object (last entry)
         ref.child(last_key).set(last_entry)
