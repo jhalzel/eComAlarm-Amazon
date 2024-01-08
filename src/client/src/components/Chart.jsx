@@ -5,9 +5,9 @@ import '../App.css'
 
 
 export const Chart = ({threshold}) => {
-    const [json_data, setJson_data] = useState([]);
-    const [original_data, setOriginal_data] = useState([]);
-    const [temp, setTemp] = useState([]);
+    const [json_data, setJson_data] = useState(localStorage.getItem('json_data') || []);
+    const [original_data, setOriginal_data] = useState(localStorage.getItem('original_data') || []);
+    const [temp, setTemp] = useState(localStorage.getItem('temp') || []);
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
     // const apiUrl = 'http://127.0.0.1:5000/';
@@ -107,9 +107,8 @@ export const Chart = ({threshold}) => {
                     });
 
                 // Set json_data
-                setTemp(filter_dates({target: {value: 'Weekly View'}}, formattedData));
+                setTemp(filter_dates({target: {value: 'Monthly View'}}, formattedData));
                 setOriginal_data(formattedData);
-
                 })
                 .catch((err) => {
                     console.log(err);
