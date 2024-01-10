@@ -22,6 +22,7 @@ from flask import current_app as app
 # Firebase Setup
 from firebase_admin import db
 from trial import firebase_config
+from trial import get_pause_status
 
 # Communication and Notification 
 from sms import send_sms_via_email 
@@ -108,14 +109,40 @@ def get_asin_counter(order_ids, orders_client):
 
     return asin_counter
 
+def get_pause_status():
+    try:
+        # Assuming your Flask app is running on localhost:5000
+        flask_url = 'http://127.0.0.1:5000/get_pause_status'
+        
+        response = requests.get(flask_url)
+        if response.status_code == 200:
+            data = response.json()
+            return data
+        else:
+            return {'message': 'Failed to get pause status from Flask app'}, response.status_code
+
+    except Exception as e:
+        return {'message': f'Error: {str(e)}'}, 500  # Internal Server Error
+    
+    
+def set_pause_status(status):
+    try: 
+        flask_url = 'http://127.0.0.1:5000/set_pause_status'
+        response = requests.post(flask_url, json=status)
+        if response.status_code == 200:
+            data = response.json()
+            return data
+        else:
+            return {'message': 'Failed to set pause status from Flask app'}, response.status_code
+    except Exception as e:
+        return {'message': f'Error: {str(e)}'}, 500
+    
 
 # Function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
 def check_and_send_notifications(pause_flag, fbm_sales, number, message, provider, sender_credentials, threshold):
-    # print('Check and Send Notifications')
+    print('Check and Send Notifications')
 
-    # print(f'pause_flag: {pause_flag}')
-
-    # print(f'fbm_sales: {fbm_sales}')
+    print(f'pause_flag: {pause_flag}')
 
     # type check for error handling
     if type(threshold) not in [float, int]:
@@ -123,25 +150,30 @@ def check_and_send_notifications(pause_flag, fbm_sales, number, message, provide
         print('threshold is not a float or int')
     
     # If total_sales reaches threshold, send text message
-    if fbm_sales < threshold and not pause_flag:
+    if fbm_sales >= threshold and pause_flag == False:
         print('Total sales has met the threshold!')
         try:
             send_sms_via_email(number, message, provider, sender_credentials)
         except Exception as e:
             print(f'Error: {e}')
+      
         # Set pause_flag to True to prevent subsequent notifications
         pause_flag = True
-
-    print(f'pause_flag: {pause_flag}')
-
-# Initialize the global variables
-pause_flag = False
+        set_pause_status(pause_flag)
+    elif fbm_sales < threshold and pause_flag == True:
+        # Set pause_flag to False to allow notifications
+        pause_flag = False
+        set_pause_status(pause_flag)
+    else:
+        pass
 
 
 def main():
-    # Access the global variable inside the main function
-    global pause_flag
+    # Initialize pause_flag to False
+    pause_flag = get_pause_status()
 
+    print(f'pause_flag: {pause_flag}')
+    print(f'type of pause_flag: {type(pause_flag)}')
     # Load the environment variables (secret keys set in .env file)
     load_dotenv()
 

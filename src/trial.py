@@ -57,47 +57,32 @@ def home():
     return "Welcome to My App"
 
 
-# Set the fbm_threshold value
-@app.route('/set_threshold', methods=['POST'])
-@cross_origin("*", methods=['POST'], headers=['Content-Type'])
-def set_threshold():
-    data = request.json
-    new_threshold = data.get('fbm_threshold')
-    
-    # Create a dictionary with the new threshold
-    data_to_write = {"fbm_threshold": [new_threshold]}
-    
-    # Write the new threshold to the config.json file
-    with open(config_filename, 'w') as file:
-        json.dump(data_to_write, file, indent=4)    
-
-    return jsonify({'message': f'Threshold updated to {new_threshold}'})
-
-
-
-@app.route('/get_threshold', methods=['GET'])
+@app.route('/set_pause_status', methods=['POST'])
 @cross_origin("*", methods=['GET'], headers=['Content-Type'])
-def get_threshold():
-    # Get a database reference
-    ref = db.reference()
-    
-    # Read the data at the posts reference (this is a blocking operation)
-    data = ref.get()
+def set_pause_status():
+    status = request.json
 
-    # Access the key of the last object
-    data_keys = list(data.keys())
-    
-    if data_keys:
-        last_key = data_keys[-1]
-        last_entry = data.get(last_key)
-        
-        if last_entry and 'threshold' in last_entry:
-            print("Last entry:", json.dumps(last_entry, indent=4))
-            threshold = last_entry['threshold']
-            print('threshold: ', threshold)
-            return jsonify({'threshold': threshold})
-    
-    return jsonify({'message': 'Threshold not found'})
+    write_data = {"pause_status": status}
+    try: 
+        with open(event_filename, 'w') as file:
+            json.dump(write_data, file, indent=4)
+
+        return jsonify({'message': f'Pause status updated to {status}'})
+    except FileNotFoundError:
+        return jsonify({'message': 'Data not found'}), 404
+
+
+@app.route('/get_pause_status', methods=['GET'])
+@cross_origin("*", methods=['GET'], headers=['Content-Type'])
+def get_pause_status():
+    try:
+        with open(event_filename, 'r') as json_file:
+            data = json.load(json_file).get('pause_status')
+        return jsonify(data)
+
+    except FileNotFoundError:
+        return jsonify({'message': 'Data not found'}), 404
+
     
     
 # Route to retrieve JSON data (GET)
