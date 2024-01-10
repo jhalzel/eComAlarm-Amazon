@@ -5,16 +5,20 @@ import '../App.css'
 
 
 export const Chart = ({threshold}) => {
-    const [json_data, setJson_data] = useState(localStorage.getItem('json_data') || []);
-    const [original_data, setOriginal_data] = useState(localStorage.getItem('original_data') || []);
-    const [temp, setTemp] = useState(localStorage.getItem('temp') || []);
+    const [json_data, setJson_data] = useState([]);
+    const [original_data, setOriginal_data] = useState([]);
+    const [temp, setTemp] = useState([]);
+    const [selectedView, setSelectedView] = useState('Default');
 
     const apiUrl = 'https://amazon-ecom-alarm.onrender.com';
     // const apiUrl = 'http://127.0.0.1:5000/';
 
-
+    const handleSelectChange = (e) => {
+        setSelectedView(e.target.value);
+      };
+    
     const filter_dates = (e, data) => {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         // Set the selectedView state
 
         // Get current date
@@ -27,13 +31,13 @@ export const Chart = ({threshold}) => {
         // Get the last 90 days
         const last90Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 90);
 
-        console.log("event-value: ", e.target.value);   
+        // console.log("event-value: ", e.target.value);   
 
          // Create a variable to store the filtered data
         let filteredData = [];
 
         // case and switch statement to filter data based on button clicked
-        switch (e.target.value) {
+        switch (e) {
             case 'Weekly View':
                 console.log('Weekly View');
                 // Filter data to only show the last 7 days
@@ -63,7 +67,7 @@ export const Chart = ({threshold}) => {
                 // Filter data to only show the last 7 days
                 filteredData = data.filter((item) => {
                     const itemDate = new Date(item.date);
-                    return itemDate >= last90Days;
+                    return itemDate >= last30Days;
                 });
         }
         
@@ -107,8 +111,8 @@ export const Chart = ({threshold}) => {
                     });
 
                 // Set json_data
-                setTemp(filter_dates({target: {value: 'Monthly View'}}, formattedData));
-                setOriginal_data(formattedData);
+                // setTemp(filter_dates({target: {value: 'Monthly View'}}, formattedData));
+                setOriginal_data(filter_dates(selectedView, formattedData));
                 })
                 .catch((err) => {
                     console.log(err);
@@ -121,15 +125,14 @@ export const Chart = ({threshold}) => {
 
         return () => clearInterval(interval); // Cleanup function to clear the interval
 
-    }, []);
-
+    }, [original_data, selectedView]);
 
 
     return (
         <>
         <div className='options-section'>
         <h3>Chart View:</h3>
-        <select className='chart-button' onChangeCapture={e => filter_dates(e, original_data)}>
+        <select value={selectedView} className='chart-button' onChangeCapture={handleSelectChange}>
             <option value="default" selected>Choose Range</option>
             <option value="Weekly View">Weekly View</option>
             <option value="Monthly View">Monthly View</option>
@@ -143,7 +146,7 @@ export const Chart = ({threshold}) => {
             <div className='chart-container'>
             <h1>Sales Data</h1>
             <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={json_data ? json_data : temp}> 
+                <LineChart data={json_data}> 
                     {/* <CartesianGrid strokeDasharray="3 3" /> */}
                     <XAxis dataKey="date"  tick={{ fontSize: 12, fill:'#61dafb' }} tickFormatter={(value) => `${value}`} />
                     <YAxis tick={{ fontSize: 15, fill:'#61dafb' }} tickFormatter={(value) => `$${value}`} />
