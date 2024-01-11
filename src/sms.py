@@ -16,6 +16,7 @@ from exceptions import (
     NumberNotValidException,
 )
 
+
 import json
 
 cur_dir = os.path.dirname(__file__)

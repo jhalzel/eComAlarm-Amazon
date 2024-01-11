@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 import firebase_admin
 from firebase_admin import credentials
@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import base64
 import os
 import json
+
 
 app = Flask(__name__)
 

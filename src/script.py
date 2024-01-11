@@ -22,7 +22,6 @@ from flask import current_app as app
 # Firebase Setup
 from firebase_admin import db
 from trial import firebase_config
-from trial import get_pause_status
 
 # Communication and Notification 
 from sms import send_sms_via_email 
@@ -32,7 +31,6 @@ import pytz
  
 # JSON Handling 
 import json 
-
 
 # call reference to firebase config in trial.py
 firebase_config
@@ -109,10 +107,11 @@ def get_asin_counter(order_ids, orders_client):
 
     return asin_counter
 
+flask_url = 'https://amazon-ecom-alarm.onrender.com/get_pause_status'
+
 def get_pause_status():
     try:
         # Assuming your Flask app is running on localhost:5000
-        flask_url = 'http://127.0.0.1:5000/get_pause_status'
         
         response = requests.get(flask_url)
         if response.status_code == 200:
@@ -124,10 +123,11 @@ def get_pause_status():
     except Exception as e:
         return {'message': f'Error: {str(e)}'}, 500  # Internal Server Error
     
+
     
 def set_pause_status(status):
     try: 
-        flask_url = 'http://127.0.0.1:5000/set_pause_status'
+        # flask_url = 'http://127.0.0.1:5000/set_pause_status'
         response = requests.post(flask_url, json=status)
         if response.status_code == 200:
             data = response.json()
@@ -136,7 +136,7 @@ def set_pause_status(status):
             return {'message': 'Failed to set pause status from Flask app'}, response.status_code
     except Exception as e:
         return {'message': f'Error: {str(e)}'}, 500
-    
+
 
 # Function to check if total_sales reaches threshold & conditionally send text message based on pause_flag
 def check_and_send_notifications(pause_flag, fbm_sales, number, message, provider, sender_credentials, threshold):
@@ -160,6 +160,7 @@ def check_and_send_notifications(pause_flag, fbm_sales, number, message, provide
         # Set pause_flag to True to prevent subsequent notifications
         pause_flag = True
         set_pause_status(pause_flag)
+
     elif fbm_sales < threshold and pause_flag == True:
         # Set pause_flag to False to allow notifications
         pause_flag = False
@@ -528,3 +529,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
