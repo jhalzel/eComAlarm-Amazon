@@ -45,7 +45,7 @@ jobs:
       - name: execute py script # run main.py
         id: execute_script
         timeout-minutes: 1 # Setting a timeout for 1 minute to ensure the code exits if it's taking too long
-        run: python src/script.py
+        run: python src/server/script.py
         env:
           SOME_SECRET: ${{ secrets.SOME_SECRET }}
           # Amazon credentials
