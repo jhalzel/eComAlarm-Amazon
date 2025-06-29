@@ -20,9 +20,7 @@ export default function Metrics({ data, threshold }) {
 	return (
 		<>
 			<div className="flex justify-center py-2 shadow">
-				<h3 className="flex self-center pr-4 font-semibold text-center px-4">
-					Adjust Timeline:
-				</h3>
+				<h3 className="flex self-center pr-4 font-semibold text-center px-4">Adjust Timeline:</h3>
 				<select
 					value={selectedView}
 					className="bg-custom-bg rounded-lg px-2 py-1 cursor-pointer"
@@ -31,6 +29,8 @@ export default function Metrics({ data, threshold }) {
 					<option value="default">Weekly Sales</option>
 					<option value="Monthly View">Monthly Sales</option>
 					<option value="90 Day View">90 Day Sales</option>
+					<option value="Year View">365 Day Sales</option>
+					<option value="Two Year View">730 Day Sales</option>
 				</select>
 			</div>
 
@@ -85,11 +85,7 @@ export default function Metrics({ data, threshold }) {
 					{/* <div className="stat-desc">21% more than last month</div> */}
 				</div>
 			</div>
-			<Chart
-				data={filteredData}
-				threshold={threshold}
-				selectedView={selectedView}
-			/>
+			<Chart data={filteredData} threshold={threshold} selectedView={selectedView} />
 		</>
 	)
 }

@@ -1,13 +1,17 @@
 export const filter_dates = (e, data) => {
 	// Get current date
-	const today = new Date()
+	const today = new Date('2024-09-01')
 
 	// Get the last 7 days
 	const last7Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
 	// Get the last 30 days
 	const last30Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30)
+	// Get the last 90 days
+	const last90Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 90)
+	// Get the last year days
+	const last365Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 365)
 	// Get the last two years days
-	const last90Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
+	const last730Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
 
 	// Create a variable to store the filtered data
 	let filteredData = []
@@ -24,12 +28,18 @@ export const filter_dates = (e, data) => {
 			break
 		case '90 Day View':
 			console.log('90 Day View')
-			// Filter data to only show the last 90 days
 			filteredData = data.filter((item) => new Date(item.date) >= last90Days)
 			break
+		case 'Year View':
+			console.log('Year View')
+			filteredData = data.filter((item) => new Date(item.date) >= last365Days)
+			break
+		case 'Two Year View':
+			console.log('Two Year View')
+			filteredData = data.filter((item) => new Date(item.date) >= last730Days)
+			break
 		default:
-			console.log('default')
-			// Filter data to only show the last 7 days
+			console.log('default (Weekly View fallback)')
 			filteredData = data.filter((item) => new Date(item.date) >= last7Days)
 	}
 
