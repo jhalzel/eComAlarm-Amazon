@@ -1,8 +1,11 @@
 name: run main.py
 
 on:
-  schedule:
+    - workflow_dispatch:
+    
+    schedule:
     - cron: '*/15 * * * *' # run exactly every 15 minutes
+
 
 jobs:
   run:
