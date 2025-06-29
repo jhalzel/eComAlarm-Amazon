@@ -11,7 +11,7 @@ export const filter_dates = (e, data) => {
 	// Get the last year days
 	const last365Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 365)
 	// Get the last two years days
-	const last730Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
+	// const last730Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
 
 	// Create a variable to store the filtered data
 	let filteredData = []
@@ -46,14 +46,6 @@ export const filter_dates = (e, data) => {
 			filteredData = data.filter((item) => {
 				const itemDate = new Date(item.date)
 				return itemDate >= last365Days && itemDate <= today
-			})
-			break
-
-		case 'Two Year View':
-			console.log('Two Year View')
-			filteredData = data.filter((item) => {
-				const itemDate = new Date(item.date)
-				return itemDate >= last730Days && itemDate <= today
 			})
 			break
 

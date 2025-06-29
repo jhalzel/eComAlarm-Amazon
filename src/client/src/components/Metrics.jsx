@@ -30,7 +30,6 @@ export default function Metrics({ data, threshold }) {
 					<option value="Monthly View">Monthly Sales</option>
 					<option value="90 Day View">90 Day Sales</option>
 					<option value="Year View">365 Day Sales</option>
-					<option value="Two Year View">730 Day Sales</option>
 				</select>
 			</div>
 
