@@ -2,6 +2,7 @@
 import logging 
 import logging.handlers 
 import os 
+import time
 import requests
 from requests.exceptions import RequestException
 from dotenv import load_dotenv 
@@ -401,7 +402,7 @@ def main():
         # print the order items
         print(f'orderItems: {order_items.payload["OrderItems"]}')
         print('===============================')
-
+        time.sleep(1.1)  # Important: stay under 1 request/sec
 
 
     # get counter object of pending order asins
