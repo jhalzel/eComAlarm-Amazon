@@ -396,7 +396,7 @@ def main():
     for order in fbm_order_list:
         print(f'fbm_order: {order}')
         print('===============================')
-        order_items = orders_client.get_order_items(order_id={order})
+        order_items = orders_client.get_order_items(order_id=order['AmazonOrderId'])
 
         # print the order items
         print(f'orderItems: {order_items.payload["OrderItems"]}')
