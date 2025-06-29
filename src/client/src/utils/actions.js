@@ -3,23 +3,11 @@ export const filter_dates = (e, data) => {
 	const today = new Date()
 
 	// Get the last 7 days
-	const last7Days = new Date(
-		today.getFullYear(),
-		today.getMonth(),
-		today.getDate() - 7
-	)
+	const last7Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
 	// Get the last 30 days
-	const last30Days = new Date(
-		today.getFullYear(),
-		today.getMonth(),
-		today.getDate() - 30
-	)
-	// Get the last 90 days
-	const last90Days = new Date(
-		today.getFullYear(),
-		today.getMonth(),
-		today.getDate() - 90
-	)
+	const last30Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30)
+	// Get the last two years days
+	const last90Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
 
 	// Create a variable to store the filtered data
 	let filteredData = []
@@ -56,27 +44,17 @@ export const filter_dates = (e, data) => {
 	}
 
 	filteredData.forEach((i) => {
-		summedData['fba_pending_sales'] += Number.parseInt(
-			i['fba_pending_sales'][0]
-		)
+		summedData['fba_pending_sales'] += Number.parseInt(i['fba_pending_sales'][0])
 		summedData['fba_sales'] += Number.parseInt(i['fba_sales'][0])
 		summedData['fbm_sales'] += Number.parseInt(i['fbm_sales'][0])
-		summedData['order_pending_count'] += Number.parseInt(
-			i['order_pending_count'][0]
-		)
-		summedData['shipped_order_count'] += Number.parseInt(
-			i['shipped_order_count'][0]
-		)
-		summedData['total_order_count'] += Number.parseInt(
-			i['total_order_count'][0]
-		)
-		summedData['fbm_pending_sales'] += Number.parseInt(
-			i['fbm_pending_sales'][0]
-		)
+		summedData['order_pending_count'] += Number.parseInt(i['order_pending_count'][0])
+		summedData['shipped_order_count'] += Number.parseInt(i['shipped_order_count'][0])
+		summedData['total_order_count'] += Number.parseInt(i['total_order_count'][0])
+		summedData['fbm_pending_sales'] += Number.parseInt(i['fbm_pending_sales'][0])
 	})
 
 	// console.log('summedData: ', summedData)
 	// setFilteredData(summedData)
 	// console.log('filtered data (App.js): ', summedData)
-	return {filteredData, summedData}
+	return { filteredData, summedData }
 }
