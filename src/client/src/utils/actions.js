@@ -20,27 +20,50 @@ export const filter_dates = (e, data) => {
 	switch (e) {
 		case 'Weekly View':
 			console.log('Weekly View')
-			filteredData = data.filter((item) => new Date(item.date) >= last7Days)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return itemDate >= last7Days && itemDate <= today
+			})
 			break
 		case 'Monthly View':
 			console.log('Monthly View')
-			filteredData = data.filter((item) => new Date(item.date) >= last30Days)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return itemDate >= last30Days && itemDate <= today
+			})
 			break
+
 		case '90 Day View':
 			console.log('90 Day View')
-			filteredData = data.filter((item) => new Date(item.date) >= last90Days)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return itemDate >= last90Days && itemDate <= today
+			})
 			break
+
 		case 'Year View':
 			console.log('Year View')
-			filteredData = data.filter((item) => new Date(item.date) >= last365Days)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return itemDate >= last365Days && itemDate <= today
+			})
 			break
+
 		case 'Two Year View':
 			console.log('Two Year View')
-			filteredData = data.filter((item) => new Date(item.date) >= last730Days)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return itemDate >= last730Days && itemDate <= today
+			})
 			break
+
 		default:
 			console.log('default (Weekly View fallback)')
-			filteredData = data.filter((item) => new Date(item.date) >= last7Days)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return itemDate >= last7Days && itemDate <= today
+			})
+			break
 	}
 
 	const summedData = {
