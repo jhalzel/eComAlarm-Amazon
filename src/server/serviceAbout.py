@@ -21,7 +21,7 @@ from collections import Counter
 from datetime import datetime, timedelta 
 
 # Flask Setup
-from flask import current_app as app
+# from flask import current_app as app
  
 # JSON Handling 
 import json 
@@ -389,7 +389,7 @@ def main():
     load_dotenv()
 
     # Read the CSV file
-    csv_file_path = './csv_file/pets_in_stock.csv'  # Replace with the actual path to your CSV file
+    csv_file_path = './csv_file/test_batch.csv'  # Replace with the actual path to your CSV file
     df = pd.read_csv(csv_file_path)
 
     # Get the titles of the CSV columns
@@ -517,7 +517,7 @@ def main():
     df['FBA Fees'] = df['ASIN'].apply(lambda x: fee_dict[x][0] if x and x in fee_dict and fee_dict[x] else None)
     df['FBM Fees'] = df['ASIN'].apply(lambda x: fee_dict[x][1] if x and x in fee_dict and len(fee_dict[x]) > 1 else None)
 
-    print(df)
+    # print(f'first df:\n {df}\n')
 
     # Fields: UPC, ASIN, Name, Sell Price, Buy Price, Fees, Profit 
 
@@ -525,13 +525,13 @@ def main():
     df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
     df['Total Costs'] = df['FBA Fees'] + upc_asin_map['Cost']
     df['Net Profit'] = df['Listing Price'] - upc_asin_map['Total Costs']
-    df['ROI (%)'] = (df['Net Profit'] / df['Cost']).apply(lambda x: f"{x:.2%}")
+    df['ROI (%)'] = df.apply(lambda row: f"{(row['Net Profit'] / row['Cost']):.2%}" if row['Cost'] != 0 else "N/A", axis=1)
 
 
-    print(f'{df}')
+    print(f'final df:\n {df}\n')
 
     # Export upc_asin_map to CSV
-    output_file_path = './csv_file/upc_asin_map_export.csv'  # Replace with the desired output file path
+    output_file_path = './csv_file/test_sample.csv'  # Replace with the desired output file path
     df.to_csv(output_file_path, index=False)
     print(f"Exported upc_asin_map to {output_file_path}")
 

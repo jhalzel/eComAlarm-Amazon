@@ -283,7 +283,8 @@ def main():
         timezone_offset = "-05:00"  # Eastern Standard Time (EST) - UTC-5
 
     # Format the start_date and end_date with the adjusted timezone offset
-    start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
     adjusted_date = current_time - timedelta(minutes=3)
     end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
 
@@ -398,7 +399,7 @@ def main():
         order_items = orders_client.get_order_items(order_id={order})
 
         # print the order items
-        print(f'orderItems: {orderItems.payload["OrderItems"]}')
+        print(f'orderItems: {order_items.payload["OrderItems"]}')
         print('===============================')
 
 
