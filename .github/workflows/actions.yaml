@@ -21,7 +21,7 @@ jobs:
           python-version: '3.9' # install the python version needed
 
       - name: Restore cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('src/server/requirements.txt') }}
@@ -29,7 +29,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Save Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('src/server/requirements.txt') }}
