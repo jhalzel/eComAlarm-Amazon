@@ -16,12 +16,19 @@ export const filter_dates = (e, data) => {
 	// Create a variable to store the filtered data
 	let filteredData = []
 
+	// Helper to check for valid date
+	const isValidDate = (d) => d instanceof Date && !isNaN(d)
+
 	// case and switch statement to filter data based on button clicked
 	switch (e) {
 		case 'Weekly View':
 			console.log('Weekly View')
 			filteredData = data.filter((item) => {
 				const itemDate = new Date(item.date)
+				if (!isValidDate(itemDate)) {
+					console.warn('Invalid date:', item.date, item)
+					return false
+				}
 				return itemDate >= last7Days && itemDate <= today
 			})
 			break
@@ -29,6 +36,10 @@ export const filter_dates = (e, data) => {
 			console.log('Monthly View')
 			filteredData = data.filter((item) => {
 				const itemDate = new Date(item.date)
+				if (!isValidDate(itemDate)) {
+					console.warn('Invalid date:', item.date, item)
+					return false
+				}
 				return itemDate >= last30Days && itemDate <= today
 			})
 			break
@@ -37,6 +48,10 @@ export const filter_dates = (e, data) => {
 			console.log('90 Day View')
 			filteredData = data.filter((item) => {
 				const itemDate = new Date(item.date)
+				if (!isValidDate(itemDate)) {
+					console.warn('Invalid date:', item.date, item)
+					return false
+				}
 				return itemDate >= last90Days && itemDate <= today
 			})
 			break
@@ -45,6 +60,10 @@ export const filter_dates = (e, data) => {
 			console.log('Year View')
 			filteredData = data.filter((item) => {
 				const itemDate = new Date(item.date)
+				if (!isValidDate(itemDate)) {
+					console.warn('Invalid date:', item.date, item)
+					return false
+				}
 				return itemDate >= last365Days && itemDate <= today
 			})
 			break
@@ -53,6 +72,10 @@ export const filter_dates = (e, data) => {
 			console.log('default (Weekly View fallback)')
 			filteredData = data.filter((item) => {
 				const itemDate = new Date(item.date)
+				if (!isValidDate(itemDate)) {
+					console.warn('Invalid date:', item.date, item)
+					return false
+				}
 				return itemDate >= last7Days && itemDate <= today
 			})
 			break
