@@ -1,6 +1,6 @@
 export const filter_dates = (e, data) => {
 	// Get current date
-	const today = new Date('2024-09-01')
+	const today = new Date()
 
 	// Get the last 7 days
 	const last7Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7)
