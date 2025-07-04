@@ -7,6 +7,7 @@ import requests
 from requests.exceptions import RequestException
 from dotenv import load_dotenv 
  
+
 # Amazon Seller API 
 from sp_api.base import Marketplaces 
 from sp_api.api import Orders 
@@ -209,18 +210,10 @@ def get_tracking_numbers(orders_client, shipment_ids):
 
 
 def main():
-    # Initialize pause_flag to False
-    pause_flag = get_pause_status()
-
-    print(f'pause_flag: {pause_flag}')
-    print(f'type of pause_flag: {type(pause_flag)}')
-    # Load the environment variables (secret keys set in .env file)
-    load_dotenv()
-
     # Get the current script's directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Set up the logger for the script
+    # Set up the logger for the script (must be before any logger usage)
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     logger_file_handler = logging.handlers.RotatingFileHandler(
@@ -230,12 +223,19 @@ def main():
         backupCount=1,
         encoding="utf8",
     )
-
-    # Set the logging format
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     logger_file_handler.setFormatter(formatter)
     logger.addHandler(logger_file_handler)
 
+    logger.info("Script started")
+
+    # Initialize pause_flag to False
+    pause_flag = get_pause_status()
+
+    print(f'pause_flag: {pause_flag}')
+    print(f'type of pause_flag: {type(pause_flag)}')
+    # Load the environment variables (secret keys set in .env file)
+    load_dotenv()
 
     # Access credentials from the dictionary
     credentials = {
@@ -333,7 +333,7 @@ def main():
 
     # Iterate over the orders and extract the order IDs
     for order in response.payload['Orders']:
-    
+        
         # print the important details from the order data response
         # print order id
         print(f'Order id: {order["AmazonOrderId"]}')
@@ -397,12 +397,12 @@ def main():
     for order in fbm_order_list:
         print(f'fbm_order: {order}')
         print('===============================')
+        logger.info(f"Fetching order items for {order['AmazonOrderId']}")
         order_items = orders_client.get_order_items(order_id=order['AmazonOrderId'])
-
-        # print the order items
+        logger.info(f"Fetched order items for {order['AmazonOrderId']}")
         print(f'orderItems: {order_items.payload["OrderItems"]}')
         print('===============================')
-        time.sleep(1.1)  # Important: stay under 1 request/sec
+        time.sleep(1.01)  # Important: stay under 1 request/sec
 
 
     # get counter object of pending order asins
@@ -576,7 +576,7 @@ def main():
     threshold = float(round(threshold, 2))
 
     # Check if total_sales reaches threshold & conditionally send text message based on pause_flag
-    check_and_send_notifications(pause_flag, fbm_sales, number, message, provider, sender_credentials, threshold)
+    # check_and_send_notifications(pause_flag, fbm_sales, number, message, provider, sender_credentials, threshold)
 
     # print separator
     print('===============================')
