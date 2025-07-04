@@ -287,7 +287,8 @@ def main():
     # start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
     start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
     adjusted_date = current_time - timedelta(minutes=3)
-    end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    end_date = datetime(2023, 9, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
 
     # TO SET UP FOR 1 MONTH OF DATA
     # =============================
