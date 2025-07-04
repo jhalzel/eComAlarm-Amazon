@@ -92,13 +92,13 @@ export const filter_dates = (e, data) => {
 	}
 
 	filteredData.forEach((i) => {
-		summedData['fba_pending_sales'] += Number.parseInt(i['fba_pending_sales'][0])
-		summedData['fba_sales'] += Number.parseInt(i['fba_sales'][0])
-		summedData['fbm_sales'] += Number.parseInt(i['fbm_sales'][0])
-		summedData['order_pending_count'] += Number.parseInt(i['order_pending_count'][0])
-		summedData['shipped_order_count'] += Number.parseInt(i['shipped_order_count'][0])
-		summedData['total_order_count'] += Number.parseInt(i['total_order_count'][0])
-		summedData['fbm_pending_sales'] += Number.parseInt(i['fbm_pending_sales'][0])
+		summedData['fba_pending_sales'] = Number.parseInt(i['fba_pending_sales'][0])
+		summedData['fba_sales'] = Number.parseInt(i['fba_sales'][0])
+		summedData['fbm_sales'] = Number.parseInt(i['fbm_sales'][0])
+		summedData['order_pending_count'] = Number.parseInt(i['order_pending_count'][0])
+		summedData['shipped_order_count'] = Number.parseInt(i['shipped_order_count'][0])
+		summedData['total_order_count'] = Number.parseInt(i['total_order_count'][0])
+		summedData['fbm_pending_sales'] = Number.parseInt(i['fbm_pending_sales'][0])
 	})
 
 	// console.log('summedData: ', summedData)
