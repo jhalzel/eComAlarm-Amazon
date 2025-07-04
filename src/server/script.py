@@ -184,28 +184,36 @@ def check_and_send_notifications(pause_flag, fbm_sales, number, message, provide
     else:
         pass
 
-def getShipment_ids(orders_client, order_ids): 
-    '''
-    Function that retrieves the tracking numbers from the order data
-    '''
-    shipment_ids = []
-    for order in order_ids:
-        # Initialize response
-        response = orders_client.get_order_items(order_id=order)
-        order_items = response.payload['OrderItems']
-        print(f'order_items: {order_items}')
-        for item in order_items:
-            shipment_ids.append(item['ShipmentId'])
+# def getShipment_ids(orders_client, order_ids): 
+#     '''
+#     Function that retrieves the tracking numbers from the order data
+#     '''
+#     import logging
+#     logger = logging.getLogger(__name__)
+#     shipment_ids = []
+#     for order in order_ids:
+#         # Initialize response
+#         try:
+#             logger.info(f"Fetching order items for order_id: {order}")
+#             response = orders_client.get_order_items(order_id=order)
+#             order_items = response.payload['OrderItems']
+#             logger.info(f"Fetched order items for order_id: {order}, items: {order_items}")
+#             print(f'order_items: {order_items}')
+#             for item in order_items:
+#                 shipment_ids.append(item.get('ShipmentId'))
+#         except Exception as e:
+#             logger.error(f"Error fetching order items for order_id: {order}: {e}")
+#             continue
 
-    return shipment_ids
+#     return shipment_ids
     
-# Function to get the tracking numbers of the orders
-def get_tracking_numbers(orders_client, shipment_ids):
-    tracking_numbers = []
-    for shipment in shipment_ids:
-        response = orders_client.get_order_tracking(shipment_id=shipment)
-        tracking_numbers.append(response.payload['TrackingNumber'])
-    return tracking_numbers
+# # Function to get the tracking numbers of the orders
+# def get_tracking_numbers(orders_client, shipment_ids):
+#     tracking_numbers = []
+#     for shipment in shipment_ids:
+#         response = orders_client.get_order_tracking(shipment_id=shipment)
+#         tracking_numbers.append(response.payload['TrackingNumber'])
+#     return tracking_numbers
 
 
 
@@ -284,11 +292,11 @@ def main():
         timezone_offset = "-05:00"  # Eastern Standard Time (EST) - UTC-5
 
     # Format the start_date and end_date with the adjusted timezone offset
-    # start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
-    start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    start_date = current_time.replace(hour=0, minute=0, second=0, microsecond=0, tzinfo=None).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # start_date = datetime(2023, 6, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
     adjusted_date = current_time - timedelta(minutes=3)
-    end_date = datetime(2023, 9, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
-    # end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    # end_date = datetime(2023, 9, 1).strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
+    end_date = adjusted_date.strftime(f"%Y-%m-%dT%H:%M:%S{timezone_offset}")
 
     # TO SET UP FOR 1 MONTH OF DATA
     # =============================
