@@ -11,7 +11,7 @@ export const filter_dates = (e, data) => {
 	// Get the last year days
 	const last365Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 365)
 	// Get the last two years days
-	// const last730Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
+	const last730Days = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 730)
 
 	// Create a variable to store the filtered data
 	let filteredData = []
@@ -68,6 +68,18 @@ export const filter_dates = (e, data) => {
 			})
 			break
 
+		case '2 Year View':
+			console.log('2 Year View')
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				if (!isValidDate(itemDate)) {
+					console.warn('Invalid date:', item.date, item)
+					return false
+				}
+				return itemDate >= last730Days && itemDate <= today
+			})
+			break
+
 		default:
 			console.log('default (Weekly View fallback)')
 			filteredData = data.filter((item) => {
@@ -92,14 +104,15 @@ export const filter_dates = (e, data) => {
 	}
 
 	filteredData.forEach((i) => {
-		summedData['fba_pending_sales'] = Number.parseInt(i['fba_pending_sales'][0])
-		summedData['fba_sales'] = Number.parseInt(i['fba_sales'][0])
-		summedData['fbm_sales'] = Number.parseInt(i['fbm_sales'][0])
-		summedData['order_pending_count'] = Number.parseInt(i['order_pending_count'][0])
-		summedData['shipped_order_count'] = Number.parseInt(i['shipped_order_count'][0])
-		summedData['total_order_count'] = Number.parseInt(i['total_order_count'][0])
-		summedData['fbm_pending_sales'] = Number.parseInt(i['fbm_pending_sales'][0])
+		summedData['fba_pending_sales'] += Number(i['fba_pending_sales'] || 0)
+		summedData['fba_sales'] += Number(i['fba_sales'] || 0)
+		summedData['fbm_sales'] += Number(i['fbm_sales'] || 0)
+		summedData['order_pending_count'] += Number(i['order_pending_count'] || 0)
+		summedData['shipped_order_count'] += Number(i['shipped_order_count'] || 0)
+		summedData['total_order_count'] += Number(i['total_order_count'] || 0)
+		summedData['fbm_pending_sales'] += Number(i['fbm_pending_sales'] || 0)
 	})
+
 
 	// console.log('summedData: ', summedData)
 	// setFilteredData(summedData)

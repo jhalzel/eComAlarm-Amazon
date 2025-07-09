@@ -68,25 +68,26 @@ function App() {
 			.then((snapshot) => {
 				if (snapshot.exists()) {
 					const rawData = snapshot.val()
+					console.log('raw data', rawData)
 					const formattedData = []
 
 					Object.keys(rawData).forEach((key) => {
 						const dataPoint = {
 							date: rawData[key].date,
-							fba_sales: rawData[key].fba_sales,
-							fbm_sales: rawData[key].fbm_sales,
 							fba_pending_sales: rawData[key].fba_pending_sales,
+							fba_sales: rawData[key].fba_sales,
 							fbm_pending_sales: rawData[key].fbm_pending_sales,
-							total_order_count: rawData[key].total_order_count,
-							order_pending_count: rawData[key].order_pending_count,
+							fbm_sales: rawData[key].fbm_sales,
 							shipped_order_count: rawData[key].shipped_order_count,
+							order_pending_count: rawData[key].order_pending_count,
+							total_order_count: rawData[key].total_order_count,
 						}
 
 						formattedData.push(dataPoint)
 					})
 
 					const last_row = rawData[Object.keys(rawData).pop()]
-					setLast_updated(last_row.last_updated[0])
+					setLast_updated(last_row.last_updated)
 
 					console.log('formattedData_App.js: ', formattedData)
 					setData(formattedData)

@@ -29,16 +29,28 @@ export default function Metrics({ data, threshold }) {
 					<option value="default">Weekly Sales</option>
 					<option value="Monthly View">Monthly Sales</option>
 					<option value="90 Day View">90 Day Sales</option>
-					<option value="Year View">365 Day Sales</option>
+					<option value="Year View">1 Year Sales History</option>
+					<option value="2 Year View">2 Year Sales History</option>
 				</select>
 			</div>
 
 			<div className="stats grid sm:grid-rows-4 md:grid-rows-2 lg:grid-rows-2 gap-2 shadow max-w-[100vw]">
 				<div className="stat gap-1 text-center shadow max-w-100px">
 					<div className="stat-title text-center">Total Sales</div>
-					<div className="stat-value">
+					{/* <div className="stat-value">
 						{Number(summedData['fba_sales']) + Number(summedData['fbm_sales'])}
+					</div> */}
+					<div className="stat-value">
+						{(Number(summedData['fba_sales']) + Number(summedData['fbm_sales'])).toLocaleString(
+							'en-US',
+							{
+								style: 'currency',
+								currency: 'USD',
+								minimumFractionDigits: 2,
+							}
+						)}
 					</div>
+
 					{/* <div className="stat-desc">21% more than last month</div> */}
 				</div>
 
@@ -50,25 +62,53 @@ export default function Metrics({ data, threshold }) {
 
 				<div className="stat gap-1 text-center shadow">
 					<div className="stat-title text-center">Merchant Fulfilled Sales</div>
-					<div className="stat-value">{summedData.fbm_sales}</div>
+					<div className="stat-value">
+						{Number(summedData.fbm_sales).toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD',
+							minimumFractionDigits: 2,
+						})}
+					</div>
+
 					{/* <div className="stat-desc">21% more than last month</div> */}
 				</div>
 
 				<div className="stat gap-1 text-center shadow">
 					<div className="stat-title text-center">Amazon Fulfilled Sales</div>
-					<div className="stat-value">{summedData.fba_sales}</div>
+					<div className="stat-value">
+						{Number(summedData.fba_sales).toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD',
+							minimumFractionDigits: 2,
+						})}
+					</div>
+
 					{/* <div className="stat-desc">21% more than last month</div> */}
 				</div>
 
 				<div className="stat gap-1 text-center shadow">
 					<div className="stat-title text-center">FBA Pending Sales</div>
-					<div className="stat-value">{summedData['fba_pending_sales']}</div>
+					<div className="stat-value">
+						{Number(summedData['fba_pending_sales']).toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD',
+							minimumFractionDigits: 2,
+						})}
+					</div>
+
 					{/* <div className="stat-desc">21% more than last month</div> */}
 				</div>
 
 				<div className="stat gap-1 text-center shadow">
 					<div className="stat-title text-center">FBM Pending Sales</div>
-					<div className="stat-value">{summedData.fbm_pending_sales}</div>
+					<div className="stat-value">
+						{Number(summedData.fbm_pending_sales).toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD',
+							minimumFractionDigits: 2,
+						})}
+					</div>
+
 					{/* <div className="stat-desc">21% more than last month</div> */}
 				</div>
 
