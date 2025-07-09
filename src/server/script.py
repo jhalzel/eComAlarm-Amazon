@@ -411,7 +411,7 @@ def main():
         logger.info(f"Fetched order items for {order['AmazonOrderId']}")
         print(f'orderItems: {order_items.payload["OrderItems"]}')
         print('===============================')
-        time.sleep(1.01)  # Important: stay under 1 request/sec
+        time.sleep(1.5)  # Important: stay under 1 request/sec
 
 
     # get counter object of pending order asins
@@ -537,16 +537,17 @@ def main():
                     # print(f'{key}: {value}')
                     # print(type(value[0]))
                     if value[0] == cur_date[0]:
-                        # print('date matches')
-                        # update the data of the key with the new data
+                    #     # print('date matches')
+                    #     # update the data of the key with the new data
                         ref.child(object[0]).update(data)
-    
+                
             # spacers
             # print('===============================')
 
-    else:
-        # append the data from the data.json file
-            # Specify the path to your JSON file
+    # append the data from the data.json file
+    else:   
+        print("firebase_db is None")     
+        # Specify the path to your JSON file
         file_path = os.path.join(current_dir, 'data.json')
 
         # Read the JSON data from the file
@@ -569,7 +570,7 @@ def main():
         print("current date not in list of dates")
         # append json_data to firebase
         ref.push(data)
-        
+
 
     # To read it back from Firebase
     print('Reading data from Firebase')

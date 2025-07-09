@@ -1,0 +1,14 @@
+[
+    {
+        "date": "07-01-2023",
+        "fba_sales": 32.4,
+        "fbm_sales": 0,
+        "total_order_count": 1,
+        "order_pending_count": 0,
+        "shipped_order_count": 1,
+        "fba_pending_sales": 0,
+        "fbm_pending_sales": 0,
+        "total_sales": 32.4,
+        "last_updated": "July 07, 20:13:40"
+    }
+]

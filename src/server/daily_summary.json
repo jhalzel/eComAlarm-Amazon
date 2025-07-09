@@ -1,0 +1,28 @@
+[
+    {
+        "date": "07/06/2025",
+        "fba_sales": 4632.05,
+        "fbm_sales": 0,
+        "total_sales": 4632.05,
+        "total_order_count": 95,
+        "order_pending_count": 0,
+        "shipped_order_count": 95,
+        "fba_pending_sales": 0,
+        "fbm_pending_sales": 0,
+        "threshold": 999.0,
+        "last_updated": "July 06, 12:51:33"
+    },
+    {
+        "date": "07/05/2025",
+        "fba_sales": 1105.47,
+        "fbm_sales": 5553.46,
+        "total_sales": 6658.93,
+        "total_order_count": 96,
+        "order_pending_count": 0,
+        "shipped_order_count": 96,
+        "fba_pending_sales": 0,
+        "fbm_pending_sales": 0,
+        "threshold": 999.0,
+        "last_updated": "July 05, 15:30:53"
+    }
+]
