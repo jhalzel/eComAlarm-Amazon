@@ -1,4 +1,4 @@
-export const filter_dates = (e, data) => {
+export const filter_dates = (e, data, customRange = null) => {
 	// Get current date
 	const today = new Date()
 
@@ -21,40 +21,40 @@ export const filter_dates = (e, data) => {
 
 	// case and switch statement to filter data based on button clicked
 	switch (e) {
-		case 'Weekly View':
-			console.log('Weekly View')
-			filteredData = data.filter((item) => {
-				const itemDate = new Date(item.date)
-				if (!isValidDate(itemDate)) {
-					console.warn('Invalid date:', item.date, item)
-					return false
-				}
-				return itemDate >= last7Days && itemDate <= today
-			})
-			break
-		case 'Monthly View':
-			console.log('Monthly View')
-			filteredData = data.filter((item) => {
-				const itemDate = new Date(item.date)
-				if (!isValidDate(itemDate)) {
-					console.warn('Invalid date:', item.date, item)
-					return false
-				}
-				return itemDate >= last30Days && itemDate <= today
-			})
-			break
+		// case 'Weekly View':
+		// 	console.log('Weekly View')
+		// 	filteredData = data.filter((item) => {
+		// 		const itemDate = new Date(item.date)
+		// 		if (!isValidDate(itemDate)) {
+		// 			console.warn('Invalid date:', item.date, item)
+		// 			return false
+		// 		}
+		// 		return itemDate >= last7Days && itemDate <= today
+		// 	})
+		// 	break
+		// case 'Monthly View':
+		// 	console.log('Monthly View')
+		// 	filteredData = data.filter((item) => {
+		// 		const itemDate = new Date(item.date)
+		// 		if (!isValidDate(itemDate)) {
+		// 			console.warn('Invalid date:', item.date, item)
+		// 			return false
+		// 		}
+		// 		return itemDate >= last30Days && itemDate <= today
+		// 	})
+		// 	break
 
-		case '90 Day View':
-			console.log('90 Day View')
-			filteredData = data.filter((item) => {
-				const itemDate = new Date(item.date)
-				if (!isValidDate(itemDate)) {
-					console.warn('Invalid date:', item.date, item)
-					return false
-				}
-				return itemDate >= last90Days && itemDate <= today
-			})
-			break
+		// case '90 Day View':
+		// 	console.log('90 Day View')
+		// 	filteredData = data.filter((item) => {
+		// 		const itemDate = new Date(item.date)
+		// 		if (!isValidDate(itemDate)) {
+		// 			console.warn('Invalid date:', item.date, item)
+		// 			return false
+		// 		}
+		// 		return itemDate >= last90Days && itemDate <= today
+		// 	})
+		// 	break
 
 		case 'Year View':
 			console.log('Year View')
@@ -77,6 +77,15 @@ export const filter_dates = (e, data) => {
 					return false
 				}
 				return itemDate >= last730Days && itemDate <= today
+			})
+			break
+
+		case 'Custom Range':
+			const sliderStart = new Date(customRange.start)
+			const sliderEnd = new Date(customRange.end)
+			filteredData = data.filter((item) => {
+				const itemDate = new Date(item.date)
+				return isValidDate(itemDate) && itemDate >= sliderStart && itemDate <= sliderEnd
 			})
 			break
 
@@ -112,7 +121,6 @@ export const filter_dates = (e, data) => {
 		summedData['total_order_count'] += Number(i['total_order_count'] || 0)
 		summedData['fbm_pending_sales'] += Number(i['fbm_pending_sales'] || 0)
 	})
-
 
 	// console.log('summedData: ', summedData)
 	// setFilteredData(summedData)

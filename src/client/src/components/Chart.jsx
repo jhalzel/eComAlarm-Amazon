@@ -28,7 +28,7 @@ export const Chart = ({ threshold, selectedView, data }) => {
 	// const threshold = useSelector((state) => state.target.fbm_threshold)
 	// const [json_data, setJson_data] = useState([])
 	const [original_data, setOriginal_data] = useState([])
-	const [selectedChart, setSelectedChart] = useState('default')
+	const [selectedChart, setSelectedChart] = useState('Bar Chart (Orders)')
 
 	const apiUrl = 'https://amazon-ecom-alarm.onrender.com'
 	// const apiUrl = 'http://127.0.0.1:5000/';

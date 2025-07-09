@@ -1,37 +1,66 @@
 import { useEffect, useState } from 'react'
 import Chart from './Chart'
 import { filter_dates } from '../utils/actions'
+import DateSlider from './DateSlider'
 
 export default function Metrics({ data, threshold }) {
 	const [filteredData, setFilteredData] = useState(0)
 	const [summedData, setSummedData] = useState({})
-	const [selectedView, setSelectedView] = useState('Weekly View') // default view
+	const [selectedView, setSelectedView] = useState('Custom Range') // default view
+
+	const [daysBack, setDaysBack] = useState(234) // default to 30 days
 
 	const handleSelectChange = (e) => {
 		setSelectedView(e.target.value)
 	}
 
 	useEffect(() => {
-		const { filteredData, summedData } = filter_dates(selectedView, data)
-		setFilteredData(filteredData)
-		setSummedData(summedData)
-	}, [selectedView, data])
+		let result
+
+		if (selectedView === 'Custom Range') {
+			const today = new Date()
+			const startDate = new Date(today)
+			startDate.setDate(today.getDate() - daysBack)
+
+			result = filter_dates('Custom Range', data, {
+				start: startDate.toISOString().slice(0, 10),
+				end: today.toISOString().slice(0, 10),
+			})
+		} else {
+			result = filter_dates(selectedView, data)
+		}
+
+		setFilteredData(result.filteredData)
+		setSummedData(result.summedData)
+	}, [selectedView, daysBack, data])
 
 	return (
 		<>
-			<div className="flex justify-center py-2 shadow">
-				<h3 className="flex self-center pr-4 font-semibold text-center px-4">Adjust Timeline:</h3>
-				<select
-					value={selectedView}
-					className="bg-custom-bg rounded-lg px-2 py-1 cursor-pointer"
-					onChange={handleSelectChange}>
-					{/* <option value="">Choose Range</option> */}
-					<option value="default">Weekly Sales</option>
-					<option value="Monthly View">Monthly Sales</option>
-					<option value="90 Day View">90 Day Sales</option>
-					<option value="Year View">1 Year Sales History</option>
-					<option value="2 Year View">2 Year Sales History</option>
-				</select>
+			<div className="flex flex-col items-center py-2 shadow">
+				<div className="flex items-center gap-4">
+					<h3 className="font-semibold">Adjust Timeline:</h3>
+					<select
+						value={selectedView}
+						className="bg-custom-bg rounded-lg px-2 py-1 cursor-pointer"
+						onChange={handleSelectChange}>
+						<option value="Custom Range">Custom Range</option>
+						<option value="Year View">1 Year Sales History</option>
+						<option value="2 Year View">2 Year Sales History</option>
+					</select>
+
+					{/* Slider below, only when Custom Range is selected */}
+					{selectedView === 'Custom Range' && (
+						<div className="mt-3 w-full max-w-md">
+							<DateSlider
+								daysBack={daysBack}
+								onChange={(val) => {
+									setDaysBack(val)
+									setSelectedView('Custom Range')
+								}}
+							/>
+						</div>
+					)}
+				</div>
 			</div>
 
 			<div className="stats grid sm:grid-rows-4 md:grid-rows-2 lg:grid-rows-2 gap-2 shadow max-w-[100vw]">
