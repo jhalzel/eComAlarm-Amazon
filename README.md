@@ -14,7 +14,7 @@ This project comprises a dashboard connected to Amazon's SP-API for seller accou
 
 - **Data Visualization:** Visual representation of sales data over time through graphs and charts to facilitate a better understanding of sales patterns.
 
-- **Threshold Notifications (depracated):** Feature that enables users to set sales thresholds and receive notifications when a predefined dollar amount is reached from a specific subset of sales.
+- **Threshold Notifications (deprecated):** Feature that enables users to set sales thresholds and receive notifications when a predefined dollar amount is reached from a specific subset of sales.
 
 ## Project Structure
 
