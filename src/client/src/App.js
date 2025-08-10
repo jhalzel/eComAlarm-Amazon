@@ -10,6 +10,8 @@ import NavBar from './components/NavBar'
 import { useAuth } from './context/authContext'
 import { getDatabase, ref, get } from 'firebase/database'
 import { app } from './firebase/firebase'
+import Scanner2 from './pages/Scanner copy'
+
 
 function App() {
 	// const apiUrl = 'https://amazon-ecom-alarm.onrender.com'
@@ -17,9 +19,7 @@ function App() {
 	const { currentUser, userLoggedIn } = useAuth()
 	const [data, setData] = useState(null)
 	const [threshold, set_Threshold] = useState(null)
-	const [temp_threshold, setTemp_threshold] = useState(
-		localStorage.getItem('threshold') || 999.99
-	)
+	const [temp_threshold, setTemp_threshold] = useState(localStorage.getItem('threshold') || 999.99)
 	const [last_updated, setLast_updated] = useState('')
 
 	// // Function to handle changes in the input field
@@ -130,9 +130,11 @@ function App() {
 		},
 		{
 			path: '/home',
-			element: (
-				<Home data={data} last_updated={last_updated} threshold={threshold} />
-			),
+			element: <Home data={data} last_updated={last_updated} threshold={threshold} />,
+		},
+		{
+			path: '/scanner',
+			element: <Scanner2 />,
 		},
 		{
 			path: '/register',

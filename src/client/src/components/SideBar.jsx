@@ -22,9 +22,7 @@ export default function SideBar() {
 		<>
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" />
 			{/* Page content here */}
-			<label
-				htmlFor="my-drawer"
-				className="btn btn-link group h-7 w-14 rounded-lg border-2">
+			<label htmlFor="my-drawer" className="btn btn-link group h-7 w-14 rounded-lg border-2">
 				<div className="grid justify-items-center gap-1.5">
 					<span className="h-1 w-8 rounded-full bg-neutral-content  transition group-hover:rotate-45 group-hover:translate-y-2.5"></span>
 
@@ -40,27 +38,36 @@ export default function SideBar() {
 					aria-label="close sidebar"
 					className="drawer-overlay z-100"></label>
 				<ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-					{/* Sidebar content here */}
-					<li>
-						{userLoggedIn ? (
-							<Link onClick={toggleDrawer} to={'/home'}>
-								HomePage
-							</Link>
-						) : (
-							<Link onClick={toggleDrawer} to={'/login'}>
-								HomePage
-							</Link>
-						)}
-					</li>
-					<li>
-						{userLoggedIn ? (
-							<button onClick={handleLogout}>Log Out</button>
-						) : (
-							<Link onClick={toggleDrawer} to={'/login'}>
-								Login / Register
-							</Link>
-						)}
-					</li>
+					{userLoggedIn ? (
+						<>
+							<li>
+								<Link onClick={toggleDrawer} to="/home">
+									Sales Dashboard
+								</Link>
+							</li>
+							<li>
+								<Link onClick={toggleDrawer} to="/scanner">
+									Scanner
+								</Link>
+							</li>
+							<li>
+								<button onClick={handleLogout}>Log Out</button>
+							</li>
+						</>
+					) : (
+						<>
+							<li>
+								<Link onClick={toggleDrawer} to="/login">
+									HomePage
+								</Link>
+							</li>
+							<li>
+								<Link onClick={toggleDrawer} to="/login">
+									Login / Register
+								</Link>
+							</li>
+						</>
+					)}
 				</ul>
 			</div>
 		</>

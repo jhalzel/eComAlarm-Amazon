@@ -126,7 +126,7 @@ def find_item_by_upc(upc_list, costs_list, credentials):
             asins.append('')
             names.append('')
             manufacturers.append('')
-            sales_ranks.append(10000000)
+            sales_ranks.append(float('Inf'))
 
         # Set a timer for every 2 UPCs
         if (i + 1) % 2 == 0:
@@ -162,7 +162,6 @@ def find_item_by_upc(upc_list, costs_list, credentials):
 def find_competitive_pricing(asin_list):
     # Initialize lists for pricing DataFrame
     # prices, new_offer_counts    = [], []
-    
     pricing_dict = {}
 
     # Initialize the SP-API client
@@ -176,7 +175,10 @@ def find_competitive_pricing(asin_list):
     for batch in list:
 
         # print(f'length of batch: {len(batch)}')
+
         try:
+
+            time.sleep(4)
             
             # Use the Catalog Items API to search for the item by UPC
             response = products_api.get_competitive_pricing_for_asins(
@@ -188,48 +190,35 @@ def find_competitive_pricing(asin_list):
 
             # print(f'response length: {len(products_pricing)}')
 
-       
             for product_data in products_pricing:
 
-                time.sleep(0.1)
+                time.sleep(0.01)
 
                 try:
                     asin = product_data["ASIN"]
                     print(f'asin: {asin}')
-
-                except KeyError as e:
-                    logging.warning(f'Missing key {e} in product_data: {product_data}')
+                except (KeyError, IndexError): 
                     continue
 
-                # More defensive approach for landed_price extraction
                 try:
-                    competitive_prices = product_data['Product']['CompetitivePricing']['CompetitivePrices']
-                    if competitive_prices and len(competitive_prices) > 0:
-                        landed_price = competitive_prices[0]['Price']['LandedPrice']['Amount']
-                    else:
-                        landed_price = 0  # or some sentinel value indicating missing data
-                except (KeyError, IndexError, TypeError) as e:
-                    logging.warning(f'Error extracting landed_price for ASIN {asin}: {e}')
-                    landed_price = 0
-
+                    # Extract the Landed Price
+                    landed_price = product_data['Product']['CompetitivePricing']['CompetitivePrices'][0]['Price']['LandedPrice']['Amount'] 
+                except (KeyError, IndexError):
+                    landed_price = 0  # Default value if not found
 
                 pricing_dict[asin] = [landed_price]
 
-                
+                # print(f'pricing_dict: {pricing_dict}')
 
                 try:
                     # Extract the New Offer Count
                     offer_listings = product_data['Product']['CompetitivePricing']['NumberOfOfferListings']
                     new_offer_count = next((listing['Count'] for listing in offer_listings if listing['condition'] == "New"), 0)
-
                 except (KeyError, IndexError, StopIteration):
                     new_offer_count = float('Inf')  # Default value if not found
 
                 # new_offer_counts.append(new_offer_count)
                 pricing_dict[asin].append(new_offer_count)
-
-
-                print(f'pricing_dict: {pricing_dict}')
 
                 # if landed_price == 0 and new_offer_count >= 1:
                 #     asin = product_data["ASIN"]
@@ -266,16 +255,15 @@ def find_competitive_pricing(asin_list):
 
                 # print('prices length: ', len(prices))
                 # print('new_offer_counts length: ', len(new_offer_counts))
-            
-        except Exception as e:
-            logging.info(f"(competitive_pricing) Error retrieving competitive pricing for batch: {e}")
-            continue  # Skip to the next batch if an error occurs
-        
 
-        time.sleep(4)
+        except Exception as e:
+            print(f"Error retrieving competitive pricing for batch: {e}")
+            continue  # Skip to the next batch if an error occurs
+
         # Set a timer for every 2 UPCs
 
-        print(f'pricing dict: {pricing_dict}')
+        
+        # print(f'pricing dict: {pricing_dict}')
 
         # # Add a delay between each request to avoid hitting the quota limit
         # time.sleep(2)  # Wait for 2 seconds before the next iteration
@@ -299,7 +287,6 @@ def format_for_fees(pricing_data):
 
 def getFees(fee_calculation_list):
 
-    logging.info("getFees reached")
 
     fees_dict = {
         # asin : (fee, referral_fee)
@@ -372,7 +359,7 @@ def getFees(fee_calculation_list):
             #         fees_dict[asin][1] = 0
 
         except Exception as e:
-            print(f"(getFees) Error retrieving catalog batch: {e}")
+            print(f"Error retrieving catalog batch: {e}")
 
 
     # print(f"fees_dict: {fees_dict}")
@@ -396,46 +383,26 @@ credentials = {
     "role_arn": os.environ.get("SP_API_ROLE_ARN")
 }
 
+
 def process_upc_batch(upc_list, costs_list, credentials):
-    try: 
-        upc_asin_map = find_item_by_upc(upc_list, costs_list, credentials)
-        asins = upc_asin_map['ASIN']
-        pricing = find_competitive_pricing(asin_list=asins)
-        
-        logging.info(f"Pricing dict: {pricing}")
+    upc_asin_map = find_item_by_upc(upc_list, costs_list, credentials)
+    asins = upc_asin_map['ASIN']
+    pricing = find_competitive_pricing(asin_list=asins)
+    fee_calculation_list = format_for_fees([(asin, values[0]) for asin, values in pricing.items()])
+    fee_dict = getFees(fee_calculation_list)
+    # Build result DataFrame
+    df = upc_asin_map
+    df['Listing Price'] = df['ASIN'].apply(lambda x: pricing[x][0] if x in pricing else None)
+    df['New Offer Count'] = df['ASIN'].apply(lambda x: pricing[x][1] if x in pricing else None)
+    df['FBA Fees'] = df['ASIN'].apply(lambda x: fee_dict[x][0] if x and x in fee_dict and fee_dict[x] else None)
+    df['FBM Fees'] = df['ASIN'].apply(lambda x: fee_dict[x][1] if x and x in fee_dict and len(fee_dict[x]) > 1 else None)
+    df['FBA Fees'] = pd.to_numeric(df['FBA Fees'], errors='coerce')
+    df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
+    df['Total Costs'] = df['FBA Fees'] + df['Cost']
+    df['Net Profit'] = df['Listing Price'] - df['Total Costs']
+    df['ROI (%)'] = df.apply(lambda row: f"{(row['Net Profit'] / row['Cost']):.2%}" if row['Cost'] != 0 else "N/A", axis=1)
+    return df.to_dict(orient='records')
 
-        fee_calculation_list = format_for_fees([(asin, values[0]) for asin, values in pricing.items()])
-        
-        logging.info(f"Fee calculation list: {fee_calculation_list}")
-
-        fee_dict = getFees(fee_calculation_list)
-
-        logging.info(f"Fee dict: {fee_dict}")
-
-
-        # Build result DataFrame
-        df = upc_asin_map
-        df['Listing Price'] = df['ASIN'].apply(lambda x: pricing[x][0] if x in pricing and pricing[x][0] > 0 else None)
-        df['New Offer Count'] = df['ASIN'].apply(lambda x: pricing[x][1] if x in pricing else None)
-        df['FBA Fees'] = df['ASIN'].apply(lambda x: fee_dict[x][0] if x and x in fee_dict and fee_dict[x] else None)
-        df['FBM Fees'] = df['ASIN'].apply(lambda x: fee_dict[x][1] if x and x in fee_dict and len(fee_dict[x]) > 1 else None)
-        df['FBA Fees'] = pd.to_numeric(df['FBA Fees'], errors='coerce')
-        df['Cost'] = pd.to_numeric(df['Cost'], errors='coerce')
-        df['Total Costs'] = df['FBA Fees'] + df['Cost']
-        df['Net Profit'] = df['Listing Price'] - df['Total Costs']
-        df['ROI (%)'] = df.apply(lambda row: f"{(row['Net Profit'] / row['Cost']):.2%}" if row['Cost'] != 0 else "N/A", axis=1)
-
-        print(df.head())
-        print(df.columns)
-        print(df.isnull().sum())
-
-        df = df.fillna('N/A')  
-        return df.to_dict(orient='records')
-        
-    except Exception as e:
-        logging.error(f"Error in process_upc_batch: {e}", exc_info=True)
-        return {"error": str(e)}
-    
 
 def main():
 
@@ -468,7 +435,9 @@ def main():
         # Cost's
         costs_list = filtered_df[costs_column].tolist()
 
-     
+        # print("UPCs and Costs have been extracted successfully!")
+        # print("UPCs:", upc_list)
+        # print("Costs:", costs_list)
 
     else:
         if item_id_column not in df.columns:
@@ -478,17 +447,40 @@ def main():
 
     costs_list = [float(cost.strip('$')) if isinstance(cost, str) else float(cost) for cost in costs_list]    
 
-  
+    # print('costs_list: ', costs_list)
+    # CREATE KEYWORD LIST TO USE IN CASE UPC LIST DOESN"T WORK
+
+    # upc_list = ['766218005632','017158260323','075691739607','733739070234','733739023810','733739004819','733739074232','733739070227','733739076656','733739022486','733739001399','733739056955','733739042361','733739042217','733739002129','733739081025','733739079060','733739021854', '733739070746', '733739031594']
+
+    # print('upc_list: ', upc_list )
    
     upc_asin_map = find_item_by_upc(upc_list, costs_list, credentials=credentials)
 
-   
+    # upc_asin_map['Costs'] = costs_list
+
+    # print('items: ', upc_asin_map)
+    # pd.display(upc_asin_map)
+    # print('asins:', asins)
+
+    # # Merge ASINs onto the DataFrame of UPCs
+    # # df = pd.DataFrame([(upc, asin) for upc, asins in upc_asin_map.items() for asin in asins], columns=['UPC', 'ASIN'])
+
+    # # Print the merged DataFrame
+    # # ispdisplay(df
+
     asins = upc_asin_map['ASIN']
 
+    # print('asins: ', asins)
+   
+    # # asins = ['B0002APS0A','B00119SXJ4','B003JW69B0','B003FBRVHQ','B00J7G9Z7C','B01IA96R86','B01IA96TMU','B01IA96VQO','B01IA96YZW','B01IA9799W','B00IEFJSQK','B0029PT4KG','B0002APS0A','B00119SXJ4','B003JW69B0','B003FBRVHQ','B00J7G9Z7C','B01IA96R86','B01IA96TMU','B01IA96VQO','B01IA96YZW','B01IA9799W','B00IEFJSQK','B0029PT4KG']
 
     pricing = find_competitive_pricing(asin_list=asins)
 
- 
+    # print('pricing:', pricing)
+    # print(f'pricing length: {len(pricing)}')
+    # print('new offer count:', offers)
+    # print(f'new_offer length: {len(offers)}')
+
     df = upc_asin_map
 
     # Add 'Listing Price' and 'New Offer Count' to the DataFrame
@@ -497,15 +489,46 @@ def main():
 
     print(df)
 
- 
+    # upc_asin_map['Listing Price'] = pricing``
+    # upc_asin_map['New Offer Count'] = offers
+
+    # # Display the upc_asin_map DataFrame
+    # print(upc_asin_map)
+
     # Creating a list of tuples (ASIN, Listing Price, New Offer Count)
     pricing_data = [(asin, values[0]) for asin, values in pricing.items()]
 
-   
+    # print(f'pricing_data: {pricing_data}')
+ 
+    # pricing_data = list(zip(pricing, asins))
+    # pricing_data = list(pricing_data)
+
+
+    # print(f'pricing_data: {pricing_data}')
 
     fee_calculation_list = format_for_fees(pricing_data)
 
-   
+    # print(f'fee_calculation_list: {fee_calculation_list}')
+
+    # print('fee_calc_format: ', json.dumps(fee_calculation_list, indent=4))
+
+    # # estimate_requests = [
+    # # {
+    # #     'id_type': 'ASIN',
+    # #     'id_value': 'B012345678',
+    # #     'price': '50'
+    # # },
+    # # {
+    # #     'id_type': 'ASIN',
+    # #     'id_value': 'B012345678',
+    # #     'price': '50'
+    # # }
+    # # ]
+
+    # # print(f'New Request: {json.dumps(requests, indent=4)}')
+
+    # # Convert the list to a JSON string
+    # # estimate_requests_json = json.dumps(estimate_requests)
 
     fee_dict = getFees(fee_calculation_list)
 
@@ -529,80 +552,11 @@ def main():
     print(f'final df:\n {df}\n')
 
     # Export upc_asin_map to CSV
-    output_file_path = './csv_file/test_sample.csv'  # Replace with the desired output file path
+    output_file_path = './csv_files/test_output_sample.csv'  # Replace with the desired output file path
     df.to_csv(output_file_path, index=False)
     print(f"Exported upc_asin_map to {output_file_path}")
 
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-   # print("UPCs and Costs have been extracted successfully!")
-        # print("UPCs:", upc_list)
-        # print("Costs:", costs_list)
-  # print('costs_list: ', costs_list)
-    # CREATE KEYWORD LIST TO USE IN CASE UPC LIST DOESN"T WORK
-
-    # upc_list = ['766218005632','017158260323','075691739607','733739070234','733739023810','733739004819','733739074232','733739070227','733739076656','733739022486','733739001399','733739056955','733739042361','733739042217','733739002129','733739081025','733739079060','733739021854', '733739070746', '733739031594']
-
-    # print('upc_list: ', upc_list )
- # upc_asin_map['Costs'] = costs_list
-
-    # print('items: ', upc_asin_map)
-    # pd.display(upc_asin_map)
-    # print('asins:', asins)
-
-    # # Merge ASINs onto the DataFrame of UPCs
-    # # df = pd.DataFrame([(upc, asin) for upc, asins in upc_asin_map.items() for asin in asins], columns=['UPC', 'ASIN'])
-
-    # # Print the merged DataFrame
-    # # ispdisplay(df
-
-    # print('asins: ', asins)
-   
-    # # asins = ['B0002APS0A','B00119SXJ4','B003JW69B0','B003FBRVHQ','B00J7G9Z7C','B01IA96R86','B01IA96TMU','B01IA96VQO','B01IA96YZW','B01IA9799W','B00IEFJSQK','B0029PT4KG','B0002APS0A','B00119SXJ4','B003JW69B0','B003FBRVHQ','B00J7G9Z7C','B01IA96R86','B01IA96TMU','B01IA96VQO','B01IA96YZW','B01IA9799W','B00IEFJSQK','B0029PT4KG']
-
-   # print('pricing:', pricing)
-    # print(f'pricing length: {len(pricing)}')
-    # print('new offer count:', offers)
-    # print(f'new_offer length: {len(offers)}')
-
-   # upc_asin_map['Listing Price'] = pricing``
-    # upc_asin_map['New Offer Count'] = offers
-
-    # # Display the upc_asin_map DataFrame
-    # print(upc_asin_map)
-
- # print(f'pricing_data: {pricing_data}')
- 
-    # pricing_data = list(zip(pricing, asins))
-    # pricing_data = list(pricing_data)
-
-
-    # print(f'pricing_data: {pricing_data}')
- # print(f'fee_calculation_list: {fee_calculation_list}')
-
-    # print('fee_calc_format: ', json.dumps(fee_calculation_list, indent=4))
-
-    # # estimate_requests = [
-    # # {
-    # #     'id_type': 'ASIN',
-    # #     'id_value': 'B012345678',
-    # #     'price': '50'
-    # # },
-    # # {
-    # #     'id_type': 'ASIN',
-    # #     'id_value': 'B012345678',
-    # #     'price': '50'
-    # # }
-    # # ]
-
-    # # print(f'New Request: {json.dumps(requests, indent=4)}')
-
-    # # Convert the list to a JSON string
-    # # estimate_requests_json = json.dumps(estimate_requests)
 

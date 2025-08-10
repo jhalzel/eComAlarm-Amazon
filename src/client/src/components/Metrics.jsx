@@ -8,7 +8,7 @@ export default function Metrics({ data, threshold }) {
 	const [summedData, setSummedData] = useState({})
 	const [selectedView, setSelectedView] = useState('Custom Range') // default view
 
-	const [daysBack, setDaysBack] = useState(234) // default to 30 days
+	const [daysBack, setDaysBack] = useState(365) // default to 30 days
 
 	const handleSelectChange = (e) => {
 		setSelectedView(e.target.value)

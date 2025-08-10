@@ -4,19 +4,25 @@ import App from './App';
 import { AuthProvider } from './context/authContext'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from './context/themeContext'
+
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
-		<AuthProvider>
-			<BrowserRouter>
-				<App />
-			</BrowserRouter>
-		</AuthProvider>
-		<style>
-			@import
-			url('https://fonts.googleapis.com/css2?family=Gugi&family=Sarpanch:wght@500&display=swap');
-		</style>
+		<ThemeProvider>
+			<AuthProvider>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</AuthProvider>
+			<style>
+				@import
+				url('https://fonts.googleapis.com/css2?family=Gugi&family=Sarpanch:wght@500&display=swap');
+			</style>
+		</ThemeProvider>
 	</React.StrictMode>
 )
 

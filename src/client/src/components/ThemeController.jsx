@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react'
+import { useTheme } from '../context/themeContext'
+
 
 export default function ThemeController() {
-	const [isdark, setIsdark] = useState(
-		JSON.parse(localStorage.getItem('isdark')) || false
-	)
+	// const [isdark, setIsdark] = useState(
+	// 	JSON.parse(localStorage.getItem('isdark')) || false
+	// )
+	const { isdark, setIsdark } = useTheme()
 
-	useEffect(() => {
-		// Save the state to localStorage whenever it changes
-		localStorage.setItem('isdark', JSON.stringify(isdark))
+	// useEffect(() => {
+	// 	// Save the state to localStorage whenever it changes
+	// 	localStorage.setItem('isdark', JSON.stringify(isdark))
 
-		// Set the data-theme attribute based on the isdark state
-		isdark
-			? document.documentElement.setAttribute('data-theme', 'dim')
-			: document.documentElement.setAttribute('data-theme', 'nord')
-	}, [isdark])
+	// 	// Set the data-theme attribute based on the isdark state
+	// 	isdark
+	// 		? document.documentElement.setAttribute('data-theme', 'dim')
+	// 		: document.documentElement.setAttribute('data-theme', 'nord')
+	// }, [isdark])
 
 	return (
 		<>

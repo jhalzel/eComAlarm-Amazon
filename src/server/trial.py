@@ -1,13 +1,19 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-from flask import request
 from dotenv import load_dotenv
 import base64
 import os
 import json
+from serviceAbout import find_item_by_upc, find_competitive_pricing, getFees
+import pandas as pd
+import tempfile
+from werkzeug.utils import secure_filename
+import logging
+
+from serviceAbout import process_upc_batch, find_item_by_upc, find_competitive_pricing, getFees, format_for_fees
 
 
 app = Flask(__name__)
@@ -40,7 +46,7 @@ firebase_config = app.config['firebase_app'] = firebase_admin.get_app()
 
 # Enable CORS for all routes
 # CORS(app, origins=["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])
-CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"]}})
+CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5001/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"]}})
 
 
 # Store the fbm_threshold value
@@ -50,6 +56,17 @@ cur_dir = os.path.dirname(__file__)
 config_filename = os.path.join(cur_dir, 'config.json')
 event_filename = os.path.join(cur_dir, 'event.json')
 
+
+def get_sp_api_credentials():
+    """Get Amazon SP-API credentials from environment variables"""
+    return {
+        "refresh_token": os.environ.get("SP_API_REFRESH_TOKEN"),
+        "lwa_app_id": os.environ.get("LWA_APP_ID"),
+        "lwa_client_secret": os.environ.get("LWA_CLIENT_SECRET"),
+        "aws_access_key": os.environ.get("SP_API_ACCESS_KEY"),
+        "aws_secret_key": os.environ.get("SP_API_SECRET_KEY"),
+        "role_arn": os.environ.get("SP_API_ROLE_ARN")
+    }
 
 @app.route('/')
 # @cross_origin("*", methods=['GET'], headers=['Content-Type'])
@@ -147,6 +164,102 @@ def set_firebase_data():
         ref.child(last_key).update({'threshold': [fbm_threshold]})
 
     return jsonify({'message': 'Data received'})
+
+@app.route('/api/amazon/find-items-by-upc', methods=['POST'])
+@cross_origin("*", methods=['POST'])
+def find_items_by_upc():
+    """Find Amazon products by UPC codes"""
+    try:
+        data = request.get_json()
+        
+        # Validate input
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+            
+        upcs = data.get('upcs', [])
+        costs = data.get('costs', [])
+        
+        if not upcs or not costs:
+            return jsonify({"error": "Both 'upcs' and 'costs' arrays are required"}), 400
+            
+        if len(upcs) != len(costs):
+            return jsonify({"error": "UPCs and costs arrays must have equal length"}), 400
+        
+        # Format UPCs to 12-digit strings (preserve leading zeros)
+        formatted_upcs = [str(int(upc)).zfill(12) for upc in upcs]
+        
+        # Format costs to floats
+        formatted_costs = [float(cost.strip('$')) if isinstance(cost, str) else float(cost) for cost in costs]
+        
+        # Get credentials and call your function
+        credentials = get_sp_api_credentials()
+        result_df = find_item_by_upc(formatted_upcs, formatted_costs, credentials)
+        
+        # Count successful matches
+        found_items = len(result_df[result_df['ASIN'] != ''])
+        
+        return jsonify({
+            "success": True,
+            "data": result_df.to_dict('records'),
+            "summary": {
+                "total_upcs": len(upcs),
+                "items_found": found_items,
+            }
+        })
+        
+    except Exception as e:
+        print(f"Find items by UPC error: {str(e)}")
+        return jsonify({"error": f"Failed to find items: {str(e)}"}), 500
+
+
+
+@app.route('/api/amazon/get-pricing', methods=['POST'])
+@cross_origin("*", methods=['POST'])
+def get_pricing():
+    """Get competitive pricing for ASINs using your find_competitive_pricing function"""
+    try:
+        data = request.get_json()
+        
+        # Validate input
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+            
+        asins = data.get('asins', [])
+        
+        if not asins:
+            return jsonify({"error": "ASINs array is required"}), 400
+        
+        # Filter out empty ASINs
+        valid_asins = [asin for asin in asins if asin and asin.strip()]
+        
+        if not valid_asins:
+            return jsonify({"error": "No valid ASINs provided"}), 400
+        
+        # Call your existing function
+        pricing_dict = find_competitive_pricing(valid_asins)
+        
+        return jsonify({
+            "success": True,
+            "pricing": pricing_dict,
+            "asins_processed": len(valid_asins),
+            "pricing_found": len(pricing_dict)
+        })
+        
+    except Exception as e:
+        print(f"Pricing error: {str(e)}")
+        return jsonify({"error": f"Failed to get pricing: {str(e)}"}), 500
+
+
+@app.route('/api/process_upc_batch', methods=['POST'])
+def api_process_upc_batch():
+    data = request.get_json()
+    upc_list = data['upc_list']
+    costs_list = data['costs_list']
+    result = process_upc_batch(upc_list, costs_list, credentials)
+    print(f"API result: {result}")
+    
+    return jsonify(result)
+
 
 
 if __name__ == '__main__':
