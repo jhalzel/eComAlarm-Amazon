@@ -5,15 +5,14 @@ from firebase_admin import credentials
 from firebase_admin import db
 from dotenv import load_dotenv
 import base64
-import os
 import json
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from serviceAbout import find_item_by_upc, find_competitive_pricing, getFees
 import pandas as pd
 import tempfile
 from werkzeug.utils import secure_filename
 import logging
-
-from serviceAbout import process_upc_batch, find_item_by_upc, find_competitive_pricing, getFees, format_for_fees
 
 
 app = Flask(__name__)
