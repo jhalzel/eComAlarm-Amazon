@@ -65,7 +65,7 @@ function Scanner2() {
 		const costsList = csvData.map((row) => parseFloat(String(row[costColumn]).replace('$', '')))
 
 		// Send to Flask endpoint
-		const response = await fetch('/api/process_upc_batch', {
+		const response = await fetch('https://amazon-ecom-alarm.onrender.com/api/process_upc_batch', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ upc_list: upcList, costs_list: costsList }),
