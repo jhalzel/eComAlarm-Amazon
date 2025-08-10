@@ -8,7 +8,7 @@ import base64
 import json
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from serviceAbout import find_item_by_upc, find_competitive_pricing, getFees
+from serviceAbout import find_item_by_upc, find_competitive_pricing, process_upc_batch
 import pandas as pd
 import tempfile
 from werkzeug.utils import secure_filename
@@ -251,13 +251,23 @@ def get_pricing():
 
 @app.route('/api/process_upc_batch', methods=['POST'])
 def api_process_upc_batch():
-    data = request.get_json()
-    upc_list = data['upc_list']
-    costs_list = data['costs_list']
-    result = process_upc_batch(upc_list, costs_list, credentials)
-    print(f"API result: {result}")
-    
-    return jsonify(result)
+    try:
+        data = request.get_json()
+        upc_list = data['upc_list']
+        costs_list = data['costs_list']
+
+        # Make sure credentials are retrieved here if needed
+        credentials = get_sp_api_credentials()
+
+        result = process_upc_batch(upc_list, costs_list, credentials)
+        print(f"API result: {result}")
+
+        return jsonify(result)
+
+    except Exception as e:
+        print(f"Error in /api/process_upc_batch: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 
 
