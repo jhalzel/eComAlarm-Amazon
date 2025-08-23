@@ -1,85 +1,87 @@
-<!-- eComAlarm-Amazon Dashboard-->
-
-# Amazon SP-API Dashboard
+# AMZ Wholesale Analytics
 
 ## Overview
+AMZ Wholesale Analytics is a proof-of-concept full-stack tool for Amazon sellers that provides:
 
-This project comprises a dashboard connected to Amazon's SP-API for seller accounts, providing real-time insights into sales data. The goal is to offer a convenient way for users, particularly sellers, to monitor their sales status and track sales patterns over time through visually informative graphs.
+- A **historical sales dashboard** with adjustable time filters.
+- A **wholesale profit margin scanner** for uploaded CSVs.
+- **Automated backend updates** via GitHub Actions (every 15 minutes).
 
-### Link to Site: https://ecom-alarm.netlify.app
-
-## Features
-
-- **Real-time Sales Data:** The dashboard is linked to your Amazon seller account, allowing you to view the current status of your sales at any given moment.
-
-- **Data Visualization:** Visual representation of sales data over time through graphs and charts to facilitate a better understanding of sales patterns.
-
-- **Threshold Notifications (deprecated):** Feature that enables users to set sales thresholds and receive notifications when a predefined dollar amount is reached from a specific subset of sales.
-
-## Project Structure
-
-### Python Scripts
-
-- **`script.py`:** Retrieves data from the Amazon SP-API. This script serves as the main data-fetching component.
-
-- **`trial.py`:** A Flask application responsible for forwarding data between the frontend and backend. It calls the main function in `script.py`.
-
-### React Frontend
-
-- **`client/`:** Folder containing the React frontend files.
-  
-  - **`src/`:** React source files including components, styles, and utilities.
-
-    - **`Chart.jsx`:** React component for the visual display of graph data.
-
-    - **Other React files:** Add descriptions for other React files as necessary.
-
-  - **`npm dependencies`:** Dependencies for the React project managed by npm. Install dependencies using `npm install`.
-
-  - **`styles.css`:** CSS file for styling the React components.
-
-### Cron Schedule
-
-- **`actions.yaml`:** Defines a cron schedule to periodically execute the `script.py` function. This ensures that the data is regularly updated from Amazon, and Flask routing calls to the frontend are made to reflect the changes.
-
-### Hosting
-
-The application is hosted on Render to prevent it from spinning down every 15 minutes. The cron schedule serves a dual purpose: keeping the app running and updating the frontend data.
-
-## Getting Started
-
-1. **Clone the Repository:**
-    ```bash
-    git clone https://github.com/your-username/amazon-sp-api-dashboard.git
-    cd amazon-sp-api-dashboard
-    ```
-
-2. **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    cd client
-    npm install
-    ```
-
-3. **Configure Secrets:**
-    - Ensure that the necessary credentials and secrets are correctly set as environment variables or in a configuration file.
-
-4. **Run the Application:**
-    ```bash
-    python trial.py
-    ```
-
-5. **Access the Dashboard:**
-    Open your web browser and navigate to [http://localhost:5000](http://localhost:5000).
-
-## Contributing
-
-Contributions are not advised at this time. 
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+> **Note:** This project requires an active Amazon SP-API subscription. Since the owner is no longer selling on Amazon, SP-API access may stop, so functionality could be affected after a month.
 
 ---
 
-Feel free to further customize this template according to your specific project structure and details.
+## Technical Stack
+
+**Backend:**
+- Flask (`/src/server/trial.py`, `/src/server/script.py`)
+- Flask-CORS
+- Firebase Admin SDK (`firebase_admin`)
+- Amazon SP-API integration
+- Python 3.9
+- dotenv for environment variables
+
+**Frontend:**
+- React (`/src/client/src/pages/Scanner.jsx`, `/src/client/src/pages/Home.jsx`)
+- ag-grid-react for data tables
+- PapaParse for CSV parsing
+- Tailwind CSS + DaisyUI for styling
+- Theme switching (`/src/client/src/components/ThemeController.jsx`, `/src/client/src/context/themeContext/index.jsx`)
+
+**Automation/CI:**
+- GitHub Actions (`.github/workflows/actions.yaml`) runs `script.py` every 15 minutes
+
+---
+
+## How It Works
+
+- **Amazon Seller Data Integration:** Fetches and processes sales/order data using SP-API credentials.
+- **Historical Sales Dashboard:** Visualizes sales trends with interactive charts and tables.
+- **Profit Margin Scanner:** Upload a CSV, parse UPC/costs, calculate profit margins minus fees, and display results in ag-grid tables.
+- **Theme Switching:** Supports light/dark mode across the dashboard.
+- **Firebase Integration:** Reads/writes data to Firebase Realtime Database.
+- **Automated Data Updates:** GitHub Actions triggers backend scripts every 15 minutes to update data.
+
+---
+
+## Demo Videos
+### Dashboard – Historical Sales
+![Dashboard Demo 1](src/assets/Dashboard_part1.gif)  
+*Showcases the adjustable time filter and sales chart visualization (Part 1).*
+
+![Dashboard Demo 2](src/assets/Dashboard_part2.gif)  
+*Additional sales chart interactions (Part 2).*
+
+---
+
+### Scanner – Profit Margin Analysis
+![Scanner Demo 1](src/assets/sample_batch_part1.gif)  
+*CSV upload and initial processing (Part 1).*
+
+![Scanner Demo 2](src/assets/sample_batch_part2.gif)  
+*Profit margin calculation in progress (Part 2).*
+
+![Scanner Demo 3](src/assets/sample_batch_part3.gif)  
+*Batch process visualization (Part 3).*
+
+![Scanner Demo 4](src/assets/sample_batch_part4.gif)  
+*Quick insights generation (Part 4).*
+
+![Scanner Demo 5](src/assets/sample_batch_part5.gif)  
+*Final results and summary (Part 5).*
+
+
+### GitHub Actions Automation
+![GitHub Actions Demo](path_to_github_actions_demo.mp4)  
+*Shows the automated 15-minute backend data update workflow.*
+
+> **Note:** Add your `.mp4` files to the repo and update these links.
+
+---
+
+## Quick Start
+
+1. **Clone the repo**
+```bash
+git clone https://github.com/jhalzel/amz-wholesale-analytics.git
+cd amz-wholesale-analytics
