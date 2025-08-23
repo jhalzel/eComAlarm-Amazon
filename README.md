@@ -43,39 +43,55 @@ AMZ Wholesale Analytics is a proof-of-concept full-stack tool for Amazon sellers
 - **Automated Data Updates:** GitHub Actions triggers backend scripts every 15 minutes to update data.
 
 ---
-
 ## Demo Videos
-### Dashboard – Historical Sales
-![Dashboard Demo 1](src/assets/Dashboard_part1.gif)  
-*Showcases the login, theme switching and sales chart visualization with time filter adjustment (Part 1).*
 
-![Dashboard Demo 2](src/assets/Dashboard_part2.gif)  
-*Additional sales charts including line chart, bar chart and area chart graphs (Part 2).*
+### Dashboard – Historical Sales
+<p align="center">
+  <img src="src/assets/Dashboard_part1.gif" alt="Dashboard Demo 1" width="700"/>
+</p>
+<p align="center"><em>Showcases the login, theme switching and sales chart visualization with time filter adjustment (Part 1).</em></p>
+
+<p align="center">
+  <img src="src/assets/Dashboard_part2.gif" alt="Dashboard Demo 2" width="700"/>
+</p>
+<p align="center"><em>Additional sales charts including line chart, bar chart and area chart graphs (Part 2).</em></p>
 
 ---
 
 ### Scanner – Profit Margin Analysis
-![Scanner Demo 1](src/assets/sample_batch_part1.gif)  
-*CSV upload (Part 1).*
+<p align="center">
+  <img src="src/assets/sample_batch_part1.gif" alt="Scanner Demo 1" width="700"/>
+</p>
+<p align="center"><em>CSV upload (Part 1).</em></p>
 
-![Scanner Demo 2](src/assets/sample_batch_part2.gif)  
-*Selecting parameters necessary for scanning CSV sheet with batch processing (Part 2).*
+<p align="center">
+  <img src="src/assets/sample_batch_part2.gif" alt="Scanner Demo 2" width="700"/>
+</p>
+<p align="center"><em>Selecting parameters necessary for scanning CSV sheet with batch processing (Part 2).</em></p>
 
-![Scanner Demo 3](src/assets/sample_batch_part3.gif)  
-*Chart results  (Part 3).*
+<p align="center">
+  <img src="src/assets/sample_batch_part3.gif" alt="Scanner Demo 3" width="700"/>
+</p>
+<p align="center"><em>Chart results (Part 3).</em></p>
 
-![Scanner Demo 4](src/assets/sample_batch_part4.gif)  
-*More chart results featuring column metrics such as fees, and profit margin calculations (Part 4).*
+<p align="center">
+  <img src="src/assets/sample_batch_part4.gif" alt="Scanner Demo 4" width="700"/>
+</p>
+<p align="center"><em>More chart results featuring column metrics such as fees, and profit margin calculations (Part 4).</em></p>
 
-![Scanner Demo 5](src/assets/sample_batch_part5.gif)  
-*Filtering by profit margin and ROI for best products (Part 5).*
+<p align="center">
+  <img src="src/assets/sample_batch_part5.gif" alt="Scanner Demo 5" width="700"/>
+</p>
+<p align="center"><em>Filtering by profit margin and ROI for best products (Part 5).</em></p>
 
+---
 
 ### GitHub Actions Automation
-![GitHub Actions Demo](path_to_github_actions_demo.mp4)  
-*Shows the automated 15-minute backend data update workflow.*
+<p align="center">
+  <img src="path_to_github_actions_demo.mp4" alt="GitHub Actions Demo" width="700"/>
+</p>
+<p align="center"><em>Shows the automated 15-minute backend data update workflow.</em></p>
 
-> **Note:** Add your `.mp4` files to the repo and update these links.
 
 ---
 
