@@ -47,28 +47,28 @@ AMZ Wholesale Analytics is a proof-of-concept full-stack tool for Amazon sellers
 ## Demo Videos
 ### Dashboard – Historical Sales
 ![Dashboard Demo 1](src/assets/Dashboard_part1.gif)  
-*Showcases the adjustable time filter and sales chart visualization (Part 1).*
+*Showcases the login, theme switching and sales chart visualization with time filter adjustment (Part 1).*
 
 ![Dashboard Demo 2](src/assets/Dashboard_part2.gif)  
-*Additional sales chart interactions (Part 2).*
+*Additional sales charts including line chart, bar chart and area chart graphs (Part 2).*
 
 ---
 
 ### Scanner – Profit Margin Analysis
 ![Scanner Demo 1](src/assets/sample_batch_part1.gif)  
-*CSV upload and initial processing (Part 1).*
+*CSV upload (Part 1).*
 
 ![Scanner Demo 2](src/assets/sample_batch_part2.gif)  
-*Profit margin calculation in progress (Part 2).*
+*Selecting parameters necessary for scanning CSV sheet with batch processing (Part 2).*
 
 ![Scanner Demo 3](src/assets/sample_batch_part3.gif)  
-*Batch process visualization (Part 3).*
+*Chart results  (Part 3).*
 
 ![Scanner Demo 4](src/assets/sample_batch_part4.gif)  
-*Quick insights generation (Part 4).*
+*More chart results featuring column metrics such as fees, and profit margin calculations (Part 4).*
 
 ![Scanner Demo 5](src/assets/sample_batch_part5.gif)  
-*Final results and summary (Part 5).*
+*Filtering by profit margin and ROI for best products (Part 5).*
 
 
 ### GitHub Actions Automation
