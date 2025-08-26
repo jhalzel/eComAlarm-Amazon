@@ -54,12 +54,12 @@ AMZ Wholesale Analytics is a proof-of-concept full-stack tool for Amazon sellers
 
 ### Dashboard – Historical Sales
 <p align="center">
-  <img src="src/assets/Dashboard_part1.gif" alt="Dashboard Demo 1" width="700"/>
+  <img src="src/assets/Dashboard_part1.gif" alt="Dashboard Demo 1" width="1080"/>
 </p>
 <p align="center"><em>Showcases the login, theme switching and sales chart visualization with time filter adjustment (Part 1).</em></p>
 
 <p align="center">
-  <img src="src/assets/Dashboard_part2.gif" alt="Dashboard Demo 2" width="700"/>
+  <img src="src/assets/Dashboard_part2.gif" alt="Dashboard Demo 2" width="1080"/>
 </p>
 <p align="center"><em>Additional sales charts including line chart, bar chart and area chart graphs (Part 2).</em></p>
 
@@ -67,27 +67,27 @@ AMZ Wholesale Analytics is a proof-of-concept full-stack tool for Amazon sellers
 
 ### Scanner – Profit Margin Analysis
 <p align="center">
-  <img src="src/assets/sample_batch_part1.gif" alt="Scanner Demo 1" width="700"/>
+  <img src="src/assets/sample_batch_part1.gif" alt="Scanner Demo 1" width="1080"/>
 </p>
 <p align="center"><em>CSV upload; backend logic hosted on Render (Part 1).</em></p>
 
 <p align="center">
-  <img src="src/assets/sample_batch_part2.gif" alt="Scanner Demo 2" width="700"/>
+  <img src="src/assets/sample_batch_part2.gif" alt="Scanner Demo 2" width="1080"/>
 </p>
 <p align="center"><em>Selecting parameters necessary for scanning CSV sheet with batch processing (Part 2).</em></p>
 
 <p align="center">
-  <img src="src/assets/sample_batch_part3.gif" alt="Scanner Demo 3" width="700"/>
+  <img src="src/assets/sample_batch_part3.gif" alt="Scanner Demo 3" width="1080"/>
 </p>
 <p align="center"><em>Chart results (Part 3).</em></p>
 
 <p align="center">
-  <img src="src/assets/sample_batch_part4.gif" alt="Scanner Demo 4" width="700"/>
+  <img src="src/assets/sample_batch_part4.gif" alt="Scanner Demo 4" width="1080"/>
 </p>
 <p align="center"><em>More chart results featuring column metrics such as fees, and profit margin calculations (Part 4).</em></p>
 
 <p align="center">
-  <img src="src/assets/sample_batch_part5.gif" alt="Scanner Demo 5" width="700"/>
+  <img src="src/assets/sample_batch_part5.gif" alt="Scanner Demo 5" width="1080"/>
 </p>
 <p align="center"><em>Filtering by profit margin and ROI for best products (Part 5).</em></p>
 
@@ -95,12 +95,12 @@ AMZ Wholesale Analytics is a proof-of-concept full-stack tool for Amazon sellers
 
 ### GitHub Actions Automation
 <p align="center">
-  <img src="src/assets/actions_part1.gif" alt="GitHub Actions Demo" width="700"/>
+  <img src="src/assets/actions_part1.gif" alt="GitHub Actions Demo" width="1080"/>
 </p>
 <p align="center"><em>Shows the automated 15-minute backend data update workflow (Part 1)</em></p>
 
 <p align="center">
-  <img src="src/assets/actions_part2.gif" alt="GitHub Actions Demo" width="700"/>
+  <img src="src/assets/actions_part2.gif" alt="GitHub Actions Demo" width="1080"/>
 </p>
 <p align="center"><em>Shows the python script execution and results (Part 2)</em></p>
 
