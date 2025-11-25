@@ -52,19 +52,22 @@ CORS(
         "http://127.0.0.1:5001",
         "http://localhost:3000",
         "https://amazon-ecom-alarm.onrender.com",
-        "https://ecom-alarm.netlify.app",           # <-- PRODUCTION
-        "https://rainbow-branch--ecom-alarm.netlify.app"  # <-- PREVIEW
+        "https://ecom-alarm.netlify.app",           #  PRODUCTION
+        "https://rainbow-branch--ecom-alarm.netlify.app"  #  PREVIEW
     ]}},
-    supports_credentials=True
+    supports_credentials=True,
+    methods=["GET", "POST", "OPTIONS"],  # allow OPTIONS
+    allow_headers=["Content-Type", "Authorization"]  # allow headers sent by front-end
 )
 
 
-@app.after_request
-def apply_cors(response):
-    response.headers["Access-Control-Allow-Origin"] = "https://ecom-alarm.netlify.app"
-    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"]
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"]
-    return response
+
+# @app.after_request
+# def apply_cors(response):
+#     response.headers["Access-Control-Allow-Origin"] = "https://ecom-alarm.netlify.app"
+#     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+#     response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+#     return response
 
 
 # Store the fbm_threshold value
@@ -268,9 +271,13 @@ def get_pricing():
         return jsonify({"error": f"Failed to get pricing: {str(e)}"}), 500
 
 
-@app.route('/api/process_upc_batch', methods=['POST'])
-@cross_origin("*", methods=['POST'])
+@app.route('/api/process_upc_batch', methods=['POST', 'OPTIONS'])
+@cross_origin(origins="*", supports_credentials=True)
 def api_process_upc_batch():
+    if request.method == "OPTIONS":
+        # Preflight request, just respond 200
+        return '', 200
+    
     try:
         data = request.get_json()
         upc_list = data['upc_list']
