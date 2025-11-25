@@ -59,6 +59,14 @@ CORS(
 )
 
 
+@app.after_request
+def apply_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "https://ecom-alarm.netlify.app"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"]
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"]
+    return response
+
+
 # Store the fbm_threshold value
 fbm_threshold = None
 
