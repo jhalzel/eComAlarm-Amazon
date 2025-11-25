@@ -53,7 +53,7 @@ CORS(
         "http://localhost:3000",
         "https://amazon-ecom-alarm.onrender.com",
         "https://ecom-alarm.netlify.app",           #  PRODUCTION
-        # "https://rainbow-branch--ecom-alarm.netlify.app"  #  PREVIEW
+        "https://rainbow-branch--ecom-alarm.netlify.app"  #  PREVIEW
     ]}},
     supports_credentials=True,
     methods=["GET", "POST", "OPTIONS"],  # allow OPTIONS
