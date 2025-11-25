@@ -4,7 +4,7 @@ import logging.handlers
 import os 
 import requests
 from requests.exceptions import RequestException
-from dotenv import load_dotenv 
+# from dotenv import load_dotenv 
 import itertools
 import time
 import asyncio

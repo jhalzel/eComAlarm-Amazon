@@ -45,7 +45,18 @@ firebase_config = app.config['firebase_app'] = firebase_admin.get_app()
 
 # Enable CORS for all routes
 # CORS(app, origins=["http://127.0.0.1:5000/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"])
-CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5001/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"]}})
+# CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5001/", "http://localhost:3000", "https://amazon-ecom-alarm.onrender.com", "https://rainbow-branch--ecom-alarm.netlify.app"]}})
+CORS(
+    app,
+    resources={r"/api/*": {"origins": [
+        "http://127.0.0.1:5001",
+        "http://localhost:3000",
+        "https://amazon-ecom-alarm.onrender.com",
+        "https://ecom-alarm.netlify.app",           # <-- PRODUCTION
+        "https://rainbow-branch--ecom-alarm.netlify.app"  # <-- PREVIEW
+    ]}},
+    supports_credentials=True
+)
 
 
 # Store the fbm_threshold value
