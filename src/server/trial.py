@@ -261,6 +261,7 @@ def get_pricing():
 
 
 @app.route('/api/process_upc_batch', methods=['POST'])
+@cross_origin("*", methods=['POST'])
 def api_process_upc_batch():
     try:
         data = request.get_json()
