@@ -271,13 +271,9 @@ def get_pricing():
         return jsonify({"error": f"Failed to get pricing: {str(e)}"}), 500
 
 
-@app.route('/api/process_upc_batch', methods=['POST', 'OPTIONS'])
-@cross_origin(origins="*", supports_credentials=True)
+@app.route('/api/process_upc_batch', methods=['POST'])
 def api_process_upc_batch():
-    if request.method == "OPTIONS":
-        # Preflight request, just respond 200
-        return '', 200
-    
+ 
     try:
         data = request.get_json()
         upc_list = data['upc_list']
